@@ -29,6 +29,9 @@ test_that("AGENTS.md includes required workflow rules", {
   expect_match(text, "ai_assisted_human_checkpoint")
   expect_match(text, "automated_checkpoint")
   expect_match(text, "Software Inventory")
+  expect_match(text, "Agent operating rules")
+  expect_match(text, "Before starting any task")
+  expect_match(text, "files created or modified")
 })
 
 test_that("checkpoint template contains phases and opener types", {
@@ -44,7 +47,10 @@ test_that("checkpoint template contains phases and opener types", {
 test_that("software inventory template has required columns and status guidance", {
   path <- tempfile("airsetup-")
   create_agentic_project(path)
-  inv <- read.csv(file.path(path, "03_statistical_analysis_package/template/software_inventory_template.csv"))
+  inv <- read.csv(
+    file.path(path, "03_statistical_analysis_package/template/software_inventory_template.csv"),
+    check.names = FALSE
+  )
   expect_true(all(c("category", "task", "package", "function", "status", "allowed_use", "restricted_use", "qc_requirement", "notes") %in% names(inv)))
   expect_match(inv$notes[1], "approved")
   expect_match(inv$notes[1], "under_review")

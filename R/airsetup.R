@@ -136,7 +136,19 @@ create_agents_md <- function(path, template = "clinical_trial", overwrite = FALS
     "- Prefer approved functions for the relevant task.", "- Do not use prohibited functions.",
     "- Restricted functions require human approval and additional QC.",
     "- If an unlisted package or function is used, record the reason in software_use_log.csv and treat it as under_review until approved.", "",
-    "## Discrepancies", "- If a discrepancy is found at any checkpoint, stop affected downstream work, record the issue, update the relevant specification if needed, and rerun affected downstream steps.",
+
+    "## Agent operating rules",
+    "- Before starting any task, identify the current workflow phase: Preflight, Flight, or Landing.",
+    "- Before editing files, inspect the relevant package folder, active specifications, and applicable QC templates.",
+    "- Do not infer missing endpoint definitions, population definitions, variable derivation rules, or model specifications without recording the uncertainty.",
+    "- If a task requires statistical judgment, prepare evidence and proposed issues, but do not make the checkpoint decision.",
+    "- If a required specification is missing, outdated, or inconsistent with the data, stop the affected downstream work and record the issue.",
+    "- If working code is generated, place draft code in 06_analysis_execution/programs unless the user explicitly instructs otherwise.",
+    "- If exploratory outputs or intermediate work products are generated, place them in 06_analysis_execution/work_products or 06_analysis_execution/outputs according to their role.",
+    "- If a package or function is not listed in the Software Inventory, do not silently use it as approved. Record it in software_use_log.csv and treat it as under_review.",
+    "- When completing a task, summarize files read, files created or modified, assumptions made, unresolved issues, checkpoint implications, and recommended next action.", "",
+
+    "## Discrepancies",
     "- A conditional_pass may be used only when unresolved issues are explicitly recorded and downstream steps allowed under the conditional pass are specified."
   )
   out <- file.path(path, "AGENTS.md")
