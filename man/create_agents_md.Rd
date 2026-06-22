@@ -9,4 +9,4 @@
 \item{overwrite}{Logical. If \code{TRUE}, overwrite an existing \code{AGENTS.md}.}
 }
 \value{Invisibly returns the \code{AGENTS.md} path.}
-\description{Create AGENTS.md guidance for folder lifecycle, Checkpoint QC, software inventory, traceability, and deliverables.}
+\description{Create AGENTS.md guidance for the default Codex workflow, mirrored data layout, R execution boundary, folder lifecycle, Checkpoint QC, software inventory, traceability, and deliverables.}

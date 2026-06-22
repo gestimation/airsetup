@@ -15,4 +15,4 @@
 \item{overwrite}{Logical. If \code{TRUE}, overwrite generated files that already exist.}
 }
 \value{Invisibly returns the normalized project path.}
-\description{Create folders, AGENTS.md, README files, templates, Checkpoint QC materials, Software Inventory, and traceability logs.}
+\description{Create folders, AGENTS.md, README files, active AI-task contracts, AI-visible data metadata, templates, Checkpoint QC materials, Software Inventory, and traceability logs.}

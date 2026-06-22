@@ -1,4 +1,4 @@
-test_that("split mode creates ai_project and minimal r_project", {
+test_that("split mode creates ai_project and r_project with mirrored data route", {
   path <- tempfile("airsetup-")
   create_agentic_project(path, mode = "split")
 
@@ -7,9 +7,14 @@ test_that("split mode creates ai_project and minimal r_project", {
   expect_true(dir.exists(file.path(path, "ai_project", "01_study_documentation_package", "source")))
   expect_false(dir.exists(file.path(path, "01_study_documentation_package")))
   expect_true(file.exists(file.path(path, "ai_project", "AGENTS.md")))
-  expect_true(file.exists(file.path(path, "ai_project", "05_qc_package", "template", "checkpoint_definition_template.csv")))
-  expect_true(file.exists(file.path(path, "ai_project", "03_statistical_analysis_package", "template", "software_inventory_template.csv")))
-  expect_true(dir.exists(file.path(path, "ai_project", "06_analysis_execution", "datasets", "dummy")))
+  expect_true(dir.exists(file.path(path, "ai_project", "ai_visible_data", "input")))
+  expect_true(file.exists(file.path(path, "ai_project", "ai_visible_data", "metadata", "data_contract.md")))
+  expect_true(file.exists(file.path(path, "ai_project", "ai_visible_data", "metadata", "data_manifest.csv")))
+  expect_true(dir.exists(file.path(path, "r_project", "ai_hidden_data", "input")))
+  expect_true(file.exists(file.path(path, "ai_project", "04_ai_context_package", "active", "active_task.md")))
+  expect_true(file.exists(file.path(path, "ai_project", "04_ai_context_package", "active", "execution_contract.md")))
+  expect_true(file.exists(file.path(path, "ai_project", "04_ai_context_package", "active", "data_contract.md")))
+  expect_false(dir.exists(file.path(path, "ai_project", "06_analysis_execution", "datasets", "dummy")))
 })
 
 test_that("ai_only mode creates ai_project but not r_project", {
@@ -18,7 +23,9 @@ test_that("ai_only mode creates ai_project but not r_project", {
 
   expect_true(dir.exists(file.path(path, "ai_project")))
   expect_false(dir.exists(file.path(path, "r_project")))
-  expect_true(dir.exists(file.path(path, "ai_project", "06_analysis_execution", "datasets", "dummy")))
+  expect_true(dir.exists(file.path(path, "ai_project", "ai_visible_data", "input")))
+  expect_true(file.exists(file.path(path, "ai_project", "ai_visible_data", "metadata", "data_contract.md")))
+  expect_true(file.exists(file.path(path, "ai_project", "ai_visible_data", "metadata", "data_manifest.csv")))
   expect_false(dir.exists(file.path(path, "06_analysis_execution")))
 })
 
@@ -33,16 +40,16 @@ test_that("overwrite behavior preserves existing files by default", {
   expect_true(any(grepl("Checkpoint QC", readLines(agents))))
 })
 
-test_that("AGENTS.md includes required workflow and separation rules", {
+test_that("AGENTS.md includes simple AI workflow and data boundary rules", {
   path <- tempfile("airsetup-")
   create_agentic_project(path, mode = "ai_only")
   text <- paste(readLines(file.path(path, "ai_project", "AGENTS.md")), collapse = "\n")
-  expect_match(text, "AI-visible and AI-hidden project separation")
-  expect_match(text, "r_project")
-  expect_match(text, "real data")
-  expect_match(text, "dummy")
-  expect_match(text, "Agent operating rules")
-  expect_match(text, "Git or GitHub is not required")
+  expect_match(text, "Default Codex workflow")
+  expect_match(text, "Mirrored data layout contract")
+  expect_match(text, "ai_visible_data")
+  expect_match(text, "ai_hidden_data")
+  expect_match(text, "data_dir")
+  expect_match(text, "do not assume that the current working directory is `ai_project`", ignore.case = TRUE)
   expect_match(text, "Preflight")
   expect_match(text, "Flight")
   expect_match(text, "Landing")
@@ -50,21 +57,27 @@ test_that("AGENTS.md includes required workflow and separation rules", {
   expect_match(text, "ai_assisted_human_checkpoint")
   expect_match(text, "automated_checkpoint")
   expect_match(text, "Software Inventory")
-  expect_match(text, "Before starting any task")
-  expect_match(text, "files created or modified")
 })
 
-test_that("split mode r_project scaffold is minimal and protects data", {
+test_that("split mode r_project scaffold is minimal and protects hidden data", {
   path <- tempfile("airsetup-")
   create_agentic_project(path, mode = "split")
 
   gitignore <- file.path(path, "r_project", ".gitignore")
   expect_true(file.exists(gitignore))
-  expect_true(any(readLines(gitignore) == "data/"))
-  expect_true(file.exists(file.path(path, "r_project", "data", "README_DO_NOT_COMMIT.md")))
+  expect_true(any(readLines(gitignore) == "ai_hidden_data/"))
+  expect_true(file.exists(file.path(path, "r_project", "ai_hidden_data", "README_DO_NOT_COMMIT.md")))
   expect_true(file.exists(file.path(path, "r_project", "programs", "run_analysis_template.R")))
+  expect_false(dir.exists(file.path(path, "r_project", "data")))
   expect_false(dir.exists(file.path(path, "r_project", "config")))
   expect_false(dir.exists(file.path(path, "r_project", "outputs")))
+
+  template <- paste(readLines(file.path(path, "r_project", "programs", "run_analysis_template.R")), collapse = "\n")
+  expect_match(template, "ai_project_dir")
+  expect_match(template, "data_dir")
+  expect_match(template, "ai_hidden_data")
+  expect_match(template, "output_dir")
+  expect_match(template, "qc_dir")
 })
 
 test_that("checkpoint template contains phases and opener types", {
@@ -80,10 +93,7 @@ test_that("checkpoint template contains phases and opener types", {
 test_that("software inventory template has required columns and status guidance", {
   path <- tempfile("airsetup-")
   create_agentic_project(path)
-  inv <- read.csv(
-    file.path(path, "ai_project", "03_statistical_analysis_package", "template", "software_inventory_template.csv"),
-    check.names = FALSE
-  )
+  inv <- read.csv(file.path(path, "ai_project", "03_statistical_analysis_package", "template", "software_inventory_template.csv"), check.names = FALSE)
   expect_true(all(c("category", "task", "package", "function", "status", "allowed_use", "restricted_use", "qc_requirement", "notes") %in% names(inv)))
   expect_match(inv$notes[1], "approved")
   expect_match(inv$notes[1], "under_review")
@@ -100,7 +110,7 @@ test_that("checkpoint QC templates have required columns", {
   expect_true(all(c("discrepancy_id", "phase", "checkpoint_id", "detected_at", "description", "severity", "affected_files", "affected_downstream_steps", "resolution", "resolved_by", "resolved_at", "comment") %in% names(discrepancy)))
 })
 
-test_that("check_agentic_project reports missing and found split-mode items without stopping", {
+test_that("check_agentic_project reports all required split-mode items after creation", {
   path <- tempfile("airsetup-")
   dir.create(path)
   report <- check_agentic_project(path, mode = "split")
@@ -110,7 +120,12 @@ test_that("check_agentic_project reports missing and found split-mode items with
   create_agentic_project(path, mode = "split")
   report2 <- check_agentic_project(path, mode = "split")
   expect_true(all(report2$exists))
+  expect_true("ai_project/ai_visible_data/input" %in% report2$item)
+  expect_true("r_project/ai_hidden_data/input" %in% report2$item)
   expect_true("r_project/programs/run_analysis_template.R" %in% report2$item)
+  expect_false("r_project/data" %in% report2$item)
+  expect_false("r_project/config" %in% report2$item)
+  expect_false("r_project/outputs" %in% report2$item)
 })
 
 test_that("check_agentic_project reports all required ai-only items after creation", {
@@ -119,4 +134,6 @@ test_that("check_agentic_project reports all required ai-only items after creati
   report <- check_agentic_project(path, mode = "ai_only")
   expect_true(all(report$exists))
   expect_true(all(grepl("^ai_project/", report$path)))
+  expect_true("ai_project/04_ai_context_package/active/active_task.md" %in% report$item)
+  expect_true("ai_project/ai_visible_data/metadata/data_manifest.csv" %in% report$item)
 })

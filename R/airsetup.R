@@ -1,7 +1,7 @@
 #' airsetup: project setup for AI-assisted R workflows
 #'
 #' Lightweight workflow infrastructure for creating controlled project
-#' structures, templates, traceability logs, and Checkpoint QC materials.
+#' structures, AI-visible data routes, templates, traceability logs, and Checkpoint QC materials.
 #'
 #' @keywords internal
 "_PACKAGE"
@@ -18,10 +18,11 @@ required_dirs <- function() {
     "03_statistical_analysis_package/archive",
     "04_ai_context_package", "04_ai_context_package/template", "04_ai_context_package/active",
     "04_ai_context_package/archive",
+    "ai_visible_data", "ai_visible_data/input", "ai_visible_data/lookup", "ai_visible_data/metadata",
     "05_qc_package", "05_qc_package/template", "05_qc_package/pre_data_review",
     "05_qc_package/post_data_review", "05_qc_package/results", "05_qc_package/archive",
-    "06_analysis_execution", "06_analysis_execution/programs", "06_analysis_execution/datasets",
-    "06_analysis_execution/datasets/dummy", "06_analysis_execution/outputs", "06_analysis_execution/work_products",
+    "06_analysis_execution", "06_analysis_execution/programs",
+    "06_analysis_execution/outputs", "06_analysis_execution/work_products",
     "07_traceability_log",
     "08_deliverables", "08_deliverables/final_specifications", "08_deliverables/final_outputs",
     "08_deliverables/final_reports", "08_deliverables/qc_report"
@@ -62,7 +63,15 @@ template_files <- function() {
   )
 }
 
-required_files <- function() c("AGENTS.md", template_files(), traceability_files())
+required_files <- function() c("AGENTS.md", template_files(), active_files(), ai_visible_data_files(), traceability_files())
+
+active_files <- function() {
+  file.path("04_ai_context_package", "active", c("active_task.md", "execution_contract.md", "data_contract.md"))
+}
+
+ai_visible_data_files <- function() {
+  file.path("ai_visible_data", "metadata", c("data_contract.md", "data_manifest.csv"))
+}
 
 write_if_allowed <- function(path, lines, overwrite = FALSE) {
   if (file.exists(path) && !overwrite) return(FALSE)
@@ -113,48 +122,56 @@ create_ai_project_structure <- function(path, template = "clinical_trial", overw
 
 create_r_project_scaffold <- function(path, overwrite = FALSE) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
-  for (dir in c("data", "programs", "logs")) dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
+  for (dir in c("ai_hidden_data", "ai_hidden_data/input", "ai_hidden_data/lookup", "ai_hidden_data/metadata", "programs", "logs")) {
+    dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
+  }
 
   write_if_allowed(file.path(path, ".gitignore"), c(
-    "data/", "*.rds", "*.RData", "*.csv", "*.sas7bdat", "*.xlsx"
+    "ai_hidden_data/", "*.rds", "*.RData", "*.csv", "*.sas7bdat", "*.xlsx"
   ), overwrite = overwrite)
 
   write_if_allowed(file.path(path, "README_DO_NOT_SHARE_WITH_AI.md"), c(
     "# Do not share this folder with AI", "",
     "This folder is intended for local human execution only.",
-    "This folder may contain real data or paths to real data.",
+    "This folder may contain real data or paths to real data under `ai_hidden_data/`.",
     "This folder should not be exposed to AI agents.",
     "AI-generated code should generally be stored in `../ai_project/06_analysis_execution/programs/`.",
-    "Human users may run AI-generated code from this r_project.",
+    "Human users may run AI-generated code from this r_project by setting `data_dir` to `ai_hidden_data/`.",
     "Outputs from execution should generally be written back to `../ai_project/06_analysis_execution/outputs/` or `../ai_project/05_qc_package/results/`.",
     "Users may customize this folder structure as needed.",
     "Git or GitHub is not required."
   ), overwrite = overwrite)
 
-  write_if_allowed(file.path(path, "data", "README_DO_NOT_COMMIT.md"), c(
+  write_if_allowed(file.path(path, "ai_hidden_data", "README_DO_NOT_COMMIT.md"), c(
     "# Do not commit real data", "",
     "Place real data or local-only data links here if appropriate.",
+    "Mirror the internal folder structure, file names, and column names used under `../ai_project/ai_visible_data/` whenever possible.",
     "Do not expose files in this folder to AI agents.",
     "Do not commit or share real data.",
     "The folder is ignored by the default `.gitignore`."
   ), overwrite = overwrite)
 
   write_if_allowed(file.path(path, "programs", "run_analysis_template.R"), c(
-    "# Run analysis template", "",
-    "# Execute this script from the AI-hidden r_project.", "",
-    "# Real data should remain under r_project/data and should not be exposed to AI agents.", "",
-    "# Outputs should generally be written back to the sibling ai_project.", "",
+    "# Run analysis template",
+    "# Execute this script from the AI-hidden r_project.",
+    "# Real data should remain under r_project/ai_hidden_data and should not be exposed to AI agents.",
+    "# Outputs should generally be written back to the sibling ai_project.",
+    "",
+    "ai_project_dir <- normalizePath(file.path(\"..\", \"ai_project\"), winslash = \"/\", mustWork = TRUE)",
+    "",
+    "data_dir <- normalizePath(file.path(\"ai_hidden_data\"), winslash = \"/\", mustWork = TRUE)",
+    "",
+    "output_dir <- file.path(ai_project_dir, \"06_analysis_execution\", \"outputs\")",
+    "qc_dir <- file.path(ai_project_dir, \"05_qc_package\", \"results\")",
+    "log_dir <- file.path(\"logs\")",
+    "",
     "# AI-written scripts under ../ai_project/06_analysis_execution/programs/",
-    "# should use this ai_project_dir object and must not assume that getwd() is ai_project.", "",
-    "ai_project_dir <- normalizePath(file.path(\"..\", \"ai_project\"), winslash = \"/\", mustWork = FALSE)", "",
-    "program_dir <- file.path(ai_project_dir, \"06_analysis_execution\", \"programs\")",
-    "output_dir  <- file.path(ai_project_dir, \"06_analysis_execution\", \"outputs\")",
-    "qc_dir      <- file.path(ai_project_dir, \"05_qc_package\", \"results\")", "",
-    "real_data_dir <- file.path(\"data\")",
-    "log_dir <- file.path(\"logs\")", "",
-    "# Example:", "",
-    "# source(file.path(program_dir, \"01_derive_participant_flow_counts.R\"))", "",
-    "# source(file.path(program_dir, \"02_check_participant_flow_counts.R\"))"
+    "# should use ai_project_dir, data_dir, output_dir, and qc_dir.",
+    "# They must not assume that getwd() is ai_project.",
+    "",
+    "# Example:",
+    "# source(file.path(ai_project_dir, \"06_analysis_execution\", \"programs\", \"01_derive_participant_flow_counts.R\"))",
+    "# source(file.path(ai_project_dir, \"06_analysis_execution\", \"programs\", \"02_check_participant_flow_counts.R\"))"
   ), overwrite = overwrite)
 
   invisible(normalizePath(path, winslash = "/", mustWork = TRUE))
@@ -167,6 +184,7 @@ create_r_project_scaffold <- function(path, overwrite = FALSE) {
 #' @param overwrite Logical. If `TRUE`, overwrite an existing `AGENTS.md`.
 #'
 #' @return Invisibly returns the `AGENTS.md` path.
+#' @description Create AGENTS.md guidance for the default Codex workflow, mirrored data layout, R execution boundary, folder lifecycle, Checkpoint QC, software inventory, traceability, and deliverables.
 #' @export
 create_agents_md <- function(path, template = "clinical_trial", overwrite = FALSE) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
@@ -174,47 +192,80 @@ create_agents_md <- function(path, template = "clinical_trial", overwrite = FALS
     "# AGENTS.md", "", "Structure the data flow. Stop errors from flowing downstream.",
     "データの流れを整え、エラーを下流へ流さない。まずはプロジェクトフォルダから始めよう。", "",
 
+    "## Default Codex workflow",
+    "When working in this ai_project, follow this default route unless the active task explicitly says otherwise:", "",
+    "1. Read `AGENTS.md`.",
+    "2. Read `04_ai_context_package/active/active_task.md`.",
+    "3. Read data only from `ai_visible_data/`.",
+    "4. Write R scripts only to `06_analysis_execution/programs/`.",
+    "5. Write analysis outputs only to `06_analysis_execution/outputs/`.",
+    "6. Write QC evidence only to `05_qc_package/results/`.",
+    "7. Record issues or assumptions in the appropriate QC or traceability files when instructed.",
+    "8. Do not use other folders unless the active task explicitly says so.",
+    "9. Do not access, request, infer, or assume access to `r_project` or real data.",
+    "10. Do not make checkpoint decisions. Prepare evidence for human review.", "",
+
+    "## Mirrored data layout contract",
+    "- `ai_project/ai_visible_data/` contains AI-visible dummy, synthetic, or anonymized data only.",
+    "- `r_project/ai_hidden_data/`, if it exists, contains AI-hidden real data or local real-data links.",
+    "- The internal folder structure and file names under `ai_visible_data/` and `ai_hidden_data/` should match whenever possible.",
+    "- AI-written R code should be developed against `ai_visible_data/`.",
+    "- Human users should be able to run the same code against `ai_hidden_data/` by changing only a `data_dir` object.",
+    "- Do not write R code that depends on dummy-specific file names unless those same file names are expected under `ai_hidden_data/`.",
+    "- Do not place real data in `ai_project/ai_visible_data/`.",
+    "- Do not request access to `r_project/ai_hidden_data/`.",
+    "- Do not output row-level real-data records, subject IDs, or sensitive listings back into `ai_project`.", "",
+
     "## AI-visible and AI-hidden project separation",
     "- This ai_project is the only folder intended to be visible to AI agents.",
     "- Do not request, inspect, or assume access to files outside ai_project.",
     "- The sibling r_project, if it exists, is an AI-hidden local execution environment for real data.",
     "- AI agents may write R code intended to be executed from r_project, but must not read, request, infer, or simulate access to real data.",
     "- Real data should remain outside ai_project.",
-    "- Dummy or synthetic data for AI-assisted code development should be placed under 06_analysis_execution/datasets/dummy/.",
+    "- Dummy, synthetic, or anonymized data for AI-assisted code development should be placed under ai_visible_data/.",
     "- R programs written by AI agents should be placed under 06_analysis_execution/programs/.",
-    "- Outputs generated from dummy data may be placed under 06_analysis_execution/outputs/.",
-    "- QC results generated from dummy data may be placed under 05_qc_package/results/.",
+    "- Outputs generated from AI-visible data may be placed under 06_analysis_execution/outputs/.",
+    "- QC results generated from AI-visible data may be placed under 05_qc_package/results/.",
     "- Final real-data execution and checkpoint decisions require human review.",
     "- Git or GitHub is not required. These folders should work as ordinary local folders.", "",
+
     "## R execution boundary contract",
-    "- R programs stored under 06_analysis_execution/programs/ are developed in the AI-visible ai_project, but they may be executed later from an AI-hidden sibling or external r_project.",
-    "- Therefore, R programs must not assume that the current working directory is ai_project.",
-    "- Do not hard-code paths such as 06_analysis_execution/datasets/dummy without anchoring them to an explicit project root.",
-    "- Use an ai_project_dir object when it already exists in the execution environment.",
-    "- If ai_project_dir does not exist, default it to the current working directory only for interactive dummy-data execution from ai_project.",
-    "- Build all ai_project paths with file.path(ai_project_dir, ...).",
+    "R programs stored under `06_analysis_execution/programs/` are developed in the AI-visible `ai_project`, but they may be executed later from an AI-hidden sibling or external `r_project`.", "",
+    "Therefore, R programs must not assume that the current working directory is `ai_project`.", "",
+    "When writing R scripts:", "",
+    "- Use an `ai_project_dir` object when it already exists in the execution environment.",
+    "- If `ai_project_dir` does not exist, default it to the current working directory only for interactive AI-side execution from `ai_project`.",
+    "- Use a configurable `data_dir` object for input data.",
+    "- During AI-side development, `data_dir` should point to `file.path(ai_project_dir, \"ai_visible_data\")`.",
+    "- During human-side real-data execution, `data_dir` should point to `r_project/ai_hidden_data`.",
+    "- Build paths with `file.path()`.",
     "- Do not use absolute local paths.",
-    "- Do not access files outside ai_project.",
-    "- Do not access, request, infer, or assume access to r_project or real data.",
-    "- Write code so that it can be sourced from r_project/programs/run_analysis_template.R.",
-    "- Outputs from dummy-data execution should be written under 06_analysis_execution/outputs/.",
-    "- QC results from dummy-data execution should be written under 05_qc_package/results/.",
-    "- If a script is intended to be run only from ai_project, state that limitation explicitly in comments and in the completion summary.",
-    "",
-    "Use this path pattern in AI-written R scripts:",
-    "",
-    "```r",
+    "- Do not hard-code `ai_visible_data` as the only possible data root unless the script is explicitly AI-development-only.",
+    "- Write code so that it can be sourced from `r_project/programs/run_analysis_template.R`.",
+    "- Write outputs to `06_analysis_execution/outputs/`.",
+    "- Write QC results to `05_qc_package/results/`.",
+    "- Do not access files outside `ai_project` except through user-defined path objects during human-side execution.", "",
+    "Use this path pattern in AI-written R scripts:", "", "```r",
     "if (!exists(\"ai_project_dir\", inherits = TRUE)) {",
     "  ai_project_dir <- normalizePath(\".\", winslash = \"/\", mustWork = FALSE)",
-    "}",
-    "",
-    "paths <- list(",
-    "  dummy_data_dir = file.path(ai_project_dir, \"06_analysis_execution\", \"datasets\", \"dummy\"),",
-    "  output_dir = file.path(ai_project_dir, \"06_analysis_execution\", \"outputs\"),",
-    "  qc_results_dir = file.path(ai_project_dir, \"05_qc_package\", \"results\")",
-    ")",
-    "```",
-    "",
+    "}", "",
+    "if (!file.exists(file.path(ai_project_dir, \"AGENTS.md\")) ||",
+    "    !dir.exists(file.path(ai_project_dir, \"06_analysis_execution\"))) {",
+    "  stop(",
+    "    \"`ai_project_dir` does not appear to point to an airsetup ai_project. \",",
+    "    \"Run this script from ai_project or define ai_project_dir before sourcing it.\",",
+    "    call. = FALSE",
+    "  )",
+    "}", "",
+    "if (!exists(\"data_dir\", inherits = TRUE)) {",
+    "  data_dir <- file.path(ai_project_dir, \"ai_visible_data\")",
+    "}", "",
+    "if (!exists(\"output_dir\", inherits = TRUE)) {",
+    "  output_dir <- file.path(ai_project_dir, \"06_analysis_execution\", \"outputs\")",
+    "}", "",
+    "if (!exists(\"qc_dir\", inherits = TRUE)) {",
+    "  qc_dir <- file.path(ai_project_dir, \"05_qc_package\", \"results\")",
+    "}", "```", "",
 
     "## Package folder lifecycle",
     "- Package folders manage templates, pre-data-review specifications, post-data-review specifications, and archived versions.",
@@ -223,7 +274,7 @@ create_agents_md <- function(path, template = "clinical_trial", overwrite = FALS
     "- post_data_review/ contains specifications updated after reviewing actual dataset structure, variable availability, coding, missingness, and derivation feasibility.",
     "- Do not use pre_data_review specifications for final analysis when corresponding post_data_review specifications exist.",
     "- Draft work products created during data review belong in 06_analysis_execution/work_products.",
-    "- Analysis programs, derived datasets, and generated outputs belong in 06_analysis_execution.",
+    "- Analysis programs and generated outputs belong in 06_analysis_execution.",
     "- Logs belong in 07_traceability_log.", "- Reviewed final materials belong in 08_deliverables.",
     "- Substantial specification changes must be recorded in 07_traceability_log/specification_change_log.csv.",
     "- Do not overwrite raw data or source documents.", "- Do not treat AI-generated code or outputs as validated.",
@@ -243,10 +294,9 @@ create_agents_md <- function(path, template = "clinical_trial", overwrite = FALS
     "- Prefer approved functions for the relevant task.", "- Do not use prohibited functions.",
     "- Restricted functions require human approval and additional QC.",
     "- If an unlisted package or function is used, record the reason in software_use_log.csv and treat it as under_review until approved.", "",
-
     "## Agent operating rules",
     "- Before starting any task, identify the current workflow phase: Preflight, Flight, or Landing.",
-    "- Before editing files, inspect the relevant package folder, active specifications, and applicable QC templates.",
+    "- Before editing files, inspect the active task, relevant package folder, active specifications, and applicable QC templates.",
     "- Do not infer missing endpoint definitions, population definitions, variable derivation rules, or model specifications without recording the uncertainty.",
     "- If a task requires statistical judgment, prepare evidence and proposed issues, but do not make the checkpoint decision.",
     "- If a required specification is missing, outdated, or inconsistent with the data, stop the affected downstream work and record the issue.",
@@ -254,7 +304,6 @@ create_agents_md <- function(path, template = "clinical_trial", overwrite = FALS
     "- If exploratory outputs or intermediate work products are generated, place them in 06_analysis_execution/work_products or 06_analysis_execution/outputs according to their role.",
     "- If a package or function is not listed in the Software Inventory, do not silently use it as approved. Record it in software_use_log.csv and treat it as under_review.",
     "- When completing a task, summarize files read, files created or modified, assumptions made, unresolved issues, checkpoint implications, and recommended next action.", "",
-
     "## Discrepancies",
     "- A conditional_pass may be used only when unresolved issues are explicitly recorded and downstream steps allowed under the conditional pass are specified."
   )
@@ -277,6 +326,41 @@ create_templates <- function(path, overwrite = FALSE) {
   write_csv_if_allowed(file.path(path, "05_qc_package/template/checkpoint_checklist_template.csv"), data.frame(phase=character(), checkpoint_id=character(), check_item_id=character(), check_item_name=character(), description=character(), check_type=character(), expected_evidence=character(), result=character(), reviewer=character(), review_date=character(), comment=character()), overwrite)
   write_csv_if_allowed(file.path(path, "05_qc_package/template/checkpoint_decision_log_template.csv"), data.frame(phase=character(), checkpoint_id=character(), checkpoint_name=character(), opener_type=character(), checkpoint_decision=character(), decision_date=character(), decided_by=character(), evidence_reviewed=character(), unresolved_issues=character(), downstream_steps_allowed=character(), comment=character()), overwrite)
   write_csv_if_allowed(file.path(path, "05_qc_package/template/checkpoint_discrepancy_log_template.csv"), data.frame(discrepancy_id=character(), phase=character(), checkpoint_id=character(), detected_at=character(), description=character(), severity=character(), affected_files=character(), affected_downstream_steps=character(), resolution=character(), resolved_by=character(), resolved_at=character(), comment=character()), overwrite)
+  write_if_allowed(file.path(path, "ai_visible_data", "metadata", "data_contract.md"), c(
+    "# Data contract", "",
+    "This folder contains AI-visible dummy, synthetic, or anonymized data only.", "",
+    "Mirror the internal folder structure, file names, and column names used by `r_project/ai_hidden_data/` whenever possible.",
+    "Never place real data in `ai_project/ai_visible_data/`."
+  ), overwrite)
+  write_csv_if_allowed(file.path(path, "ai_visible_data", "metadata", "data_manifest.csv"), data.frame(path=character(), data_type=character(), description=character(), source=character(), notes=character()), overwrite)
+
+  write_if_allowed(file.path(path, "04_ai_context_package", "active", "active_task.md"), c(
+    "# Active task", "",
+    "Describe the current task here before asking an AI agent to work.", "",
+    "## Task goal", "", "To be completed by the user.", "",
+    "## Files the AI agent should read", "", "To be completed by the user.", "",
+    "## Data available to the AI agent", "", "Use only files under:", "", "* `ai_visible_data/`", "",
+    "## Files the AI agent may create or modify", "", "Usually:", "", "* `06_analysis_execution/programs/`", "* `06_analysis_execution/outputs/`", "* `05_qc_package/results/`", "",
+    "## Files the AI agent must not modify", "", "Usually:", "", "* `01_study_documentation_package/source/`", "* `08_deliverables/`", "* any files outside `ai_project`", "",
+    "## Expected completion summary", "", "The AI agent should summarize:", "", "* files read", "* files created or modified", "* assumptions made", "* unresolved issues", "* QC evidence generated", "* recommended next action for human review"
+  ), overwrite)
+  write_if_allowed(file.path(path, "04_ai_context_package", "active", "execution_contract.md"), c(
+    "# Execution contract", "",
+    "AI-written R scripts are developed in `ai_project`, but may be executed later from an AI-hidden `r_project`.", "",
+    "Scripts should use:", "", "* `ai_project_dir`", "* `data_dir`", "* `output_dir`", "* `qc_dir`", "",
+    "Do not assume that `getwd()` is `ai_project`.", "",
+    "During AI-side development:", "", "```r", "data_dir <- file.path(ai_project_dir, \"ai_visible_data\")", "```", "",
+    "During human-side real-data execution from r_project:", "", "```r", "data_dir <- file.path(\"ai_hidden_data\")", "```", "",
+    "Outputs and QC results should generally be written back to the sibling `ai_project`."
+  ), overwrite)
+  write_if_allowed(file.path(path, "04_ai_context_package", "active", "data_contract.md"), c(
+    "# Data contract", "",
+    "The AI-visible and AI-hidden data folders should mirror each other.", "",
+    "AI-visible dummy data:", "", "* `ai_project/ai_visible_data/input/`", "* `ai_project/ai_visible_data/lookup/`", "* `ai_project/ai_visible_data/metadata/`", "",
+    "AI-hidden real data:", "", "* `r_project/ai_hidden_data/input/`", "* `r_project/ai_hidden_data/lookup/`", "* `r_project/ai_hidden_data/metadata/`", "",
+    "The internal folder structure, file names, and column names should match whenever possible.", "",
+    "Never place real data in `ai_project/ai_visible_data/`."
+  ), overwrite)
   for (f in traceability_files()) write_csv_if_allowed(file.path(path, f), data.frame(timestamp=character(), item=character(), description=character(), reviewer=character(), comment=character()), overwrite)
 }
 
@@ -318,8 +402,8 @@ check_agentic_project <- function(path, mode = c("split", "ai_only")) {
   types <- ai_types
 
   if (identical(mode, "split")) {
-    r_dirs <- file.path("r_project", c("data", "programs", "logs"))
-    r_files <- file.path("r_project", c("README_DO_NOT_SHARE_WITH_AI.md", ".gitignore", "data/README_DO_NOT_COMMIT.md", "programs/run_analysis_template.R"))
+    r_dirs <- file.path("r_project", c("ai_hidden_data", "ai_hidden_data/input", "ai_hidden_data/lookup", "ai_hidden_data/metadata", "programs", "logs"))
+    r_files <- file.path("r_project", c("README_DO_NOT_SHARE_WITH_AI.md", ".gitignore", "ai_hidden_data/README_DO_NOT_COMMIT.md", "programs/run_analysis_template.R"))
     items <- c(items, r_dirs, r_files)
     types <- c(types, rep("folder", length(r_dirs)), rep("file", length(r_files)))
   }
