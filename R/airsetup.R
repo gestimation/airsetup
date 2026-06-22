@@ -21,7 +21,7 @@ required_dirs <- function() {
     "05_qc_package", "05_qc_package/template", "05_qc_package/pre_data_review",
     "05_qc_package/post_data_review", "05_qc_package/results", "05_qc_package/archive",
     "06_analysis_execution", "06_analysis_execution/programs", "06_analysis_execution/datasets",
-    "06_analysis_execution/outputs", "06_analysis_execution/work_products",
+    "06_analysis_execution/datasets/dummy", "06_analysis_execution/outputs", "06_analysis_execution/work_products",
     "07_traceability_log",
     "08_deliverables", "08_deliverables/final_specifications", "08_deliverables/final_outputs",
     "08_deliverables/final_reports", "08_deliverables/qc_report"
@@ -81,18 +81,80 @@ write_csv_if_allowed <- function(path, data, overwrite = FALSE) {
 #' Create an AI-assisted statistical analysis project structure
 #'
 #' @param path Project directory to create or update.
+#' @param mode Project layout mode: `"split"` creates sibling `ai_project` and `r_project` folders; `"ai_only"` creates only `ai_project`.
 #' @param template Template name. Currently only `"clinical_trial"` is used.
 #' @param overwrite Logical. If `TRUE`, overwrite generated files that already exist.
 #'
 #' @return Invisibly returns the normalized project path.
 #' @export
-create_agentic_project <- function(path, template = "clinical_trial", overwrite = FALSE) {
+create_agentic_project <- function(path, mode = c("split", "ai_only"), template = "clinical_trial", overwrite = FALSE) {
   if (!nzchar(path)) stop("`path` must be a non-empty string.", call. = FALSE)
+  mode <- match.arg(mode)
+  dir.create(path, recursive = TRUE, showWarnings = FALSE)
+
+  ai_path <- file.path(path, "ai_project")
+  create_ai_project_structure(ai_path, template = template, overwrite = overwrite)
+
+  if (identical(mode, "split")) {
+    create_r_project_scaffold(file.path(path, "r_project"), overwrite = overwrite)
+  }
+
+  invisible(normalizePath(path, winslash = "/", mustWork = TRUE))
+}
+
+create_ai_project_structure <- function(path, template = "clinical_trial", overwrite = FALSE) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
   for (dir in required_dirs()) dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
   create_agents_md(path, template = template, overwrite = overwrite)
   create_readmes(path, overwrite = overwrite)
   create_templates(path, overwrite = overwrite)
+  invisible(normalizePath(path, winslash = "/", mustWork = TRUE))
+}
+
+create_r_project_scaffold <- function(path, overwrite = FALSE) {
+  dir.create(path, recursive = TRUE, showWarnings = FALSE)
+  for (dir in c("data", "programs", "logs")) dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
+
+  write_if_allowed(file.path(path, ".gitignore"), c(
+    "data/", "*.rds", "*.RData", "*.csv", "*.sas7bdat", "*.xlsx"
+  ), overwrite = overwrite)
+
+  write_if_allowed(file.path(path, "README_DO_NOT_SHARE_WITH_AI.md"), c(
+    "# Do not share this folder with AI", "",
+    "This folder is intended for local human execution only.",
+    "This folder may contain real data or paths to real data.",
+    "This folder should not be exposed to AI agents.",
+    "AI-generated code should generally be stored in `../ai_project/06_analysis_execution/programs/`.",
+    "Human users may run AI-generated code from this r_project.",
+    "Outputs from execution should generally be written back to `../ai_project/06_analysis_execution/outputs/` or `../ai_project/05_qc_package/results/`.",
+    "Users may customize this folder structure as needed.",
+    "Git or GitHub is not required."
+  ), overwrite = overwrite)
+
+  write_if_allowed(file.path(path, "data", "README_DO_NOT_COMMIT.md"), c(
+    "# Do not commit real data", "",
+    "Place real data or local-only data links here if appropriate.",
+    "Do not expose files in this folder to AI agents.",
+    "Do not commit or share real data.",
+    "The folder is ignored by the default `.gitignore`."
+  ), overwrite = overwrite)
+
+  write_if_allowed(file.path(path, "programs", "run_analysis_template.R"), c(
+    "# Run analysis template", "",
+    "# Execute this script from the AI-hidden r_project.", "",
+    "# Real data should remain under r_project/data and should not be exposed to AI agents.", "",
+    "# Outputs should generally be written back to the sibling ai_project.", "",
+    "ai_project_dir <- normalizePath(file.path(\"..\", \"ai_project\"), winslash = \"/\", mustWork = FALSE)", "",
+    "program_dir <- file.path(ai_project_dir, \"06_analysis_execution\", \"programs\")",
+    "output_dir  <- file.path(ai_project_dir, \"06_analysis_execution\", \"outputs\")",
+    "qc_dir      <- file.path(ai_project_dir, \"05_qc_package\", \"results\")", "",
+    "real_data_dir <- file.path(\"data\")",
+    "log_dir <- file.path(\"logs\")", "",
+    "# Example:", "",
+    "# source(file.path(program_dir, \"01_derive_participant_flow_counts.R\"))", "",
+    "# source(file.path(program_dir, \"02_check_participant_flow_counts.R\"))"
+  ), overwrite = overwrite)
+
   invisible(normalizePath(path, winslash = "/", mustWork = TRUE))
 }
 
@@ -109,6 +171,19 @@ create_agents_md <- function(path, template = "clinical_trial", overwrite = FALS
   agents <- c(
     "# AGENTS.md", "", "Structure the data flow. Stop errors from flowing downstream.",
     "データの流れを整え、エラーを下流へ流さない。まずはプロジェクトフォルダから始めよう。", "",
+
+    "## AI-visible and AI-hidden project separation",
+    "- This ai_project is the only folder intended to be visible to AI agents.",
+    "- Do not request, inspect, or assume access to files outside ai_project.",
+    "- The sibling r_project, if it exists, is an AI-hidden local execution environment for real data.",
+    "- AI agents may write R code intended to be executed from r_project, but must not read, request, infer, or simulate access to real data.",
+    "- Real data should remain outside ai_project.",
+    "- Dummy or synthetic data for AI-assisted code development should be placed under 06_analysis_execution/datasets/dummy/.",
+    "- R programs written by AI agents should be placed under 06_analysis_execution/programs/.",
+    "- Outputs generated from dummy data may be placed under 06_analysis_execution/outputs/.",
+    "- QC results generated from dummy data may be placed under 05_qc_package/results/.",
+    "- Final real-data execution and checkpoint decisions require human review.",
+    "- Git or GitHub is not required. These folders should work as ordinary local folders.", "",
     "## Package folder lifecycle",
     "- Package folders manage templates, pre-data-review specifications, post-data-review specifications, and archived versions.",
     "- template/ contains reusable toolkit templates.",
@@ -198,13 +273,26 @@ checkpoint_definition_data <- function() data.frame(
 #' Check an airsetup project structure
 #'
 #' @param path Project directory to check.
+#' @param mode Project layout mode to check.
 #'
 #' @return A data.frame with columns `item`, `type`, `path`, `exists`, `required`, and `message`.
 #' @export
-check_agentic_project <- function(path) {
-  dirs <- required_dirs(); files <- required_files()
-  items <- c(dirs, files); types <- c(rep("folder", length(dirs)), rep("file", length(files)))
+check_agentic_project <- function(path, mode = c("split", "ai_only")) {
+  mode <- match.arg(mode)
+  ai_items <- file.path("ai_project", c(required_dirs(), required_files()))
+  ai_types <- c(rep("folder", length(required_dirs())), rep("file", length(required_files())))
+
+  items <- ai_items
+  types <- ai_types
+
+  if (identical(mode, "split")) {
+    r_dirs <- file.path("r_project", c("data", "programs", "logs"))
+    r_files <- file.path("r_project", c("README_DO_NOT_SHARE_WITH_AI.md", ".gitignore", "data/README_DO_NOT_COMMIT.md", "programs/run_analysis_template.R"))
+    items <- c(items, r_dirs, r_files)
+    types <- c(types, rep("folder", length(r_dirs)), rep("file", length(r_files)))
+  }
+
   full <- file.path(path, items)
   exists <- ifelse(types == "folder", dir.exists(full), file.exists(full))
-  data.frame(item = basename(items), type = types, path = items, exists = exists, required = TRUE, message = ifelse(exists, "Found", "Missing required item"), stringsAsFactors = FALSE)
+  data.frame(item = items, type = types, path = items, exists = exists, required = TRUE, message = ifelse(exists, "Found", "Missing required item"), stringsAsFactors = FALSE)
 }

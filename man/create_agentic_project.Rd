@@ -2,9 +2,15 @@
 \name{create_agentic_project}
 \alias{create_agentic_project}
 \title{Create an AI-assisted statistical analysis project structure}
-\usage{create_agentic_project(path, template = "clinical_trial", overwrite = FALSE)}
+\usage{create_agentic_project(
+  path,
+  mode = c("split", "ai_only"),
+  template = "clinical_trial",
+  overwrite = FALSE
+)}
 \arguments{
 \item{path}{Project directory to create or update.}
+\item{mode}{Project layout mode: \code{"split"} creates sibling \code{ai_project} and \code{r_project} folders; \code{"ai_only"} creates only \code{ai_project}.}
 \item{template}{Template name. Currently only \code{"clinical_trial"} is used.}
 \item{overwrite}{Logical. If \code{TRUE}, overwrite generated files that already exist.}
 }
