@@ -1,11 +1,14 @@
 Package: airsetup
-Title: What the Package Does (One Line, Title Case)
+Title: Setup AI-Assisted R Analysis Project Structures
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("gestimation", "Toolkit", , "maintainer@example.com", role = c("aut", "cre"))
+Description: Lightweight workflow infrastructure for setting up controlled
+    AI-assisted statistical analysis projects with R. The package creates
+    folder structures, AGENTS.md guidance, specification templates, Checkpoint
+    QC templates, software inventory templates, traceability logs, and project
+    structure checks. It does not implement statistical analysis functions.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
