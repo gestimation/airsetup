@@ -2,7 +2,10 @@
 \name{check_agentic_project}
 \alias{check_agentic_project}
 \title{Check an airsetup project structure}
-\usage{check_agentic_project(path)}
-\arguments{\item{path}{Project directory to check.}}
+\usage{check_agentic_project(path, mode = c("split", "ai_only"))}
+\arguments{
+\item{path}{Project directory to check.}
+\item{mode}{Project layout mode to check.}
+}
 \value{A data.frame with columns \code{item}, \code{type}, \code{path}, \code{exists}, \code{required}, and \code{message}.}
 \description{Check required folders and files without stopping on missing items.}

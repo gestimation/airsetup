@@ -11,15 +11,46 @@ It is not a statistical analysis package.
 Checkpoint QC templates, Software Inventory templates, traceability logs, and project structure checks for
 AI-assisted statistical analysis workflows in R.
 
-## Minimal example
+## AI-visible and AI-hidden project separation
+
+`airsetup` separates the AI-visible workflow project from the AI-hidden local R execution project.
+
+In split mode, `airsetup` creates:
+
+```text
+root/
+  ai_project/
+  r_project/
+```
+
+The `ai_project` is intended for AI agents. It contains context, specifications, dummy data, R code under
+development, QC materials, logs, and deliverables.
+
+The `r_project` is intended for secure local real-data execution by humans. It should not be exposed to AI
+agents. It is intentionally minimal and customizable.
+
+In `ai_only` mode, `airsetup` creates only:
+
+```text
+root/
+  ai_project/
+```
+
+This is useful when the real-data R project is created manually in a separate secure location.
+
+Git or GitHub is not required. The generated folders work as local folders. If Git is used, sensitive data
+folders should be excluded from version control.
+
+## Minimal examples
 
 ```r
 library(airsetup)
 
-project <- tempfile("analysis_project_")
-create_agentic_project(project)
+create_agentic_project("kd_flow", mode = "split")
+check_agentic_project("kd_flow", mode = "split")
 
-check_agentic_project(project)
+create_agentic_project("kd_flow_ai", mode = "ai_only")
+check_agentic_project("kd_flow_ai", mode = "ai_only")
 ```
 
 The generated workflow is organized into three phases:
