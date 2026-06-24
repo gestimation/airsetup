@@ -1,8 +1,8 @@
 ---
-title: "Start AI-assisted R analysis with QC and clear boundaries"
+title: "Getting started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Start AI-assisted R analysis with QC and clear boundaries}
+  %\VignetteIndexEntry{Getting started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

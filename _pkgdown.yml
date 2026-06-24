@@ -4,7 +4,11 @@ template:
 
 navbar:
   structure:
-    left: [home, reference, articles]
+    left: [getting_started, reference]
+  components:
+    getting_started:
+      text: Getting started
+      href: articles/getting-started.html
 
 articles:
 - title: Getting started

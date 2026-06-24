@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# airsetup
+# AI-assisted R workflow with QC and clear boundaries
 
 <!-- badges: start -->
 
