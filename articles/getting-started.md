@@ -1,4 +1,4 @@
-# Start AI-assisted R analysis with QC and clear boundaries
+# Getting started
 
 This article shows one way to use `airsetup` before starting an
 AI-assisted R analysis.

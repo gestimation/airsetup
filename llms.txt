@@ -1,4 +1,4 @@
-# airsetup
+# AI-assisted R workflow with QC and clear boundaries
 
 Clear boundaries, flexible QC, and traceable structure for AI-assisted R
 analysis.
@@ -167,5 +167,5 @@ directory.
 
 ### Getting started
 
-- [Start AI-assisted R analysis with QC and clear
-  boundaries](https://gestimation.github.io/airsetup/articles/getting-started.md):
+- [Getting
+  started](https://gestimation.github.io/airsetup/articles/getting-started.md):

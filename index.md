@@ -1,4 +1,4 @@
-# airsetup
+# AI-assisted R workflow with QC and clear boundaries
 
 Clear boundaries, flexible QC, and traceable structure for AI-assisted R
 analysis.
