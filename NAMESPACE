@@ -3,3 +3,5 @@
 export(check_agentic_project)
 export(create_agentic_project)
 export(create_agents_md)
+export(create_ai_project_structure)
+export(create_qc_status_md)
