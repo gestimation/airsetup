@@ -1,3 +1,9 @@
 ^airsetup\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
+^\.positai$
+^\.claude$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$

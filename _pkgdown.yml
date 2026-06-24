@@ -1,0 +1,19 @@
+url: https://gestimation.github.io/airsetup/
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [home, reference, articles]
+
+articles:
+- title: Getting started
+  navbar: ~
+  contents:
+  - getting-started
+
+reference:
+- title: Create and check projects
+  contents:
+  - airsetup
+  - aircheck

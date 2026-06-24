@@ -11,6 +11,7 @@ Lightweight project scaffolding for AI-assisted R analysis workflows.
 Useful links:
 \itemize{
   \item \url{https://github.com/gestimation/airsetup}
+  \item \url{https://gestimation.github.io/airsetup/}
   \item Report bugs at \url{https://github.com/gestimation/airsetup/issues}
 }
 

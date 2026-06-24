@@ -331,6 +331,7 @@ create_ai_project_structure <- function(path, japanese = FALSE, overwrite = FALS
 #'   exist.
 #'
 #' @return Invisibly returns the normalized R project path.
+#' @noRd
 create_r_project_scaffold <- function(path, overwrite = FALSE) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
 
