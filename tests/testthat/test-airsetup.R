@@ -75,7 +75,7 @@ test_that("overwrite behavior preserves existing files by default", {
   expect_identical(readLines(qc_status, warn = FALSE), qc_status_template())
 })
 
-test_that("AGENTS.md is generated from the canonical English minimal template by default", {
+test_that("AGENTS.md is generated from the canonical English template by default", {
   path <- tempfile("airsetup-")
   airsetup(path, mode = "ai_only")
 
@@ -120,7 +120,7 @@ test_that("japanese must be a single TRUE or FALSE value", {
 
   expect_error(airsetup(path, japanese = NA), "japanese.*TRUE or FALSE")
   expect_error(airsetup(path, japanese = c(TRUE, FALSE)), "japanese.*TRUE or FALSE")
-  expect_error(create_agents_md(path, japanese = "yes"), "japanese.*TRUE or FALSE")
+  expect_error(airsetup(path, japanese = "yes"), "japanese.*TRUE or FALSE")
 })
 
 test_that("QC_STATUS.md is generated as a minimal root status file", {
@@ -159,17 +159,17 @@ test_that("split mode r_project scaffold is minimal and protects hidden data", {
   expect_false(dir.exists(file.path(path, "r_project", "outputs")))
 })
 
-test_that("check_agentic_project reports missing and found split-mode items", {
+test_that("aircheck reports missing and found split-mode items", {
   path <- tempfile("airsetup-")
   dir.create(path)
 
-  report <- check_agentic_project(path, mode = "split")
+  report <- aircheck(path, mode = "split")
   expect_s3_class(report, "data.frame")
   expect_true(all(c("item", "type", "path", "exists", "required", "message") %in% names(report)))
   expect_true(any(!report$exists))
 
   airsetup(path, mode = "split")
-  report2 <- check_agentic_project(path, mode = "split")
+  report2 <- aircheck(path, mode = "split")
 
   expect_true(all(report2$exists))
   expect_true("ai_project/source/initial" %in% report2$item)
@@ -187,11 +187,11 @@ test_that("check_agentic_project reports missing and found split-mode items", {
   expect_false("r_project/programs/run_analysis_template.R" %in% report2$item)
 })
 
-test_that("check_agentic_project reports all required ai-only items after creation", {
+test_that("aircheck reports all required ai-only items after creation", {
   path <- tempfile("airsetup-")
   airsetup(path, mode = "ai_only")
 
-  report <- check_agentic_project(path, mode = "ai_only")
+  report <- aircheck(path, mode = "ai_only")
 
   expect_true(all(report$exists))
   expect_true(all(grepl("^ai_project/", report$path)))
@@ -200,4 +200,9 @@ test_that("check_agentic_project reports all required ai-only items after creati
   expect_true("ai_project/ai_visible_data/initial" %in% report$item)
   expect_true("ai_project/AGENTS.md" %in% report$item)
   expect_true("ai_project/QC_STATUS.md" %in% report$item)
+})
+
+test_that("mode must be split or ai_only", {
+  expect_error(airsetup(tempfile("airsetup-"), mode = "other"))
+  expect_error(aircheck(tempfile("airsetup-"), mode = "other"))
 })

@@ -57,6 +57,7 @@ agents_md_template <- function(japanese = FALSE) {
     "    `ai_visible_data/addition_YYYYMMDD/`.",
     "  - Treat this folder as read-only. Codex may use it for column inspection,",
     "    script design, and dummy-data execution.",
+    "  - This folder is append-only. Later additions do not replace earlier files.",
     "",
     "- `../r_project/ai_hidden_data/`",
     "  - Stores analysis data that Codex must not inspect directly.",
@@ -94,14 +95,19 @@ agents_md_template <- function(japanese = FALSE) {
     "    records.",
     "  - Deliverables belong in `ai_output/`; R outputs belong in `r_output/`; QC",
     "    materials belong in `qc/`.",
+    "  - Files under `log/` are historical records. They may explain what happened,",
+    "    but they are not the current project status unless `QC_STATUS.md` explicitly",
+    "    refers to them.",
     "  - Log only decisions and context that affect later work. Detailed chronological",
     "    logs are optional.",
     "",
     "- `QC_STATUS.md`",
     "  - Tracks QC items and their current status.",
-    "  - Keep it at the project root.",
-    "  - Codex should check it before continuing QC work and update it when QC",
-    "    status, implementation, validation, or open questions change.",
+    "  - Keep it at the root of `ai_project/`.",
+    "  - Codex should check it before any substantive work, including script",
+    "    generation, review, validation, interpretation, and QC work.",
+    "  - Codex should update it when QC status, implementation, validation,",
+    "    data-assumption acceptance, or open questions change.",
     "  - Use stable QC IDs such as `QC-001`.",
     "  - When QC-driven changes are reflected in scripts, record the QC ID, evidence,",
     "    implementation summary, validation result, and next action.",
@@ -114,9 +120,14 @@ agents_md_template <- function(japanese = FALSE) {
     "  - a dummy-data version that reads from `ai_visible_data/`;",
     "  - an analysis-data version that reads from `../r_project/ai_hidden_data/`.",
     "- R scripts should use project-relative paths where possible.",
-    "- When multiple data batches exist, scripts should prefer",
-    "  `addition_YYYYMMDD/` folders as newer inputs, then fall back to `initial/`",
-    "  when appropriate.",
+    "- When multiple data batches exist, scripts must not automatically assume that",
+    "  the latest `addition_YYYYMMDD/` folder is approved for the current analysis.",
+    "- Before using any `addition_YYYYMMDD/` folder, Codex must check",
+    "  `QC_STATUS.md` to determine whether that addition is accepted into the",
+    "  current analysis data assumption.",
+    "- If the acceptance status is unclear, Codex should prepare code that can",
+    "  include the addition, but should not treat it as the default analysis input",
+    "  without user approval.",
     "- Even when creating analysis-data scripts, Codex must not inspect",
     "  `../r_project/ai_hidden_data/`.",
     "- The user runs R scripts manually and places results under `r_output/`.",
@@ -126,6 +137,18 @@ agents_md_template <- function(japanese = FALSE) {
     "  `QC_STATUS.md`.",
     "- Important decisions and investigation notes that affect later work may also be",
     "  recorded under `log/`.",
+    "",
+    "## AI-Assisted QC",
+    "",
+    "- Codex may propose study-specific QC checkpoints based on the project context.",
+    "- Proposed QC checkpoints should be recorded as candidates in `QC_STATUS.md`",
+    "  unless the user asks for a lighter review.",
+    "- Codex may assess risks, affected downstream tasks, and possible next actions.",
+    "- Codex must distinguish AI risk assessment from user-approved QC decisions.",
+    "- Codex must not mark human-judgment QC items as final without user approval.",
+    "- If a QC item is critical, Codex may recommend blocking downstream work, but",
+    "  the blocking decision should be confirmed by the user unless it is a purely",
+    "  technical issue such as a missing file, execution error, or undefined object.",
     "",
     "## Human Approval",
     "",
@@ -137,6 +160,7 @@ agents_md_template <- function(japanese = FALSE) {
     "  - inclusion or exclusion criteria;",
     "  - handling of missing values, outliers, or abnormal values;",
     "  - mismatches between specifications and data structure;",
+    "  - acceptance of additional data batches into the current analysis assumption;",
     "  - any situation where the hidden analysis data would need to be inspected.",
     "- Inspecting, listing, moving, copying, summarizing, or otherwise using",
     "  `../r_project/ai_hidden_data/` directly is prohibited.",
@@ -246,10 +270,12 @@ qc_status_template <- function() {
 #'   overwrite = FALSE
 #' )
 #'
-#' check_agentic_project(project_dir, mode = "split")
+#' aircheck(project_dir, mode = "split")
 #'
 #' ai_only_dir <- file.path(tempdir(), "airsetup_ai_only_example")
 #' airsetup(ai_only_dir, mode = "ai_only", japanese = TRUE)
+#' aircheck(ai_only_dir, mode = "ai_only")
+#'
 #' @export
 airsetup <- function(path, mode = c("split", "ai_only"), japanese = FALSE, overwrite = FALSE) {
   if (!is.character(path) || length(path) != 1L || !nzchar(path)) {
@@ -283,7 +309,7 @@ airsetup <- function(path, mode = c("split", "ai_only"), japanese = FALSE, overw
 #'   exist.
 #'
 #' @return Invisibly returns the normalized AI project path.
-#' @export
+#' @noRd
 create_ai_project_structure <- function(path, japanese = FALSE, overwrite = FALSE) {
   validate_japanese(japanese)
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
@@ -359,7 +385,7 @@ create_r_project_scaffold <- function(path, overwrite = FALSE) {
 #' @param overwrite Logical. If `TRUE`, overwrite an existing `AGENTS.md`.
 #'
 #' @return Invisibly returns the `AGENTS.md` path.
-#' @export
+#' @noRd
 create_agents_md <- function(path, japanese = FALSE, overwrite = FALSE) {
   validate_japanese(japanese)
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
@@ -374,7 +400,7 @@ create_agents_md <- function(path, japanese = FALSE, overwrite = FALSE) {
 #' @param overwrite Logical. If `TRUE`, overwrite an existing `QC_STATUS.md`.
 #'
 #' @return Invisibly returns the `QC_STATUS.md` path.
-#' @export
+#' @noRd
 create_qc_status_md <- function(path, overwrite = FALSE) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
   out <- file.path(path, "QC_STATUS.md")
@@ -385,12 +411,24 @@ create_qc_status_md <- function(path, overwrite = FALSE) {
 #' Check an airsetup project structure
 #'
 #' @param path Parent project directory to check.
-#' @param mode Project layout mode to check.
+#' @param mode Project layout mode to check. `"split"` checks sibling
+#'   `ai_project` and `r_project` folders. `"ai_only"` checks only
+#'   `ai_project`.
 #'
 #' @return A data.frame with columns `item`, `type`, `path`, `exists`,
 #'   `required`, and `message`.
+#'
+#' @examples
+#' project_dir <- file.path(tempdir(), "aircheck_example")
+#' airsetup(project_dir, mode = "split")
+#' aircheck(project_dir, mode = "split")
+#'
 #' @export
-check_agentic_project <- function(path, mode = c("split", "ai_only")) {
+aircheck <- function(path, mode = c("split", "ai_only")) {
+  if (!is.character(path) || length(path) != 1L || !nzchar(path)) {
+    stop("`path` must be a non-empty string.", call. = FALSE)
+  }
+
   mode <- match.arg(mode)
 
   ai_items <- file.path("ai_project", c(required_dirs(), required_files()))

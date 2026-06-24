@@ -41,8 +41,10 @@ airsetup(
   overwrite = FALSE
 )
 
-check_agentic_project(project_dir, mode = "split")
+aircheck(project_dir, mode = "split")
 
 ai_only_dir <- file.path(tempdir(), "airsetup_ai_only_example")
 airsetup(ai_only_dir, mode = "ai_only", japanese = TRUE)
+aircheck(ai_only_dir, mode = "ai_only")
+
 }
