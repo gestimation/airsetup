@@ -1,6 +1,6 @@
 test_that("split mode creates ai_project and r_project with minimal data route", {
   path <- tempfile("airsetup-")
-  create_agentic_project(path, mode = "split")
+  airsetup(path, mode = "split")
 
   expect_true(dir.exists(file.path(path, "ai_project")))
   expect_true(dir.exists(file.path(path, "r_project")))
@@ -40,7 +40,7 @@ test_that("split mode creates ai_project and r_project with minimal data route",
 
 test_that("ai_only mode creates ai_project but not r_project", {
   path <- tempfile("airsetup-")
-  create_agentic_project(path, mode = "ai_only")
+  airsetup(path, mode = "ai_only")
 
   expect_true(dir.exists(file.path(path, "ai_project")))
   expect_false(dir.exists(file.path(path, "r_project")))
@@ -58,7 +58,7 @@ test_that("ai_only mode creates ai_project but not r_project", {
 
 test_that("overwrite behavior preserves existing files by default", {
   path <- tempfile("airsetup-")
-  create_agentic_project(path, mode = "ai_only")
+  airsetup(path, mode = "ai_only")
 
   agents <- file.path(path, "ai_project", "AGENTS.md")
   qc_status <- file.path(path, "ai_project", "QC_STATUS.md")
@@ -66,18 +66,18 @@ test_that("overwrite behavior preserves existing files by default", {
   writeLines("custom agents", agents)
   writeLines("custom qc", qc_status)
 
-  create_agentic_project(path, mode = "ai_only", overwrite = FALSE)
+  airsetup(path, mode = "ai_only", overwrite = FALSE)
   expect_equal(readLines(agents, warn = FALSE), "custom agents")
   expect_equal(readLines(qc_status, warn = FALSE), "custom qc")
 
-  create_agentic_project(path, mode = "ai_only", japanese = TRUE, overwrite = TRUE)
+  airsetup(path, mode = "ai_only", japanese = TRUE, overwrite = TRUE)
   expect_identical(readLines(agents, warn = FALSE), agents_md_template(japanese = TRUE))
   expect_identical(readLines(qc_status, warn = FALSE), qc_status_template())
 })
 
 test_that("AGENTS.md is generated from the canonical English minimal template by default", {
   path <- tempfile("airsetup-")
-  create_agentic_project(path, mode = "ai_only")
+  airsetup(path, mode = "ai_only")
 
   agents <- readLines(file.path(path, "ai_project", "AGENTS.md"), warn = FALSE)
   text <- paste(agents, collapse = "\n")
@@ -103,7 +103,7 @@ test_that("AGENTS.md is generated from the canonical English minimal template by
 
 test_that("AGENTS.md records Japanese narrative output language when requested", {
   path <- tempfile("airsetup-")
-  create_agentic_project(path, mode = "ai_only", japanese = TRUE)
+  airsetup(path, mode = "ai_only", japanese = TRUE)
 
   agents <- readLines(file.path(path, "ai_project", "AGENTS.md"), warn = FALSE)
   text <- paste(agents, collapse = "\n")
@@ -118,14 +118,14 @@ test_that("AGENTS.md records Japanese narrative output language when requested",
 test_that("japanese must be a single TRUE or FALSE value", {
   path <- tempfile("airsetup-")
 
-  expect_error(create_agentic_project(path, japanese = NA), "japanese.*TRUE or FALSE")
-  expect_error(create_agentic_project(path, japanese = c(TRUE, FALSE)), "japanese.*TRUE or FALSE")
+  expect_error(airsetup(path, japanese = NA), "japanese.*TRUE or FALSE")
+  expect_error(airsetup(path, japanese = c(TRUE, FALSE)), "japanese.*TRUE or FALSE")
   expect_error(create_agents_md(path, japanese = "yes"), "japanese.*TRUE or FALSE")
 })
 
 test_that("QC_STATUS.md is generated as a minimal root status file", {
   path <- tempfile("airsetup-")
-  create_agentic_project(path, mode = "ai_only")
+  airsetup(path, mode = "ai_only")
 
   qc_status <- readLines(file.path(path, "ai_project", "QC_STATUS.md"), warn = FALSE)
 
@@ -136,7 +136,7 @@ test_that("QC_STATUS.md is generated as a minimal root status file", {
 
 test_that("split mode r_project scaffold is minimal and protects hidden data", {
   path <- tempfile("airsetup-")
-  create_agentic_project(path, mode = "split")
+  airsetup(path, mode = "split")
 
   gitignore <- file.path(path, "r_project", ".gitignore")
   readme <- file.path(path, "r_project", "README_DO_NOT_SHARE_WITH_AI.md")
@@ -168,7 +168,7 @@ test_that("check_agentic_project reports missing and found split-mode items", {
   expect_true(all(c("item", "type", "path", "exists", "required", "message") %in% names(report)))
   expect_true(any(!report$exists))
 
-  create_agentic_project(path, mode = "split")
+  airsetup(path, mode = "split")
   report2 <- check_agentic_project(path, mode = "split")
 
   expect_true(all(report2$exists))
@@ -189,7 +189,7 @@ test_that("check_agentic_project reports missing and found split-mode items", {
 
 test_that("check_agentic_project reports all required ai-only items after creation", {
   path <- tempfile("airsetup-")
-  create_agentic_project(path, mode = "ai_only")
+  airsetup(path, mode = "ai_only")
 
   report <- check_agentic_project(path, mode = "ai_only")
 

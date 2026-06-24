@@ -222,7 +222,7 @@ qc_status_template <- function() {
   )
 }
 
-#' Create an AI-assisted analysis project structure
+#' Set up an AI-assisted analysis project structure
 #'
 #' @param path Parent directory to create or update.
 #' @param mode Project layout mode. `"split"` creates sibling `ai_project` and
@@ -235,8 +235,23 @@ qc_status_template <- function() {
 #'   exist.
 #'
 #' @return Invisibly returns the normalized parent path.
+#'
+#' @examples
+#' project_dir <- file.path(tempdir(), "airsetup_example")
+#'
+#' airsetup(
+#'   path = project_dir,
+#'   mode = "split",
+#'   japanese = FALSE,
+#'   overwrite = FALSE
+#' )
+#'
+#' check_agentic_project(project_dir, mode = "split")
+#'
+#' ai_only_dir <- file.path(tempdir(), "airsetup_ai_only_example")
+#' airsetup(ai_only_dir, mode = "ai_only", japanese = TRUE)
 #' @export
-create_agentic_project <- function(path, mode = c("split", "ai_only"), japanese = FALSE, overwrite = FALSE) {
+airsetup <- function(path, mode = c("split", "ai_only"), japanese = FALSE, overwrite = FALSE) {
   if (!is.character(path) || length(path) != 1L || !nzchar(path)) {
     stop("`path` must be a non-empty string.", call. = FALSE)
   }

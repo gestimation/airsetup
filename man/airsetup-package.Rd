@@ -2,7 +2,6 @@
 % Please edit documentation in R/airsetup.R
 \docType{package}
 \name{airsetup-package}
-\alias{airsetup}
 \alias{airsetup-package}
 \title{airsetup: project setup for AI-assisted R workflows}
 \description{
