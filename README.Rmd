@@ -7,9 +7,7 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  comment = "#>"
 )
 ```
 
@@ -18,38 +16,98 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of airsetup is to ...
+`airsetup` creates a lightweight project scaffold for AI-assisted R analysis workflows. It organizes AI and R work using separated folders and a minimal `AGENTS.md`, supports flexible AI-assisted QC through `QC_STATUS.md`, and encourages traceable handling of data additions without treating new files as automatically approved analysis inputs.
 
 ## Installation
 
-You can install the development version of airsetup from [GitHub](https://github.com/) with:
+You can install the development version of `airsetup` from GitHub with:
 
 ``` r
 # install.packages("pak")
 pak::pak("gestimation/airsetup")
 ```
 
-## Example
+## Quick start
 
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
+```{r quick-start, eval=FALSE}
 library(airsetup)
-## basic example code
+
+project_dir <- file.path(tempdir(), "airsetup_example")
+
+airsetup(
+  path = project_dir,
+  mode = "split",
+  japanese = TRUE
+)
+
+aircheck(project_dir, mode = "split")
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+`airsetup()` creates or updates the scaffold. `aircheck()` returns a data frame showing whether the expected folders and files are present.
 
-```{r cars}
-summary(cars)
+## Created folder structure
+
+In the default `split` mode, `airsetup()` creates a parent folder with two sibling areas:
+
+``` text
+airsetup_example/
+├── ai_project/
+│   ├── AGENTS.md
+│   ├── QC_STATUS.md
+│   ├── source/initial/
+│   ├── ai_visible_data/initial/
+│   ├── ai_output/
+│   ├── r_output/
+│   ├── qc/
+│   └── log/
+└── r_project/
+    ├── ai_hidden_data/initial/
+    ├── .gitignore
+    └── README_DO_NOT_SHARE_WITH_AI.md
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+The scaffold separates source materials, AI-visible data, AI-generated outputs, R-generated outputs, QC materials, and logs. It is intended to be a small practical scaffold, not a large workflow management system.
 
-You can also embed plots, for example:
+## `split` mode and `ai_only` mode
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+- `mode = "split"` creates `ai_project/` for AI-visible work and `r_project/` for local R execution with hidden analysis data.
+- `mode = "ai_only"` creates only `ai_project/` when a separate hidden-data execution area is not needed.
+
+```{r ai-only, eval=FALSE}
+ai_only_dir <- file.path(tempdir(), "airsetup_ai_only_example")
+airsetup(ai_only_dir, mode = "ai_only", japanese = FALSE)
+aircheck(ai_only_dir, mode = "ai_only")
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+## AI-visible data and AI-hidden data
+
+`ai_visible_data/` is for dummy, synthetic, redacted, or otherwise shareable data that AI agents may inspect for column checks, script design, and test execution.
+
+In `split` mode, `r_project/ai_hidden_data/` is reserved for real or analysis data that AI agents should not inspect directly. AI-generated scripts may refer to this location for human-run analysis, but examples in this README do not read hidden analysis data.
+
+## `AGENTS.md` and `QC_STATUS.md`
+
+`AGENTS.md` provides minimal shared working rules for Codex-style AI agents, including folder boundaries, read/write expectations, and reminders not to inspect hidden analysis data.
+
+`QC_STATUS.md` is a lightweight current-status file for QC items, open questions, validation status, and human-approved decisions. AI-assisted QC can help with risk identification, workflow tracking, and review support, but domain and statistical decisions require human approval. AI agents should not be described as making final QC judgments.
+
+## Checking a project with `aircheck()`
+
+Use `aircheck()` to verify that the expected scaffold items exist:
+
+```{r aircheck, eval=FALSE}
+checks <- aircheck(project_dir, mode = "split")
+checks
+subset(checks, !exists)
+```
+
+A complete project should have no missing required items. The result is a regular data frame, so it can be filtered or reported with ordinary R code.
+
+## Design principles
+
+- Keep the public API small: use `airsetup()` to create the scaffold and `aircheck()` to inspect it.
+- Organize AI-and-R workflows with separated folders and a minimal `AGENTS.md`.
+- Support flexible AI-assisted QC through `QC_STATUS.md` while keeping human approval explicit.
+- Distinguish initial materials and data in `initial/` from later additions in `addition_YYYYMMDD/` folders.
+- Maintain traceability for additions, but treat them as inputs to review rather than automatically approved current-analysis inputs.
+- Decide whether an addition belongs in the current analysis through the QC/status workflow and human approval.
