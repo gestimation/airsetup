@@ -160,6 +160,20 @@ agents_md_template <- function(japanese = FALSE) {
     "  mismatches occurred.",
     "- If Codex needs to run an R script for debugging or validation, Codex must",
     "  ask the user for approval first.",
+    "- Generated R scripts must not assume that the current R working directory is",
+    "  the project root. Interactive sessions, IDE run buttons, notebook chunks,",
+    "  and line-by-line console execution may all start from different working",
+    "  directories.",
+    "- Generated R scripts should resolve input and output paths from an explicit",
+    "  project root or from the script file location when that location is",
+    "  available. If the project root cannot be determined, the script should stop",
+    "  with a clear message telling the user how to set it explicitly.",
+    "- Run notes for generated R scripts should include both a recommended",
+    "  command-line execution pattern and an interactive-session fallback for",
+    "  setting the project root explicitly. Keep these notes generic and avoid",
+    "  embedding machine-specific absolute paths unless the user asks for them.",
+    "- Avoid relying on bare relative paths for data inputs or outputs unless the",
+    "  script first resolves the project root and constructs paths from that root.",
     "- If a script needs both a dummy-data version and an analysis-data version,",
     "  both versions should be generated under `ai_output/` with clear file names.",
     "- If variable creation requires fallback variables, proxy variables, handling",
@@ -244,6 +258,7 @@ agents_md_template <- function(japanese = FALSE) {
 
   c(base, language_rule)
 }
+
 
 validate_japanese <- function(japanese) {
   if (!is.logical(japanese) || length(japanese) != 1L || is.na(japanese)) {
