@@ -23,8 +23,8 @@ separated folders, a minimal `AGENTS.md`, and a `QC_STATUS.md` tracker.
 You can install the development version of airsetup from GitHub with:
 
 ``` r
-# install.packages("pak")
-pak::pak("gestimation/airsetup")
+# install.packages("devtools")
+devtools::install_github("gestimation/airsetup")
 ```
 
 ## Basic use
@@ -52,8 +52,10 @@ my_analysis/
 ```
 
 <figure>
-<img src="man/figures/screenshot_root.png" alt="Split project root" />
-<figcaption aria-hidden="true">Split project root</figcaption>
+<img src="man/figures/screenshot_root.png"
+alt="An example of split project root" />
+<figcaption aria-hidden="true">An example of split project
+root</figcaption>
 </figure>
 
 ## What airsetup creates
@@ -63,8 +65,9 @@ to the project rules.
 
 <figure>
 <img src="man/figures/screenshot_ai_project.png"
-alt="AI project folder" />
-<figcaption aria-hidden="true">AI project folder</figcaption>
+alt="An example of AI project folder" />
+<figcaption aria-hidden="true">An example of AI project
+folder</figcaption>
 </figure>
 
 It contains folders for source materials, AI-visible data, AI-generated
@@ -83,11 +86,8 @@ files, R outputs, QC evidence, and logs:
 
 In `split` mode, `r_project/` is also created next to `ai_project/`.
 
-<figure>
-<img src="man/figures/screenshot_r_project.png"
-alt="R project folder" />
-<figcaption aria-hidden="true">R project folder</figcaption>
-</figure>
+\![[An example of R project
+folder](man/figures/screenshot_r_project.png)
 
 It contains a hidden-data area and local reminders:
 
@@ -100,29 +100,31 @@ It contains a hidden-data area and local reminders:
 ## Clear boundaries with separated folders
 
 The package separates what AI can inspect from what R can use for real
-analysis. The visible and hidden data areas can share the same internal
-structure:
+analysis. The visible and hidden data areas would share the same
+internal structure:
 
 ``` text
 ai_project/ai_visible_data/initial/
 r_project/ai_hidden_data/initial/
 ```
 
-For example, a small visible `prostate.csv` can be placed in
-`ai_project/ai_visible_data/initial/`, while a full analysis
-`prostate.csv` with the same file name can be placed in
-`r_project/ai_hidden_data/initial/`.
+For example, a dummy or empty data set `prostate.csv` may be placed in
+`ai_project/ai_visible_data/initial/`, while a real data set
+`prostate.csv` with the same file name and the same data structure may
+be placed in `r_project/ai_hidden_data/initial/`.
 
 <figure>
 <img src="man/figures/screenshot_ai_project_ai_visible_data_initial.png"
-alt="AI-visible data folder" />
-<figcaption aria-hidden="true">AI-visible data folder</figcaption>
+alt="An example of AI-visible data folder" />
+<figcaption aria-hidden="true">An example of AI-visible data
+folder</figcaption>
 </figure>
 
 <figure>
 <img src="man/figures/screenshot_r_project_ai_hidden_data_initial.png"
-alt="AI-hidden data folder" />
-<figcaption aria-hidden="true">AI-hidden data folder</figcaption>
+alt="An example of AI-hidden data folder" />
+<figcaption aria-hidden="true">An example of AI-hidden data
+folder</figcaption>
 </figure>
 
 This lets AI agents design scripts against visible data while R scripts
