@@ -59,8 +59,8 @@
 </h2>
 <p>You can install the development version of airsetup from GitHub with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="st">"gestimation/airsetup"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"gestimation/airsetup"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="basic-use">Basic use<a class="anchor" aria-label="anchor" href="#basic-use"></a>
@@ -81,16 +81,16 @@
 <pre class="text"><code>my_analysis/
 +-- ai_project/
 +-- r_project/</code></pre>
-<figure><img src="reference/figures/screenshot_root.png" alt="Split project root"><figcaption aria-hidden="true">
-Split project root
+<figure><img src="reference/figures/screenshot_root.png" alt="An example of split project root"><figcaption aria-hidden="true">
+An example of split project root
 </figcaption></figure>
 </div>
 <div class="section level2">
 <h2 id="what-airsetup-creates">What airsetup creates<a class="anchor" aria-label="anchor" href="#what-airsetup-creates"></a>
 </h2>
 <p><code>ai_project/</code> is the workspace AI agents may inspect and edit according to the project rules.</p>
-<figure><img src="reference/figures/screenshot_ai_project.png" alt="AI project folder"><figcaption aria-hidden="true">
-AI project folder
+<figure><img src="reference/figures/screenshot_ai_project.png" alt="An example of AI project folder"><figcaption aria-hidden="true">
+An example of AI project folder
 </figcaption></figure><p>It contains folders for source materials, AI-visible data, AI-generated files, R outputs, QC evidence, and logs:</p>
 <ul>
 <li>
@@ -111,9 +111,8 @@ AI project folder
 <code>QC_STATUS.md</code>: the current QC status and open review items.</li>
 </ul>
 <p>In <code>split</code> mode, <code>r_project/</code> is also created next to <code>ai_project/</code>.</p>
-<figure><img src="reference/figures/screenshot_r_project.png" alt="R project folder"><figcaption aria-hidden="true">
-R project folder
-</figcaption></figure><p>It contains a hidden-data area and local reminders:</p>
+<p>![<a href="man/figures/screenshot_r_project.png">An example of R project folder</a></p>
+<p>It contains a hidden-data area and local reminders:</p>
 <ul>
 <li>
 <code>ai_hidden_data/</code>: analysis data that AI agents must not inspect directly.</li>
@@ -126,14 +125,14 @@ R project folder
 <div class="section level2">
 <h2 id="clear-boundaries-with-separated-folders">Clear boundaries with separated folders<a class="anchor" aria-label="anchor" href="#clear-boundaries-with-separated-folders"></a>
 </h2>
-<p>The package separates what AI can inspect from what R can use for real analysis. The visible and hidden data areas can share the same internal structure:</p>
+<p>The package separates what AI can inspect from what R can use for real analysis. The visible and hidden data areas would share the same internal structure:</p>
 <pre class="text"><code>ai_project/ai_visible_data/initial/
 r_project/ai_hidden_data/initial/</code></pre>
-<p>For example, a small visible <code>prostate.csv</code> can be placed in <code>ai_project/ai_visible_data/initial/</code>, while a full analysis <code>prostate.csv</code> with the same file name can be placed in <code>r_project/ai_hidden_data/initial/</code>.</p>
-<figure><img src="reference/figures/screenshot_ai_project_ai_visible_data_initial.png" alt="AI-visible data folder"><figcaption aria-hidden="true">
-AI-visible data folder
-</figcaption></figure><figure><img src="reference/figures/screenshot_r_project_ai_hidden_data_initial.png" alt="AI-hidden data folder"><figcaption aria-hidden="true">
-AI-hidden data folder
+<p>For example, a dummy or empty data set <code>prostate.csv</code> may be placed in <code>ai_project/ai_visible_data/initial/</code>, while a real data set <code>prostate.csv</code> with the same file name and the same data structure may be placed in <code>r_project/ai_hidden_data/initial/</code>.</p>
+<figure><img src="reference/figures/screenshot_ai_project_ai_visible_data_initial.png" alt="An example of AI-visible data folder"><figcaption aria-hidden="true">
+An example of AI-visible data folder
+</figcaption></figure><figure><img src="reference/figures/screenshot_r_project_ai_hidden_data_initial.png" alt="An example of AI-hidden data folder"><figcaption aria-hidden="true">
+An example of AI-hidden data folder
 </figcaption></figure><p>This lets AI agents design scripts against visible data while R scripts can be run against hidden data by changing the input root, without asking AI to inspect the hidden files.</p>
 </div>
 <div class="section level2">
