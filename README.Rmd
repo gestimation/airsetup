@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# AI-assisted R workflow with QC and clear boundaries
+# Setup AI-assisted R analysis project structures
 
 <!-- badges: start -->
 <!-- badges: end -->

@@ -2,13 +2,24 @@ url: https://gestimation.github.io/airsetup/
 template:
   bootstrap: 5
 
+development:
+  mode: auto
+
+home:
+  title: airsetup
+  description: AI-assisted R workflow with QC and clear boundaries
+
 navbar:
   structure:
-    left: [getting_started, reference]
+    left:  [getting_started, reference]
+    right: [search, github]
   components:
     getting_started:
       text: Getting started
       href: articles/getting-started.html
+    reference:
+      text: Reference
+      href: reference/index.html
 
 articles:
 - title: Getting started

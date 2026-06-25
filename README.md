@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# AI-assisted R workflow with QC and clear boundaries
+# Setup AI-assisted R analysis project structures
 
 <!-- badges: start -->
 

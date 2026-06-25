@@ -1,5 +1,5 @@
 Package: airsetup
-Title: Setup AI-Assisted R Analysis Project Structures
+Title: AI-Assisted R Workflow with QC and Clear Boundaries
 Version: 0.0.0.9000
 Authors@R:
     person("gestimation", "Toolkit", , "maintainer@example.com", role = c("aut", "cre"))
