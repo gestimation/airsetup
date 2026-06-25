@@ -1,4 +1,4 @@
-# AI-assisted R workflow with QC and clear boundaries
+# Setup AI-assisted R analysis project structures
 
 Clear boundaries, flexible QC, and traceable structure for AI-assisted R
 analysis.
