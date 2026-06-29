@@ -5,12 +5,22 @@
 #' @keywords internal
 "_PACKAGE"
 
+initial_dir_name <- function(date = Sys.Date()) {
+  paste0("initial_", format(as.Date(date), "%Y%m%d"))
+}
+
+has_dated_initial_dir <- function(path, parent) {
+  target <- file.path(path, parent)
+  if (!dir.exists(target)) return(FALSE)
+
+  dirs <- list.dirs(target, full.names = FALSE, recursive = FALSE)
+  any(grepl("^initial_[0-9]{8}$", dirs))
+}
+
 required_dirs <- function() {
   c(
     "source",
-    "source/initial",
     "ai_visible_data",
-    "ai_visible_data/initial",
     "ai_output",
     "r_output",
     "qc",
@@ -20,6 +30,21 @@ required_dirs <- function() {
 
 required_files <- function() {
   c("AGENTS.md", "QC_STATUS.md")
+}
+
+create_ai_initial_dirs <- function(path, date = Sys.Date()) {
+  initial <- initial_dir_name(date)
+
+  dirs <- c(
+    file.path("source", initial),
+    file.path("ai_visible_data", initial)
+  )
+
+  for (dir in dirs) {
+    dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
+  }
+
+  invisible(dirs)
 }
 
 write_if_allowed <- function(path, lines, overwrite = FALSE) {
@@ -45,14 +70,14 @@ agents_md_template <- function(japanese = FALSE) {
     "",
     "- `source/`",
     "  - Stores source specifications, reference documents, and original materials.",
-    "  - Initial materials should be placed under `source/initial/`.",
+    "  - Initial materials should be placed under `source/initial_YYYYMMDD/`.",
     "  - Additional materials should be placed under `source/addition_YYYYMMDD/`.",
     "  - Treat this folder as read-only. Codex must not overwrite, move, or delete",
     "    source materials.",
     "",
     "- `ai_visible_data/`",
     "  - Stores dummy or visible data that Codex is allowed to inspect.",
-    "  - Initial visible data should be placed under `ai_visible_data/initial/`.",
+    "  - Initial visible data should be placed under `ai_visible_data/initial_YYYYMMDD/`.",
     "  - Additional visible data should be placed under",
     "    `ai_visible_data/addition_YYYYMMDD/`.",
     "  - Treat this folder as read-only.",
@@ -64,7 +89,7 @@ agents_md_template <- function(japanese = FALSE) {
     "- `../r_project/ai_hidden_data/`",
     "  - Stores analysis data that Codex must not inspect directly.",
     "  - It is assumed to follow the same folder convention as visible data:",
-    "    `initial/` for initial data and `addition_YYYYMMDD/` for additions.",
+    "    `initial_YYYYMMDD/` for initial data and `addition_YYYYMMDD/` for additions.",
     "  - Codex must not list, open, copy, move, summarize, or otherwise inspect this",
     "    folder or its contents.",
     "  - R scripts may reference this folder by relative path for user-run analysis.",
@@ -222,6 +247,44 @@ agents_md_template <- function(japanese = FALSE) {
     "  `QC_STATUS.md`."
   )
 
+  sap_rule <- c(
+    "",
+    "## Statistical Analysis Plan and Analysis Decisions",
+    "",
+    "- Before substantive analysis script generation, review, validation,",
+    "  interpretation, or QC work, Codex should check whether a Statistical",
+    "  Analysis Plan or equivalent analysis specification is available under",
+    "  `source/` or `ai_output/`.",
+    "- If an SAP or equivalent analysis specification exists, Codex should use it",
+    "  as the primary analysis-planning source. Codex must not overwrite, replace,",
+    "  or rewrite the SAP unless the user explicitly asks for that change.",
+    "- If no SAP or equivalent analysis specification exists, Codex should create",
+    "  `ai_output/SAP.md` as a project-specific draft Statistical Analysis Plan",
+    "  based on the available source materials, user instructions, visible data",
+    "  structure, and the analysis context.",
+    "- `ai_output/SAP.md` should not be a generic template. Codex should determine",
+    "  the structure, headings, and level of detail from the project context.",
+    "- If important information is unavailable, Codex should write explicit open",
+    "  questions or uncertainty statements rather than silently filling in",
+    "  assumptions.",
+    "- When Codex makes analysis-planning judgments, interpretations, assumptions,",
+    "  or proposed decisions that are not directly specified in the SAP, source",
+    "  materials, or user instructions, Codex should record them in",
+    "  `ai_output/SAP_DECISIONS.md`.",
+    "- `SAP_DECISIONS.md` should distinguish source-specified decisions,",
+    "  user-approved decisions, Codex interpretations, Codex proposals, and",
+    "  unresolved questions.",
+    "- Codex must not treat its own proposed SAP content, interpretations, or",
+    "  analysis decisions as final user-approved decisions unless the user",
+    "  explicitly approves them.",
+    "- Codex must not revise planned analyses based on observed results in",
+    "  `r_output/` unless the user explicitly requests or approves the change.",
+    "  Such changes must be recorded as post hoc or revised decisions in",
+    "  `SAP_DECISIONS.md`.",
+    "- Codex must not inspect `../r_project/ai_hidden_data/` to prepare, revise,",
+    "  or interpret SAP-related files."
+  )
+
   language_rule <- if (isTRUE(japanese)) {
     c(
       "",
@@ -256,9 +319,8 @@ agents_md_template <- function(japanese = FALSE) {
     )
   }
 
-  c(base, language_rule)
+  c(base, sap_rule, language_rule)
 }
-
 
 validate_japanese <- function(japanese) {
   if (!is.logical(japanese) || length(japanese) != 1L || is.na(japanese)) {
@@ -366,6 +428,8 @@ create_ai_project_structure <- function(path, japanese = FALSE, overwrite = FALS
     dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
   }
 
+  create_ai_initial_dirs(path)
+
   create_agents_md(path, japanese = japanese, overwrite = overwrite)
   create_qc_status_md(path, overwrite = overwrite)
 
@@ -382,8 +446,9 @@ create_ai_project_structure <- function(path, japanese = FALSE, overwrite = FALS
 #' @noRd
 create_r_project_scaffold <- function(path, overwrite = FALSE) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
+  initial <- initial_dir_name()
 
-  for (dir in c("ai_hidden_data", "ai_hidden_data/initial")) {
+  for (dir in c("ai_hidden_data", file.path("ai_hidden_data", initial))) {
     dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
   }
 
@@ -413,7 +478,7 @@ create_r_project_scaffold <- function(path, overwrite = FALSE) {
       "The expected analysis data folder is:",
       "",
       "- `ai_hidden_data/`",
-      "- `ai_hidden_data/initial/`",
+      "- `ai_hidden_data/initial_YYYYMMDD/`",
       "- `ai_hidden_data/addition_YYYYMMDD/` for later additions",
       "",
       "AI-generated scripts should generally live in `../ai_project/ai_output/`.",
@@ -486,17 +551,10 @@ aircheck <- function(path, mode = c("split", "ai_only")) {
   items <- ai_items
   types <- ai_types
 
-  if (identical(mode, "split")) {
-    r_dirs <- file.path("r_project", c("ai_hidden_data", "ai_hidden_data/initial"))
-    r_files <- file.path("r_project", c(".gitignore", "README_DO_NOT_SHARE_WITH_AI.md"))
-    items <- c(items, r_dirs, r_files)
-    types <- c(types, rep("folder", length(r_dirs)), rep("file", length(r_files)))
-  }
-
   full <- file.path(path, items)
   exists <- ifelse(types == "folder", dir.exists(full), file.exists(full))
 
-  data.frame(
+  out <- data.frame(
     item = items,
     type = types,
     path = items,
@@ -505,4 +563,77 @@ aircheck <- function(path, mode = c("split", "ai_only")) {
     message = ifelse(exists, "Found", "Missing required item"),
     stringsAsFactors = FALSE
   )
+
+  ai_initial_checks <- data.frame(
+    item = c(
+      "ai_project/source/initial_YYYYMMDD",
+      "ai_project/ai_visible_data/initial_YYYYMMDD"
+    ),
+    type = c("folder", "folder"),
+    path = c(
+      "ai_project/source/initial_YYYYMMDD",
+      "ai_project/ai_visible_data/initial_YYYYMMDD"
+    ),
+    exists = c(
+      has_dated_initial_dir(file.path(path, "ai_project"), "source"),
+      has_dated_initial_dir(file.path(path, "ai_project"), "ai_visible_data")
+    ),
+    required = c(TRUE, TRUE),
+    stringsAsFactors = FALSE
+  )
+
+  ai_initial_checks$message <- ifelse(
+    ai_initial_checks$exists,
+    "Found dated initial folder",
+    "Missing required dated initial folder"
+  )
+
+  out <- rbind(out, ai_initial_checks)
+
+  if (identical(mode, "split")) {
+    r_items <- file.path("r_project", c(".gitignore", "README_DO_NOT_SHARE_WITH_AI.md"))
+    r_types <- rep("file", length(r_items))
+
+    r_full <- file.path(path, r_items)
+    r_exists <- file.exists(r_full)
+
+    r_out <- data.frame(
+      item = r_items,
+      type = r_types,
+      path = r_items,
+      exists = r_exists,
+      required = TRUE,
+      message = ifelse(r_exists, "Found", "Missing required item"),
+      stringsAsFactors = FALSE
+    )
+
+    r_initial_checks <- data.frame(
+      item = c(
+        "r_project/ai_hidden_data",
+        "r_project/ai_hidden_data/initial_YYYYMMDD"
+      ),
+      type = c("folder", "folder"),
+      path = c(
+        "r_project/ai_hidden_data",
+        "r_project/ai_hidden_data/initial_YYYYMMDD"
+      ),
+      exists = c(
+        dir.exists(file.path(path, "r_project", "ai_hidden_data")),
+        has_dated_initial_dir(file.path(path, "r_project"), "ai_hidden_data")
+      ),
+      required = c(TRUE, TRUE),
+      stringsAsFactors = FALSE
+    )
+
+    r_initial_checks$message <- ifelse(
+      r_initial_checks$exists,
+      "Found",
+      "Missing required item"
+    )
+
+    out <- rbind(out, r_out, r_initial_checks)
+  }
+
+  rownames(out) <- NULL
+  out
 }

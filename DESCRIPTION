@@ -1,6 +1,6 @@
 Package: airsetup
 Title: AI-Assisted R Workflow with QC and Clear Boundaries
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R:
     person("gestimation", "Toolkit", , "maintainer@example.com", role = c("aut", "cre"))
 Description: Lightweight workflow infrastructure for setting up minimal
