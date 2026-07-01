@@ -79,8 +79,10 @@ files, R outputs, QC evidence, and logs:
 
 In `split` mode, `r_project/` is also created next to `ai_project/`.
 
-\![[An example of R project
-folder](https://gestimation.github.io/airsetup/man/figures/screenshot_r_project.png)
+![An example of R project
+folder](reference/figures/screenshot_r_project.png)
+
+An example of R project folder
 
 It contains a hidden-data area and local reminders:
 

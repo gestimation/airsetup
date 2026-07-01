@@ -86,8 +86,12 @@ files, R outputs, QC evidence, and logs:
 
 In `split` mode, `r_project/` is also created next to `ai_project/`.
 
-\![[An example of R project
-folder](man/figures/screenshot_r_project.png)
+<figure>
+<img src="man/figures/screenshot_r_project.png"
+alt="An example of R project folder" />
+<figcaption aria-hidden="true">An example of R project
+folder</figcaption>
+</figure>
 
 It contains a hidden-data area and local reminders:
 
