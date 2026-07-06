@@ -195,9 +195,9 @@ skills_index_template <- function() {
     "",
     "## Agent instruction",
     "",
-    "When a skill is used, read the relevant skill file, produce the requested QC",
-    "report, save the report under `ai_project/qc/`, and update `QC_STATUS.md`",
-    "when unresolved issues, decisions, or handoff actions need to be tracked."
+    "When file writing is available, save the report under `ai_project/qc/`.",
+    "If file writing is not available, return the report in the chat and clearly",
+    "state the intended output path."
   )
 }
 
