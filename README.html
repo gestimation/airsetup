@@ -635,7 +635,8 @@ with:</p>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="at">japanese =</span> <span class="cn">TRUE</span></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>)</span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">aircheck</span>(project_dir, <span class="at">mode =</span> <span class="st">&quot;split&quot;</span>)</span></code></pre></div>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">aircheck</span>(project_dir, <span class="at">mode =</span> <span class="st">&quot;split&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="fu">airskill</span>(project_dir)</span></code></pre></div>
 <p>In <code>split</code> mode, <code>airsetup()</code> creates two
 sibling folders:</p>
 <pre class="text"><code>my_analysis/
@@ -759,7 +760,7 @@ in an AI-assisted R workflow.</p>
 <ul>
 <li><p>QC_SKILL_CONTEXT.md: checks whether the supplied analysis context
 is clear enough before drafting a plan or generating R code.</p></li>
-<li><p>QC_SKILL_PLAN.md: checks whether an analysis plan or SAP is clear
+<li><p>QC_SKILL_PLAN.md: checks whether an coding plan or SAP is clear
 enough for R implementation.</p></li>
 <li><p>QC_SKILL_RESULT.md: checks whether analysis results are
 internally consistent, traceable, aligned with the plan, and safe to

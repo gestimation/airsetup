@@ -43,6 +43,7 @@ airsetup(
 )
 
 aircheck(project_dir, mode = "split")
+airskill(project_dir)
 ```
 
 In `split` mode, `airsetup()` creates two sibling folders:
@@ -180,8 +181,8 @@ an AI-assisted R workflow.
 - QC_SKILL_CONTEXT.md: checks whether the supplied analysis context is
   clear enough before drafting a plan or generating R code.
 
-- QC_SKILL_PLAN.md: checks whether an analysis plan or SAP is clear
-  enough for R implementation.
+- QC_SKILL_PLAN.md: checks whether an coding plan or SAP is clear enough
+  for R implementation.
 
 - QC_SKILL_RESULT.md: checks whether analysis results are internally
   consistent, traceable, aligned with the plan, and safe to interpret.
