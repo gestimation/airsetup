@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">airsetup</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@
 <!-- badges: end -->
 <p>Clear boundaries, flexible QC, and traceable structure for AI-assisted R analysis.</p>
 <p><code>airsetup</code> creates a small, opinionated folder structure for R analysis projects where AI agents help write scripts, inspect visible dummy data, and review outputs, while hidden analysis data stays outside the AI-visible workspace.</p>
-<p>It does not provide statistical analysis functions. Instead, it prepares separated folders, a minimal <code>AGENTS.md</code>, and a <code>QC_STATUS.md</code> tracker.</p>
+<p>It does not provide statistical analysis functions. Instead, it prepares separated folders, a minimal <code>AGENTS.md</code>, a <code>QC_STATUS.md</code> tracker, and optional lightweight QC skill templates for context review, plan review, and result review.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -165,6 +165,19 @@ An example of AI-hidden data folder
 <code>log/</code> for decisions and investigation notes that matter later.</li>
 </ul>
 <p>As data batches, scripts, outputs, and QC evidence evolve, the structure keeps those materials separated instead of mixing them into one working directory.</p>
+</div>
+<div class="section level2">
+<h2 id="what-the-qc-skills-are-for">What the QC skills are for<a class="anchor" aria-label="anchor" href="#what-the-qc-skills-are-for"></a>
+</h2>
+<p>The generated skill files are intended to support self-checking steps in an AI-assisted R workflow.</p>
+<ul>
+<li><p>QC_SKILL_CONTEXT.md: checks whether the supplied analysis context is clear enough before drafting a plan or generating R code.</p></li>
+<li><p>QC_SKILL_PLAN.md: checks whether an analysis plan or SAP is clear enough for R implementation.</p></li>
+<li><p>QC_SKILL_RESULT.md: checks whether analysis results are internally consistent, traceable, aligned with the plan, and safe to interpret.</p></li>
+<li><p>SKILLS_IDEX.md: explains the skill files.</p></li>
+</ul>
+<p>The skills use a compact QC report format with domain-level status, issue severity, readiness for next steps, cannot-assess items, AI assumption risks, and recommended handoff actions.</p>
+<p>They are intentionally lightweight. A Pass from these skills does not mean formal statistical approval, independent validation, regulatory approval, or final scientific acceptance.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
