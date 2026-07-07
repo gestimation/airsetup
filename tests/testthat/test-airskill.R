@@ -10,9 +10,9 @@ test_that("airskill creates QC skill files", {
     report$file,
     c(
       "SKILLS_INDEX.md",
-      "CONTEXT-QC-SKILL.md",
-      "PLAN-QC-SKILL.md",
-      "RESULT-QC-SKILL.md"
+      "QC_SKILL_CONTEXT.md",
+      "QC_SKILL_PLAN.md",
+      "QC_SKILL_RESULT.md"
     )
   )
   expect_true(all(report$status == "created"))
@@ -21,15 +21,15 @@ test_that("airskill creates QC skill files", {
   skills_dir <- file.path(path, "ai_project", "source", "skills")
   expect_true(dir.exists(skills_dir))
   expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
-  expect_true(file.exists(file.path(skills_dir, "CONTEXT-QC-SKILL.md")))
-  expect_true(file.exists(file.path(skills_dir, "PLAN-QC-SKILL.md")))
-  expect_true(file.exists(file.path(skills_dir, "RESULT-QC-SKILL.md")))
+  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
+  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_PLAN.md")))
+  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_RESULT.md")))
 
   index <- paste(readLines(file.path(skills_dir, "SKILLS_INDEX.md"), warn = FALSE), collapse = "\n")
   expect_match(index, "Do not load all skill files unless needed.", fixed = TRUE)
   expect_match(index, "Carry unresolved issues forward to `QC_STATUS.md`.", fixed = TRUE)
 
-  context <- paste(readLines(file.path(skills_dir, "CONTEXT-QC-SKILL.md"), warn = FALSE), collapse = "\n")
+  context <- paste(readLines(file.path(skills_dir, "QC_SKILL_CONTEXT.md"), warn = FALSE), collapse = "\n")
   expect_match(context, "## 12. Handoff to next workflow step", fixed = TRUE)
   expect_match(context, "Do not assign a numeric score.", fixed = TRUE)
   expect_match(context, "AI assumption risks", fixed = TRUE)
@@ -41,13 +41,13 @@ test_that("airskill selected skills creates index plus selected files", {
 
   report <- airskill(path, skills = "context", quiet = TRUE)
 
-  expect_equal(report$file, c("SKILLS_INDEX.md", "CONTEXT-QC-SKILL.md"))
+  expect_equal(report$file, c("SKILLS_INDEX.md", "QC_SKILL_CONTEXT.md"))
 
   skills_dir <- file.path(path, "ai_project", "source", "skills")
   expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
-  expect_true(file.exists(file.path(skills_dir, "CONTEXT-QC-SKILL.md")))
-  expect_false(file.exists(file.path(skills_dir, "PLAN-QC-SKILL.md")))
-  expect_false(file.exists(file.path(skills_dir, "RESULT-QC-SKILL.md")))
+  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
+  expect_false(file.exists(file.path(skills_dir, "QC_SKILL_PLAN.md")))
+  expect_false(file.exists(file.path(skills_dir, "QC_SKILL_RESULT.md")))
 })
 
 test_that("airskill preserves existing files by default and overwrites when requested", {
@@ -55,16 +55,16 @@ test_that("airskill preserves existing files by default and overwrites when requ
   airsetup(path, mode = "ai_only")
   airskill(path, skills = "context", quiet = TRUE)
 
-  context <- file.path(path, "ai_project", "source", "skills", "CONTEXT-QC-SKILL.md")
+  context <- file.path(path, "ai_project", "source", "skills", "QC_SKILL_CONTEXT.md")
   writeLines("custom context skill", context)
 
   skipped <- airskill(path, skills = "context", overwrite = FALSE, quiet = TRUE)
-  expect_true(any(skipped$file == "CONTEXT-QC-SKILL.md" & skipped$status == "skipped"))
+  expect_true(any(skipped$file == "QC_SKILL_CONTEXT.md" & skipped$status == "skipped"))
   expect_equal(readLines(context, warn = FALSE), "custom context skill")
 
   overwritten <- airskill(path, skills = "context", overwrite = TRUE, quiet = TRUE)
-  expect_true(any(overwritten$file == "CONTEXT-QC-SKILL.md" & overwritten$status == "overwritten"))
-  expect_true(any(overwritten$file == "CONTEXT-QC-SKILL.md" & overwritten$overwritten))
+  expect_true(any(overwritten$file == "QC_SKILL_CONTEXT.md" & overwritten$status == "overwritten"))
+  expect_true(any(overwritten$file == "QC_SKILL_CONTEXT.md" & overwritten$overwritten))
   expect_identical(readLines(context, warn = FALSE), context_qc_skill_template())
 })
 

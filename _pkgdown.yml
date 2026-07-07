@@ -31,4 +31,5 @@ reference:
 - title: Create and check projects
   contents:
   - airsetup
+  - airskill
   - aircheck

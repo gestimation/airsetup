@@ -108,9 +108,9 @@ validate_airskill_skills <- function(skills) {
 
 airskill_file_specs <- function(skills) {
   skill_specs <- list(
-    context = list(file = "CONTEXT-QC-SKILL.md", template = context_qc_skill_template),
-    plan = list(file = "PLAN-QC-SKILL.md", template = plan_qc_skill_template),
-    result = list(file = "RESULT-QC-SKILL.md", template = result_qc_skill_template)
+    context = list(file = "QC_SKILL_CONTEXT.md", template = context_qc_skill_template),
+    plan = list(file = "QC_SKILL_PLAN.md", template = plan_qc_skill_template),
+    result = list(file = "QC_SKILL_RESULT.md", template = result_qc_skill_template)
   )
 
   c(
@@ -129,7 +129,7 @@ skills_index_template <- function() {
     "",
     "## Available skills",
     "",
-    "### CONTEXT-QC-SKILL.md",
+    "### QC_SKILL_CONTEXT.md",
     "",
     "Use before drafting an analysis plan or generating R code.",
     "",
@@ -144,7 +144,7 @@ skills_index_template <- function() {
     "",
     "- `ai_project/qc/context-qc-001.md`",
     "",
-    "### PLAN-QC-SKILL.md",
+    "### QC_SKILL_PLAN.md",
     "",
     "Use before generating R code from a SAP or analysis plan.",
     "",
@@ -159,7 +159,7 @@ skills_index_template <- function() {
     "",
     "- `ai_project/qc/plan-qc-001.md`",
     "",
-    "### RESULT-QC-SKILL.md",
+    "### QC_SKILL_RESULT.md",
     "",
     "Use after R outputs are available and before report writing.",
     "",
@@ -192,6 +192,41 @@ skills_index_template <- function() {
     "Carry unresolved issues forward to `QC_STATUS.md`.",
     "",
     "A `Pass` from a quick QC skill does not mean formal statistical approval.",
+    "",
+    "## Skill selection rule",
+    "",
+    "When the user asks to `use the QC skill` or `use QC skills`, first inspect",
+    "the current project materials and choose the most relevant `QC_SKILL_*.md`",
+    "file based on the workflow stage.",
+    "",
+    "Use `QC_SKILL_CONTEXT.md` when:",
+    "",
+    "- the project has just started;",
+    "- source materials, user instructions, or visible data have been added;",
+    "- no analysis plan or SAP has been reviewed yet;",
+    "- the user asks whether the available context is sufficient;",
+    "- the user asks for R code generation but the analysis context has not been QC-reviewed.",
+    "",
+    "Use `QC_SKILL_PLAN.md` when:",
+    "",
+    "- a SAP, analysis plan, or analysis specification is available;",
+    "- the user asks whether the plan is implementable;",
+    "- the next step is R script generation from a plan;",
+    "- the previous Context QC recommended plan drafting or plan revision.",
+    "",
+    "Use `QC_SKILL_RESULT.md` when:",
+    "",
+    "- analysis outputs, R outputs, tables, figures, logs, or result text are available;",
+    "- the user asks whether results are consistent or reportable;",
+    "- the next step is result correction, interpretation, report writing, or human statistical review.",
+    "",
+    "If more than one skill seems relevant, choose the earliest unresolved workflow",
+    "stage in this order: context, plan, result. Explain the choice briefly.",
+    "",
+    "If the user names a specific skill file, use that file.",
+    "",
+    "When uncertain, start with `QC_SKILL_CONTEXT.md` and state what additional",
+    "material would be needed to use `QC_SKILL_PLAN.md` or `QC_SKILL_RESULT.md`.",
     "",
     "## Agent instruction",
     "",
@@ -404,7 +439,7 @@ context_qc_skill_template <- function() {
     "Output clarity"
   )
   c(
-    "# CONTEXT-QC-SKILL.md",
+    "# QC_SKILL_CONTEXT.md",
     "",
     "## Purpose",
     "",
@@ -523,7 +558,7 @@ plan_qc_skill_template <- function() {
     "R implementation readiness"
   )
   c(
-    "# PLAN-QC-SKILL.md",
+    "# QC_SKILL_PLAN.md",
     "",
     "## Purpose",
     "",
@@ -646,7 +681,7 @@ result_qc_skill_template <- function() {
     "Traceability and missing information"
   )
   c(
-    "# RESULT-QC-SKILL.md",
+    "# QC_SKILL_RESULT.md",
     "",
     "## Purpose",
     "",

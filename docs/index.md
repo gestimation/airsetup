@@ -9,7 +9,9 @@ and review outputs, while hidden analysis data stays outside the
 AI-visible workspace.
 
 It does not provide statistical analysis functions. Instead, it prepares
-separated folders, a minimal `AGENTS.md`, and a `QC_STATUS.md` tracker.
+separated folders, a minimal `AGENTS.md`, a `QC_STATUS.md` tracker, and
+optional lightweight QC skill templates for context review, plan review,
+and result review.
 
 ## Installation
 
@@ -156,3 +158,27 @@ The package simply gives QC a stable place:
 As data batches, scripts, outputs, and QC evidence evolve, the structure
 keeps those materials separated instead of mixing them into one working
 directory.
+
+## What the QC skills are for
+
+The generated skill files are intended to support self-checking steps in
+an AI-assisted R workflow.
+
+- QC_SKILL_CONTEXT.md: checks whether the supplied analysis context is
+  clear enough before drafting a plan or generating R code.
+
+- QC_SKILL_PLAN.md: checks whether an analysis plan or SAP is clear
+  enough for R implementation.
+
+- QC_SKILL_RESULT.md: checks whether analysis results are internally
+  consistent, traceable, aligned with the plan, and safe to interpret.
+
+- SKILLS_IDEX.md: explains the skill files.
+
+The skills use a compact QC report format with domain-level status,
+issue severity, readiness for next steps, cannot-assess items, AI
+assumption risks, and recommended handoff actions.
+
+They are intentionally lightweight. A Pass from these skills does not
+mean formal statistical approval, independent validation, regulatory
+approval, or final scientific acceptance.
