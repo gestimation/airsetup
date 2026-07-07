@@ -123,9 +123,9 @@ Codexのインターフェース
 
 ``` text
 プロンプト「demodata.rds、data_definition_demodata.txt、help_cifplot.txtを参照してください。
-関心イベントはがん死亡です。がん死亡以外の死亡は競合リスクとして扱います。イベント変数 epsilon の
-コーディングは、0 = alive/censored、1 = cancer death、2 = non-cancer death の予定です。
-まずQCスキルを使い、コンテキストがRコーディングに進めるほど明確かどうか評価してください」
+関心イベントはがん死亡です。がん死亡以外の死亡は競合リスクとして扱います。
+イベント変数 epsilon のコーディングは、0 = alive/censored、1 = cancer death、2 = non-cancer death の
+予定です。まずQCスキルを使い、コンテキストがRコーディングに進めるほど明確か評価してください」
 ```
 
 ``` text
