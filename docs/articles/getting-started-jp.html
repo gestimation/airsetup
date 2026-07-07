@@ -60,8 +60,8 @@
 
     
     
-<p>あなたが統計解析を行う作業領域と、AIエージェントがアクセスする領域を、簡単に分けたいと思ったことはありませんか。あるいは、RStudioとChatGPTを何度も往復する作業に疲れていませんか。このサイトでは、AI支援型Rワークフローを紹介しています。
-重要なのは、AIにいきなり解析を頼まないことです。このワークフローはいくつかのシンプルな原則に従っています。</p>
+<p>あなたが統計解析を行う作業領域と、AIエージェントがアクセスする領域を、簡単に分けたいと思ったことはありませんか？あるいは、RStudioとChatGPTを何度も往復する作業に疲れていませんか？このサイトでは、AI支援型Rワークフローを紹介しています。</p>
+<p>重要なのは、AIにいきなり解析を頼まないことです。このワークフローはいくつかのシンプルな原則に従っています。</p>
 <ul>
 <li>AIエージェントとRStudioの作業空間を分離する</li>
 <li>プランニングとコーディングを分離する</li>
@@ -69,16 +69,19 @@
 <li>統計解析ワークフローの作業記録を支援する</li>
 <li>ユーザーは意思決定、結果解釈、アウトプットについて責任を持つ</li>
 </ul>
-<p>airsetupパッケージは、AIエージェントが支援するRワークフローのためのフォルダ構造を生成します。統計解析のための関数は提供されませんが、その代わりフォルダ、最小限のAGENTS.md、QC_STATUS.mdトラッカー、そしてオプションとして軽快なQCスキルテンプレートが用意されています。</p>
-<p>QCの方法は1つではありません。あるプロジェクトではダブルプログラミングを行うかもしれませんし、別のプロジェクトでは目視チェックを行うかもしれません。AI
+<p>これから紹介する<code>airsetup</code>パッケージは、AIエージェントが支援するRワークフローのためのフォルダ構造を生成します。統計解析のための関数は提供されませんが、その代わりフォルダ、最小限のAGENTS.md、QC_STATUS.mdトラッカー、そしてオプションとして軽快なQCスキルテンプレートが用意されています。</p>
+<p>コーディングの正確性を確認し、QCを行う方法は1つではありません。あるプロジェクトではダブルプログラミングを採用するかもしれませんし、別のプロジェクトでは目視チェックを行うかもしれません。AI
 &amp;
 Rワークフローにおける自己QCをサポートするために、3つのQCスキルテンプレートが用意されています。</p>
 <ul>
-<li>QC_SKILL_CONTEXT.md:
+<li>
+<code>QC_SKILL_CONTEXT.md</code>:
 計画のドラフトやRコーディングに先立って、コンテキスト情報が明確かどうかを確認します</li>
-<li>QC_SKILL_PLAN.md:
+<li>
+<code>QC_SKILL_PLAN.md</code>:
 コーディング計画または統計解析計画（SAP）が、Rで実装するためにじゅうぶんな情報を持っているかどうかを確認します。</li>
-<li>QC_SKILL_RESULT.md:
+<li>
+<code>QC_SKILL_RESULT.md</code>:
 解析結果が内部的に一貫しており、計画に沿ったもので、安全に解釈できるかどうかを確認します</li>
 </ul>
 <div class="section level2">
@@ -132,7 +135,7 @@ Rワークフローにおける自己QCをサポートするために、3つのQ
 </h2>
 <ul>
 <li>AIがアクセスできるダミーデータと非公開の実データを、対応するフォルダ構造に配置する</li>
-<li>このデモでは、ダミーデータとして、<code>cifmodeling</code>に含まれているデータフレームから抽出した、最初の3行を用いる</li>
+<li>このデモでは、ダミーデータとして、<code>cifmodeling</code>パッケージに含まれているデータフレームから抽出した、最初の3行を用いる</li>
 <li>以下のRコードによって、コンテキスト・ダミーデータがプロジェクトフォルダに格納されるはずである</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -217,13 +220,13 @@ R実行用の実データ解析スクリプトの両方が必要です。RStudio
 </div>
 <ul>
 <li>ai_outputに生成されたRスクリプトをRStudioに読み込ませて、実行する</li>
-<li>RStudioの作業ディレクトリに注意すること。作業ディレクトリに依存するコードは、環境によって動かないことがある。</li>
-<li>その場合は、入力するデータセットの場所を指定すると解決するかもしれない。</li>
+<li>RStudioの作業ディレクトリに注意すること。作業ディレクトリに依存するコードは、環境によって動かないことがある</li>
+<li>その場合は、入力するデータセットの場所を指定すると解決するかもしれない</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>DEMODATA_RDS <span class="op">=</span> <span class="st">"C:/demo/r_project/ai_hidden_data/demodata.rds"</span><span class="op">)</span></span></code></pre></div>
 <ul>
-<li>または、作業ディレクトリを手動で設定することもできる。</li>
+<li>または、作業ディレクトリを手動で設定することもできる</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="st">"C:/demo/r_project/ai_hidden_data"</span><span class="op">)</span></span></code></pre></div>
