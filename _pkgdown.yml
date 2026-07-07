@@ -11,21 +11,26 @@ home:
 
 navbar:
   structure:
-    left:  [getting_started, reference]
+    left:  [getting_started, getting_started_jp, reference]
     right: [search, github]
   components:
     getting_started:
-      text: Getting started
+      text: Getting started [EN]
       href: articles/getting-started.html
+    getting_started_jp:
+      text: Getting started [JP]
+      href: articles/getting-started-jp.html
     reference:
       text: Reference
       href: reference/index.html
 
 articles:
 - title: Getting started
-  navbar: ~
   contents:
   - getting-started
+- title: "Getting started－チャットの方が得意な研究者のためのAI & Rワークフロー"
+  contents:
+  - getting-started-jp
 
 reference:
 - title: Create and check projects
