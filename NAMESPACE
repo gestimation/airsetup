@@ -2,4 +2,5 @@
 
 export(aircheck)
 export(airsetup)
+export(airsetup_demo)
 export(airskill)

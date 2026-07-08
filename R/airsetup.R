@@ -405,6 +405,73 @@ qc_status_template <- function() {
   )
 }
 
+write_rds_if_allowed <- function(object, path, overwrite = FALSE) {
+  if (file.exists(path) && !overwrite) return(FALSE)
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  saveRDS(object, path)
+  TRUE
+}
+
+load_demo_prostate <- function() {
+  env <- new.env(parent = emptyenv())
+
+  loaded <- tryCatch(
+    {
+      utils::data("prostate", package = "airsetup", envir = env)
+      exists("prostate", envir = env, inherits = FALSE)
+    },
+    error = function(e) FALSE
+  )
+
+  if (!loaded) {
+    data_file <- system.file("data", "prostate.rda", package = "airsetup")
+    if (!nzchar(data_file)) {
+      data_file <- file.path("data", "prostate.rda")
+    }
+    if (!file.exists(data_file)) {
+      stop("Could not find the bundled `prostate` demo data.", call. = FALSE)
+    }
+
+    load(data_file, envir = env)
+  }
+
+  if (!exists("prostate", envir = env, inherits = FALSE)) {
+    stop("The bundled demo data did not contain an object named `prostate`.", call. = FALSE)
+  }
+
+  get("prostate", envir = env, inherits = FALSE)
+}
+
+load_demo_prostate_rd <- function() {
+  rd <- tryCatch(
+    tools::Rd_db(package = "airsetup")[["prostate.Rd"]],
+    error = function(e) NULL
+  )
+  if (!is.null(rd)) return(rd)
+
+  rd_file <- system.file("man", "prostate.Rd", package = "airsetup")
+  if (!nzchar(rd_file)) {
+    rd_file <- file.path("man", "prostate.Rd")
+  }
+  if (!file.exists(rd_file)) {
+    stop("Could not find the bundled `prostate` documentation.", call. = FALSE)
+  }
+
+  tools::parse_Rd(rd_file)
+}
+
+write_demo_data_definition <- function(path, overwrite = FALSE) {
+  if (file.exists(path) && !overwrite) return(FALSE)
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  tmp <- tempfile("airsetup-rd2txt-")
+  on.exit(unlink(tmp), add = TRUE)
+  tools::Rd2txt(load_demo_prostate_rd(), out = tmp)
+  lines <- readLines(tmp, warn = FALSE)
+  lines <- gsub(paste0(".", intToUtf8(8)), "", lines, perl = TRUE)
+  writeLines(lines, path, useBytes = TRUE)
+  TRUE
+}
+
 #' Set up an AI-assisted analysis project structure
 #'
 #' @param path Parent directory to create or update.
@@ -456,6 +523,99 @@ airsetup <- function(path, mode = c("split", "ai_only"), japanese = FALSE, overw
   }
 
   invisible(normalizePath(path, winslash = "/", mustWork = TRUE))
+}
+
+#' Set up a demo AI-assisted analysis project
+#'
+#' `airsetup_demo()` is a beginner-friendly wrapper around [airsetup()]. It
+#' creates the standard project structure, optionally adds QC skill templates
+#' with [airskill()], and places bundled prostate cancer demo materials in the
+#' initial data and source folders.
+#'
+#' @param path Parent directory to create or update.
+#' @param japanese Logical. If `TRUE`, generated `AGENTS.md` instructs Codex to
+#'   write narrative output documents in Japanese by default.
+#' @param skills Logical. If `TRUE`, also run [airskill()] to add QC skill
+#'   templates.
+#' @param overwrite Logical. If `TRUE`, overwrite generated files and demo
+#'   materials that already exist.
+#'
+#' @return A data frame with columns `file`, `path`, `status`, and
+#'   `overwritten`.
+#'
+#' @examples
+#' demo_dir <- file.path(tempdir(), "airsetup_demo_example")
+#' airsetup_demo(demo_dir)
+#' aircheck(demo_dir)
+#'
+#' @export
+airsetup_demo <- function(path, japanese = TRUE, skills = TRUE, overwrite = FALSE) {
+  if (!is.character(path) || length(path) != 1L || !nzchar(path)) {
+    stop("`path` must be a non-empty string.", call. = FALSE)
+  }
+  validate_japanese(japanese)
+  if (!is.logical(skills) || length(skills) != 1L || is.na(skills)) {
+    stop("`skills` must be TRUE or FALSE.", call. = FALSE)
+  }
+  if (!is.logical(overwrite) || length(overwrite) != 1L || is.na(overwrite)) {
+    stop("`overwrite` must be TRUE or FALSE.", call. = FALSE)
+  }
+
+  airsetup(path, mode = "split", japanese = japanese, overwrite = overwrite)
+
+  skill_report <- NULL
+  if (isTRUE(skills)) {
+    skill_report <- airskill(path, overwrite = overwrite, quiet = TRUE)
+  }
+
+  initial <- initial_dir_name()
+  prostate <- load_demo_prostate()
+
+  demo_files <- list(
+    list(
+      file = "demodata.rds",
+      path = file.path("ai_project", "ai_visible_data", initial, "demodata.rds"),
+      writer = function(out) write_rds_if_allowed(utils::head(prostate, 3L), out, overwrite = overwrite)
+    ),
+    list(
+      file = "demodata.rds",
+      path = file.path("r_project", "ai_hidden_data", initial, "demodata.rds"),
+      writer = function(out) write_rds_if_allowed(prostate, out, overwrite = overwrite)
+    ),
+    list(
+      file = "data_definition_demodata.txt",
+      path = file.path("ai_project", "source", initial, "data_definition_demodata.txt"),
+      writer = function(out) write_demo_data_definition(out, overwrite = overwrite)
+    )
+  )
+
+  demo_report <- lapply(demo_files, function(spec) {
+    out <- file.path(path, spec$path)
+    existed <- file.exists(out)
+    written <- spec$writer(out)
+
+    data.frame(
+      file = spec$file,
+      path = spec$path,
+      status = if (written && existed) {
+        "overwritten"
+      } else if (written) {
+        "created"
+      } else {
+        "skipped"
+      },
+      overwritten = isTRUE(written && existed),
+      stringsAsFactors = FALSE
+    )
+  })
+
+  out <- do.call(rbind, demo_report)
+  if (!is.null(skill_report)) {
+    out <- rbind(skill_report, out)
+  }
+
+  rownames(out) <- NULL
+  out
 }
 
 #' Create the AI-visible project folder

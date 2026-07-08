@@ -19,6 +19,17 @@ knitr::opts_chunk$set(
 
 あなたが統計解析を行う作業領域と、AIエージェントがアクセスする領域を、簡単に分けたいと思ったことはありませんか？あるいは、RStudioとChatGPTを何度も往復する作業に疲れていませんか？このサイトでは、AI支援型Rワークフローを紹介しています。
 
+## フォルダ構造を整えるだけで
+- AIエージェントがワークフローとコンテキストを理解しやすくなり、
+- AIのアクセス権限をユーザーが管理しやすくなり、
+- 決まった場所に品質管理結果やログが残るようになる
+
+<figure>
+<img src="../man/figures/screenshot_ai_project.png"
+alt="`airsetup()`が生成するフォルダ構造" />
+<figcaption aria-hidden="true">`airsetup()`が生成するフォルダ構造</figcaption>
+</figure>
+
 重要なのは、AIにいきなり解析を頼まないことです。このワークフローはいくつかのシンプルな原則に従っています。
 
 - AIエージェントとRStudioの作業空間を分離する
@@ -27,7 +38,7 @@ knitr::opts_chunk$set(
 - 統計解析ワークフローの作業記録を支援する
 - ユーザーは意思決定、結果解釈、アウトプットについて責任を持つ
 
-これから紹介する`airsetup`パッケージは、AIエージェントが支援するRワークフローのためのフォルダ構造を生成します。統計解析のための関数は提供されませんが、その代わりフォルダ、最小限のAGENTS.md、QC_STATUS.mdトラッカー、そしてオプションとして軽快なQCスキルテンプレートが用意されています。
+これから紹介する`airsetup`パッケージは、AIエージェントが支援するRワークフローのためのフォルダを生成します。統計解析のための関数は提供されませんが、その代わりフォルダ構造、最小限の`AGENTS.md`、`QC_STATUS.md`トラッカー、そしてオプションとして軽快なQCスキルテンプレートが用意されています。
 
 コーディングの正確性を確認し、QCを行う方法は1つではありません。あるプロジェクトではダブルプログラミングを採用するかもしれませんし、別のプロジェクトでは目視チェックを行うかもしれません。AI & Rワークフローにおける自己QCをサポートするために、3つのQCスキルテンプレートが用意されています。
 
@@ -35,13 +46,17 @@ knitr::opts_chunk$set(
 -  `QC_SKILL_PLAN.md`: コーディング計画または統計解析計画（SAP）が、Rで実装するためにじゅうぶんな情報を持っているかどうかを確認します。
 -  `QC_SKILL_RESULT.md`: 解析結果が内部的に一貫しており、計画に沿ったもので、安全に解釈できるかどうかを確認します
 
-## ステップ0. R、RStudio、Codexをインストール
+## チュートリアル1. セットアップ
+
+3つのチュートリアルに従って、AI & Rワークフローを体験してみてください。最初のチュートリアルでは、AIエージェントにタスクを依頼する前の環境設定までを扱います。ここではCodexアプリを用いていますが、AIエージェントツールに関する制約は特にありません。
+
+### ステップ1. R、RStudio、Codexアプリをインストール
 
 - R本体をインストールする
 - RStudioインストーラーを[Positサイト](https://posit.co/downloads)からダウンロード
-- Codexインストーラーを[OpenAIサイト](https://openai.com/ja-JP/codex)からダウンロード
+- Codexアプリインストーラーを[OpenAIサイト](https://openai.com/ja-JP/codex)からダウンロード
 
-## ステップ1. プロジェクトフォルダ作成（airsetup）
+### ステップ2. プロジェクトフォルダ作成（airsetup）
 
 - `airsetup()`を実行してフォルダとマークダウンファイルを作成する
   - `AGENTS.md`
@@ -57,60 +72,40 @@ knitr::opts_chunk$set(
 library(airsetup)
 
 root_dir <- "C:/demo"
-ai_visible_dir <- "C:/demo/ai_project/ai_visible_data"
-ai_hidden_dir <- "C:/demo/r_project/ai_hidden_data"
-source_dir <- "C:/demo/ai_project/source"
-
 airsetup(root_dir)
 airskill(root_dir)
 ```
 
 ![AIエージェントとRStudioの作業空間](../man/figures/screenshot_root.png)
 
-## ステップ2. プロジェクトフォルダへのファイル格納
-- AIがアクセスできるダミーデータと非公開の実データを、対応するフォルダ構造に配置する
-- このデモでは、ダミーデータとして、`cifmodeling`パッケージに含まれているデータフレームから抽出した、最初の3行を用いる
-- 以下のRコードによって、コンテキスト・ダミーデータがプロジェクトフォルダに格納されるはずである
+### ステップ3. ダミーデータ・コンテキスト情報の準備
+
+- R実行用の実データとは別に、AIがアクセスできるダミーデータを用意します
+- AIに参照させる統計解析に関連する資料を用意します。研究計画書やデータベース定義書はコンテキストとして与えた方がよいでしょう
+
+## チュートリアル2. プランニング
+
+二つ目のチュートリアルでは、実際にCodexに指示を与えて、統計解析やRコーディングの計画を立てさせます。これ以降はデモ専用の関数`airsetup_demo()`を用いて、`airsetup`パッケージに含まれている`prostate`データを解析します。ステップ1では、既存のプロジェクトフォルダがあれば、その中にデモ用のファイル一式を追加します。
+
+### ステップ1. プロジェクトフォルダへのファイル格納
+- AIがアクセスできるダミーデータとR実行用データを、対応するフォルダ構造に配置する
+- このデモでは、ダミーデータとして、`prostate`データから抽出した最初の3行を用いる
+- コンテキストとして`prostate.Rd`の情報を用いる
+- 以下のRコードによって、コンテキスト・ダミーデータ・実データがプロジェクトフォルダに格納されるはずである
 
 ```{r step2, eval = FALSE}
+
 # データの冒頭と構造を確認
-library(cifmodeling)
-data(prostate, package = "cifmodeling")
+data(prostate, package = "airsetup")
 head(prostate)
 str(prostate)
 
-# R実行用のデータ保存
-ai_visible_dir <- "C:/demo/ai_project/ai_visible_data"
-ai_hidden_dir <- "C:/demo/r_project/ai_hidden_data"
-source_dir <- "C:/demo/ai_project/source"
-
-demodata <- prostate
-out_file <- file.path(ai_hidden_dir, "demodata.rds")
-saveRDS(demodata, out_file)
-
-# AIが構造確認に用いるダミーデータ保存
-demodata <- head(demodata, 3)
-out_file <- file.path(ai_visible_dir, "demodata.rds")
-saveRDS(demodata, out_file)
-
-# AIのコンテキスト情報としてRdを保存
-rd_list <- tools::Rd_db(package = "cifmodeling")
-rd_name <- grep("prostate", names(rd_list), value = TRUE)
-rd <- rd_list[[rd_name[1]]]
-tools::Rd2txt(
-  rd,
-  out = file.path(source_dir, "data_definition_demodata.txt")
-)
-rd_list <- tools::Rd_db(package = "cifmodeling")
-rd_name <- grep("cifplot", names(rd_list), value = TRUE)
-rd <- rd_list[[rd_name[1]]]
-tools::Rd2txt(
-  rd,
-  out = file.path(source_dir, "help_cifplot.txt")
-)
+# フォルダ作成・ファイル格納（コンテキスト・ダミーデータ・実データ）
+root_dir <- "C:/demo"
+airsetup_demo(root_dir)
 ```
 
-## ステップ3. Codexプロジェクトの開始
+### ステップ2. Codexプロジェクトの開始
 
 ![Codexのインターフェース](../man/figures/screenshot_codex.png)
 
@@ -121,15 +116,18 @@ tools::Rd2txt(
 プロンプト「プロジェクトフォルダ内のファイルを確認してください」
 ```
 
-## ステップ4. ユーザーとCodexによるコーディングプランの確認
+### ステップ3. ユーザーとCodexによるコーディングプランの確認
 - Codexにプロンプトを入力する
 - Rスクリプトのコーディングプランを立てさせ、チャットを通じてプランが適切かどうか確認する
+- 確認して問題がなければ、承認し、コーディングに進む
 
 ```text
-プロンプト「demodata.rds、data_definition_demodata.txt、help_cifplot.txtを参照してください。
-関心イベントはがん死亡です。がん死亡以外の死亡は競合リスクとして扱います。
-イベント変数 epsilon のコーディングは、0 = alive/censored、1 = cancer death、2 = non-cancer death の
-予定です。まずQCスキルを使い、コンテキストがRコーディングに進めるほど明確か評価してください」
+プロンプト「demodata.rds、data_definition_demodata.txtを参照してください。この解析は、
+アウトカムであるがん死亡を累積発生曲線を用いて記述することが目的です。関心イベントはがん死亡です。
+がん死亡以外の死亡は競合リスクとして扱います。イベント変数 epsilon のコーディングは、
+0 = alive/censored、1 = cancer death、2 = non-cancer death の予定です。
+累積発生曲線の推定方法については、https://gestimation.github.io/cifmodeling/reference/cifplot.htmlを
+参考にしてください。まずQCスキルを使い、コンテキストがRコーディングに進めるほど明確か評価してください」
 ```
 
 ```text
@@ -140,26 +138,30 @@ tools::Rd2txt(
 プロンプト「QCスキルを使い、コーディングプランを評価してください」
 ```
 
-## ステップ5. CodexによるRコーディングとQC
+## チュートリアル3. コーディング
+
+三つ目のチュートリアルでは、先ほどCodexが立て、あなたが承認したコーディングプランに従って、実データを用いた解析結果を出力するためのRスクリプトをCodexに書かせます。
+
+### ステップ1. CodexによるRコーディングとQC
 - Codexにプロンプトを入力する
 - Rスクリプトをコーディングさせ、必要に応じてチャットで質問を行い、正しいかどうか確認する
 
 ```text
 プロンプト「Rスクリプトを書いてください。AI確認用ダミーデータ用のRスクリプトと
-R実行用の実データ解析スクリプトの両方が必要です。RStudioの作業ディレクトリに注意してください。
+R実行用のRスクリプトの両方が必要です。RStudioの作業ディレクトリに注意してください。
 手動で指定する必要がない方が望ましいです」
 ```
 
-## ステップ6. RStudioによるR実行
+### ステップ2. RStudioによるR実行
 
 ![RStudioのインターフェース](../man/figures/screenshot_R.png)
 
-- ai_outputに生成されたRスクリプトをRStudioに読み込ませて、実行する
+- ai_outputフォルダに生成されたRスクリプトをRStudioに読み込ませて、実行する
 - RStudioの作業ディレクトリに注意すること。作業ディレクトリに依存するコードは、環境によって動かないことがある
-- その場合は、入力するデータセットの場所を指定すると解決するかもしれない
+- その場合は、入力するデータセットの場所を指定すると解決するかもしれない（`YYYYMMDD`は実行日に置き換える）
 
 ```r
-options(DEMODATA_RDS = "C:/demo/r_project/ai_hidden_data/demodata.rds")
+options(DEMODATA_RDS = "C:/demo/r_project/ai_hidden_data/initial_YYYYMMDD/demodata.rds")
 ```
 - または、作業ディレクトリを手動で設定することもできる
 
@@ -167,10 +169,24 @@ options(DEMODATA_RDS = "C:/demo/r_project/ai_hidden_data/demodata.rds")
 setwd("C:/demo/r_project/ai_hidden_data")
 ```
 
-## ステップ7. ユーザーとCodexによる結果の確認
-- ai_outputに生成されたCIF曲線を確認する
+### ステップ3. ユーザーとCodexによる結果の確認
+- ai_outputフォルダに生成されたCIF曲線を確認する
 - Codexのサポートを受けながら、解析結果が正しいか最終レビューを行う
 
 ![期待される解析結果（プロンプトによってグループごとの結果が生成されることもある）](../man/figures/cif_cancer_death_analysis_overall.png)
 
+## インストール
 
+`airsetup`パッケージはGitHubからインストールできます。
+
+``` r
+# install.packages("pak")
+pak::pak("gestimation/airsetup")
+```
+
+このパッケージはまだアルファ版のためCRANに提出していませんが、`testthat`を用いた100件以上のテストに合格しています。`airsetup()`を実行した結果、指定したパス以外に影響を与えることはありません。もし、AIがこのワークフローの中でどのようにふるまうのかに興味を持たれたなら、`airsetup_demo()`で生成される`AGENTS.md`、フォルダ構造、コンテキスト資料をご覧ください。
+
+``` r
+library(airsetup)
+airsetup_demo("C:/demo")
+```

@@ -57,8 +57,7 @@ my_analysis/
 <figure>
 <img src="man/figures/screenshot_root.png"
 alt="An example of split project root" />
-<figcaption aria-hidden="true">An example of split project
-root</figcaption>
+<figcaption aria-hidden="true">An example of split project root</figcaption>
 </figure>
 
 ## What airsetup creates
@@ -92,8 +91,7 @@ In `split` mode, `r_project/` is also created next to `ai_project/`.
 <figure>
 <img src="man/figures/screenshot_r_project.png"
 alt="An example of R project folder" />
-<figcaption aria-hidden="true">An example of R project
-folder</figcaption>
+<figcaption aria-hidden="true">An example of R project folder</figcaption>
 </figure>
 
 It contains a hidden-data area and local reminders:

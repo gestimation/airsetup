@@ -32,8 +32,8 @@ It does not provide statistical analysis functions. Instead, it prepares separat
 You can install the development version of airsetup from GitHub with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("gestimation/airsetup")
+# install.packages("pak")
+pak::pak("gestimation/airsetup")
 ```
 
 ## Basic use
@@ -163,3 +163,17 @@ consistent, traceable, aligned with the plan, and safe to interpret.
 The skills use a compact QC report format with domain-level status, issue severity, readiness for next steps, cannot-assess items, AI assumption risks, and recommended handoff actions.
 
 They are intentionally lightweight. A Pass from these skills does not mean formal statistical approval, independent validation, regulatory approval, or final scientific acceptance. 
+
+## Check the required structure
+
+Use `aircheck()` to verify that the required folders and files exist.
+
+```{r aircheck-example, eval = FALSE}
+aircheck("example-analysis", mode = "split")
+```
+
+`aircheck()` returns a data frame with one row per required item. It reports
+whether each folder or file was found.
+
+This makes it easy to confirm that the workspace still has the structure that
+AI-assisted analysis depends on.

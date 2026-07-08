@@ -61,7 +61,16 @@
     
     
 <p>あなたが統計解析を行う作業領域と、AIエージェントがアクセスする領域を、簡単に分けたいと思ったことはありませんか？あるいは、RStudioとChatGPTを何度も往復する作業に疲れていませんか？このサイトでは、AI支援型Rワークフローを紹介しています。</p>
-<p>重要なのは、AIにいきなり解析を頼まないことです。このワークフローはいくつかのシンプルな原則に従っています。</p>
+<div class="section level2">
+<h2 id="フォルダ構造を整えるだけで">フォルダ構造を整えるだけで<a class="anchor" aria-label="anchor" href="#%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E6%A7%8B%E9%80%A0%E3%82%92%E6%95%B4%E3%81%88%E3%82%8B%E3%81%A0%E3%81%91%E3%81%A7"></a>
+</h2>
+<ul>
+<li>AIエージェントがワークフローとコンテキストを理解しやすくなり、</li>
+<li>AIのアクセス権限をユーザーが管理しやすくなり、</li>
+<li>決まった場所に品質管理結果やログが残るようになる</li>
+</ul>
+<figure><img src="../reference/figures/screenshot_ai_project.png" alt="`airsetup()`が生成するフォルダ構造"><figcaption aria-hidden="true"><code><a href="../reference/airsetup.html">airsetup()</a></code>が生成するフォルダ構造
+</figcaption></figure><p>重要なのは、AIにいきなり解析を頼まないことです。このワークフローはいくつかのシンプルな原則に従っています。</p>
 <ul>
 <li>AIエージェントとRStudioの作業空間を分離する</li>
 <li>プランニングとコーディングを分離する</li>
@@ -69,7 +78,7 @@
 <li>統計解析ワークフローの作業記録を支援する</li>
 <li>ユーザーは意思決定、結果解釈、アウトプットについて責任を持つ</li>
 </ul>
-<p>これから紹介する<code>airsetup</code>パッケージは、AIエージェントが支援するRワークフローのためのフォルダ構造を生成します。統計解析のための関数は提供されませんが、その代わりフォルダ、最小限のAGENTS.md、QC_STATUS.mdトラッカー、そしてオプションとして軽快なQCスキルテンプレートが用意されています。</p>
+<p>これから紹介する<code>airsetup</code>パッケージは、AIエージェントが支援するRワークフローのためのフォルダを生成します。統計解析のための関数は提供されませんが、その代わりフォルダ構造、最小限の<code>AGENTS.md</code>、<code>QC_STATUS.md</code>トラッカー、そしてオプションとして軽快なQCスキルテンプレートが用意されています。</p>
 <p>コーディングの正確性を確認し、QCを行う方法は1つではありません。あるプロジェクトではダブルプログラミングを採用するかもしれませんし、別のプロジェクトでは目視チェックを行うかもしれません。AI
 &amp;
 Rワークフローにおける自己QCをサポートするために、3つのQCスキルテンプレートが用意されています。</p>
@@ -84,18 +93,24 @@ Rワークフローにおける自己QCをサポートするために、3つのQ
 <code>QC_SKILL_RESULT.md</code>:
 解析結果が内部的に一貫しており、計画に沿ったもので、安全に解釈できるかどうかを確認します</li>
 </ul>
+</div>
 <div class="section level2">
-<h2 id="ステップ0--rrstudiocodexをインストール">ステップ0. R、RStudio、Codexをインストール<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%970--rrstudiocodex%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB"></a>
+<h2 id="チュートリアル1--セットアップ">チュートリアル1. セットアップ<a class="anchor" aria-label="anchor" href="#%E3%83%81%E3%83%A5%E3%83%BC%E3%83%88%E3%83%AA%E3%82%A2%E3%83%AB1--%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97"></a>
 </h2>
+<p>3つのチュートリアルに従って、AI &amp;
+Rワークフローを体験してみてください。最初のチュートリアルでは、AIエージェントにタスクを依頼する前の環境設定までを扱います。ここではCodexアプリを用いていますが、AIエージェントツールに関する制約は特にありません。</p>
+<div class="section level3">
+<h3 id="ステップ1--rrstudiocodexアプリをインストール">ステップ1. R、RStudio、Codexアプリをインストール<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%971--rrstudiocodex%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB"></a>
+</h3>
 <ul>
 <li>R本体をインストールする</li>
 <li>RStudioインストーラーを<a href="https://posit.co/downloads" class="external-link">Positサイト</a>からダウンロード</li>
-<li>Codexインストーラーを<a href="https://openai.com/ja-JP/codex" class="external-link">OpenAIサイト</a>からダウンロード</li>
+<li>Codexアプリインストーラーを<a href="https://openai.com/ja-JP/codex" class="external-link">OpenAIサイト</a>からダウンロード</li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="ステップ1--プロジェクトフォルダ作成airsetup">ステップ1. プロジェクトフォルダ作成（airsetup）<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%971--%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E4%BD%9C%E6%88%90airsetup"></a>
-</h2>
+<div class="section level3">
+<h3 id="ステップ2--プロジェクトフォルダ作成airsetup">ステップ2. プロジェクトフォルダ作成（airsetup）<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%972--%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E4%BD%9C%E6%88%90airsetup"></a>
+</h3>
 <ul>
 <li>
 <code><a href="../reference/airsetup.html">airsetup()</a></code>を実行してフォルダとマークダウンファイルを作成する
@@ -120,64 +135,48 @@ Rワークフローにおける自己QCをサポートするために、3つのQ
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gestimation/airsetup" class="external-link">airsetup</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">root_dir</span> <span class="op">&lt;-</span> <span class="st">"C:/demo"</span></span>
-<span><span class="va">ai_visible_dir</span> <span class="op">&lt;-</span> <span class="st">"C:/demo/ai_project/ai_visible_data"</span></span>
-<span><span class="va">ai_hidden_dir</span> <span class="op">&lt;-</span> <span class="st">"C:/demo/r_project/ai_hidden_data"</span></span>
-<span><span class="va">source_dir</span> <span class="op">&lt;-</span> <span class="st">"C:/demo/ai_project/source"</span></span>
-<span></span>
 <span><span class="fu"><a href="../reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="va">root_dir</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/airskill.html">airskill</a></span><span class="op">(</span><span class="va">root_dir</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="../reference/figures/screenshot_root.png" alt="AIエージェントとRStudioの作業空間"><div class="figcaption">AIエージェントとRStudioの作業空間</div>
 </div>
 </div>
-<div class="section level2">
-<h2 id="ステップ2--プロジェクトフォルダへのファイル格納">ステップ2. プロジェクトフォルダへのファイル格納<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%972--%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E3%81%B8%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E6%A0%BC%E7%B4%8D"></a>
-</h2>
+<div class="section level3">
+<h3 id="ステップ3--ダミーデータコンテキスト情報の準備">ステップ3. ダミーデータ・コンテキスト情報の準備<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%973--%E3%83%80%E3%83%9F%E3%83%BC%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E6%83%85%E5%A0%B1%E3%81%AE%E6%BA%96%E5%82%99"></a>
+</h3>
 <ul>
-<li>AIがアクセスできるダミーデータと非公開の実データを、対応するフォルダ構造に配置する</li>
-<li>このデモでは、ダミーデータとして、<code>cifmodeling</code>パッケージに含まれているデータフレームから抽出した、最初の3行を用いる</li>
-<li>以下のRコードによって、コンテキスト・ダミーデータがプロジェクトフォルダに格納されるはずである</li>
+<li>R実行用の実データとは別に、AIがアクセスできるダミーデータを用意します</li>
+<li>AIに参照させる統計解析に関連する資料を用意します。研究計画書やデータベース定義書はコンテキストとして与えた方がよいでしょう</li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="チュートリアル2--プランニング">チュートリアル2. プランニング<a class="anchor" aria-label="anchor" href="#%E3%83%81%E3%83%A5%E3%83%BC%E3%83%88%E3%83%AA%E3%82%A2%E3%83%AB2--%E3%83%97%E3%83%A9%E3%83%B3%E3%83%8B%E3%83%B3%E3%82%B0"></a>
+</h2>
+<p>二つ目のチュートリアルでは、実際にCodexに指示を与えて、統計解析やRコーディングの計画を立てさせます。これ以降はデモ専用の関数<code><a href="../reference/airsetup_demo.html">airsetup_demo()</a></code>を用いて、<code>airsetup</code>パッケージに含まれている<code>prostate</code>データを解析します。ステップ1では、既存のプロジェクトフォルダがあれば、その中にデモ用のファイル一式を追加します。</p>
+<div class="section level3">
+<h3 id="ステップ1--プロジェクトフォルダへのファイル格納">ステップ1. プロジェクトフォルダへのファイル格納<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%971--%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E3%81%B8%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E6%A0%BC%E7%B4%8D"></a>
+</h3>
+<ul>
+<li>AIがアクセスできるダミーデータとR実行用データを、対応するフォルダ構造に配置する</li>
+<li>このデモでは、ダミーデータとして、<code>prostate</code>データから抽出した最初の3行を用いる</li>
+<li>コンテキストとして<code>prostate.Rd</code>の情報を用いる</li>
+<li>以下のRコードによって、コンテキスト・ダミーデータ・実データがプロジェクトフォルダに格納されるはずである</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># データの冒頭と構造を確認</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gestimation.github.io/cifmodeling/" class="external-link">cifmodeling</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">prostate</span>, package <span class="op">=</span> <span class="st">"cifmodeling"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="co"># データの冒頭と構造を確認</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">prostate</span>, package <span class="op">=</span> <span class="st">"airsetup"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">prostate</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">prostate</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># R実行用のデータ保存</span></span>
-<span><span class="va">ai_visible_dir</span> <span class="op">&lt;-</span> <span class="st">"C:/demo/ai_project/ai_visible_data"</span></span>
-<span><span class="va">ai_hidden_dir</span> <span class="op">&lt;-</span> <span class="st">"C:/demo/r_project/ai_hidden_data"</span></span>
-<span><span class="va">source_dir</span> <span class="op">&lt;-</span> <span class="st">"C:/demo/ai_project/source"</span></span>
-<span></span>
-<span><span class="va">demodata</span> <span class="op">&lt;-</span> <span class="va">prostate</span></span>
-<span><span class="va">out_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">ai_hidden_dir</span>, <span class="st">"demodata.rds"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">demodata</span>, <span class="va">out_file</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># AIが構造確認に用いるダミーデータ保存</span></span>
-<span><span class="va">demodata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">demodata</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="va">out_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">ai_visible_dir</span>, <span class="st">"demodata.rds"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">demodata</span>, <span class="va">out_file</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># AIのコンテキスト情報としてRdを保存</span></span>
-<span><span class="va">rd_list</span> <span class="op">&lt;-</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/Rdutils.html" class="external-link">Rd_db</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"cifmodeling"</span><span class="op">)</span></span>
-<span><span class="va">rd_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"prostate"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">rd_list</span><span class="op">)</span>, value <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">rd</span> <span class="op">&lt;-</span> <span class="va">rd_list</span><span class="op">[[</span><span class="va">rd_name</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/Rd2HTML.html" class="external-link">Rd2txt</a></span><span class="op">(</span></span>
-<span>  <span class="va">rd</span>,</span>
-<span>  out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">source_dir</span>, <span class="st">"data_definition_demodata.txt"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">rd_list</span> <span class="op">&lt;-</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/Rdutils.html" class="external-link">Rd_db</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"cifmodeling"</span><span class="op">)</span></span>
-<span><span class="va">rd_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"cifplot"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">rd_list</span><span class="op">)</span>, value <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">rd</span> <span class="op">&lt;-</span> <span class="va">rd_list</span><span class="op">[[</span><span class="va">rd_name</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/Rd2HTML.html" class="external-link">Rd2txt</a></span><span class="op">(</span></span>
-<span>  <span class="va">rd</span>,</span>
-<span>  out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">source_dir</span>, <span class="st">"help_cifplot.txt"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># フォルダ作成・ファイル格納（コンテキスト・ダミーデータ・実データ）</span></span>
+<span><span class="va">root_dir</span> <span class="op">&lt;-</span> <span class="st">"C:/demo"</span></span>
+<span><span class="fu"><a href="../reference/airsetup_demo.html">airsetup_demo</a></span><span class="op">(</span><span class="va">root_dir</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="ステップ3--codexプロジェクトの開始">ステップ3. Codexプロジェクトの開始<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%973--codex%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E9%96%8B%E5%A7%8B"></a>
-</h2>
+<div class="section level3">
+<h3 id="ステップ2--codexプロジェクトの開始">ステップ2. Codexプロジェクトの開始<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%972--codex%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E9%96%8B%E5%A7%8B"></a>
+</h3>
 <div class="float">
 <img src="../reference/figures/screenshot_codex.png" alt="Codexのインターフェース"><div class="figcaption">Codexのインターフェース</div>
 </div>
@@ -187,60 +186,81 @@ Rワークフローにおける自己QCをサポートするために、3つのQ
 </ul>
 <pre class="text"><code>プロンプト「プロジェクトフォルダ内のファイルを確認してください」</code></pre>
 </div>
-<div class="section level2">
-<h2 id="ステップ4--ユーザーとcodexによるコーディングプランの確認">ステップ4. ユーザーとCodexによるコーディングプランの確認<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%974--%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%81%A8codex%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%83%97%E3%83%A9%E3%83%B3%E3%81%AE%E7%A2%BA%E8%AA%8D"></a>
-</h2>
+<div class="section level3">
+<h3 id="ステップ3--ユーザーとcodexによるコーディングプランの確認">ステップ3. ユーザーとCodexによるコーディングプランの確認<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%973--%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%81%A8codex%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%83%97%E3%83%A9%E3%83%B3%E3%81%AE%E7%A2%BA%E8%AA%8D"></a>
+</h3>
 <ul>
 <li>Codexにプロンプトを入力する</li>
 <li>Rスクリプトのコーディングプランを立てさせ、チャットを通じてプランが適切かどうか確認する</li>
+<li>確認して問題がなければ、承認し、コーディングに進む</li>
 </ul>
-<pre class="text"><code>プロンプト「demodata.rds、data_definition_demodata.txt、help_cifplot.txtを参照してください。
-関心イベントはがん死亡です。がん死亡以外の死亡は競合リスクとして扱います。
-イベント変数 epsilon のコーディングは、0 = alive/censored、1 = cancer death、2 = non-cancer death の
-予定です。まずQCスキルを使い、コンテキストがRコーディングに進めるほど明確か評価してください」</code></pre>
+<pre class="text"><code>プロンプト「demodata.rds、data_definition_demodata.txtを参照してください。この解析は、
+アウトカムであるがん死亡を累積発生曲線を用いて記述することが目的です。関心イベントはがん死亡です。
+がん死亡以外の死亡は競合リスクとして扱います。イベント変数 epsilon のコーディングは、
+0 = alive/censored、1 = cancer death、2 = non-cancer death の予定です。
+累積発生曲線の推定方法については、https://gestimation.github.io/cifmodeling/reference/cifplot.htmlを
+参考にしてください。まずQCスキルを使い、コンテキストがRコーディングに進めるほど明確か評価してください」</code></pre>
 <pre class="text"><code>プロンプト「QCの結果を踏まえて、Rスクリプトのコーディングプランを立ててください」</code></pre>
 <pre class="text"><code>プロンプト「QCスキルを使い、コーディングプランを評価してください」</code></pre>
 </div>
+</div>
 <div class="section level2">
-<h2 id="ステップ5--codexによるrコーディングとqc">ステップ5. CodexによるRコーディングとQC<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%975--codex%E3%81%AB%E3%82%88%E3%82%8Br%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8qc"></a>
+<h2 id="チュートリアル3--コーディング">チュートリアル3. コーディング<a class="anchor" aria-label="anchor" href="#%E3%83%81%E3%83%A5%E3%83%BC%E3%83%88%E3%83%AA%E3%82%A2%E3%83%AB3--%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0"></a>
 </h2>
+<p>三つ目のチュートリアルでは、先ほどCodexが立て、あなたが承認したコーディングプランに従って、実データを用いた解析結果を出力するためのRスクリプトをCodexに書かせます。</p>
+<div class="section level3">
+<h3 id="ステップ1--codexによるrコーディングとqc">ステップ1. CodexによるRコーディングとQC<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%971--codex%E3%81%AB%E3%82%88%E3%82%8Br%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8qc"></a>
+</h3>
 <ul>
 <li>Codexにプロンプトを入力する</li>
 <li>Rスクリプトをコーディングさせ、必要に応じてチャットで質問を行い、正しいかどうか確認する</li>
 </ul>
 <pre class="text"><code>プロンプト「Rスクリプトを書いてください。AI確認用ダミーデータ用のRスクリプトと
-R実行用の実データ解析スクリプトの両方が必要です。RStudioの作業ディレクトリに注意してください。
+R実行用のRスクリプトの両方が必要です。RStudioの作業ディレクトリに注意してください。
 手動で指定する必要がない方が望ましいです」</code></pre>
 </div>
-<div class="section level2">
-<h2 id="ステップ6--rstudioによるr実行">ステップ6. RStudioによるR実行<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%976--rstudio%E3%81%AB%E3%82%88%E3%82%8Br%E5%AE%9F%E8%A1%8C"></a>
-</h2>
+<div class="section level3">
+<h3 id="ステップ2--rstudioによるr実行">ステップ2. RStudioによるR実行<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%972--rstudio%E3%81%AB%E3%82%88%E3%82%8Br%E5%AE%9F%E8%A1%8C"></a>
+</h3>
 <div class="float">
 <img src="../reference/figures/screenshot_R.png" alt="RStudioのインターフェース"><div class="figcaption">RStudioのインターフェース</div>
 </div>
 <ul>
-<li>ai_outputに生成されたRスクリプトをRStudioに読み込ませて、実行する</li>
+<li>ai_outputフォルダに生成されたRスクリプトをRStudioに読み込ませて、実行する</li>
 <li>RStudioの作業ディレクトリに注意すること。作業ディレクトリに依存するコードは、環境によって動かないことがある</li>
-<li>その場合は、入力するデータセットの場所を指定すると解決するかもしれない</li>
+<li>その場合は、入力するデータセットの場所を指定すると解決するかもしれない（<code>YYYYMMDD</code>は実行日に置き換える）</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>DEMODATA_RDS <span class="op">=</span> <span class="st">"C:/demo/r_project/ai_hidden_data/demodata.rds"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>DEMODATA_RDS <span class="op">=</span> <span class="st">"C:/demo/r_project/ai_hidden_data/initial_YYYYMMDD/demodata.rds"</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>または、作業ディレクトリを手動で設定することもできる</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="st">"C:/demo/r_project/ai_hidden_data"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="ステップ7--ユーザーとcodexによる結果の確認">ステップ7. ユーザーとCodexによる結果の確認<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%977--%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%81%A8codex%E3%81%AB%E3%82%88%E3%82%8B%E7%B5%90%E6%9E%9C%E3%81%AE%E7%A2%BA%E8%AA%8D"></a>
-</h2>
+<div class="section level3">
+<h3 id="ステップ3--ユーザーとcodexによる結果の確認">ステップ3. ユーザーとCodexによる結果の確認<a class="anchor" aria-label="anchor" href="#%E3%82%B9%E3%83%86%E3%83%83%E3%83%973--%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%81%A8codex%E3%81%AB%E3%82%88%E3%82%8B%E7%B5%90%E6%9E%9C%E3%81%AE%E7%A2%BA%E8%AA%8D"></a>
+</h3>
 <ul>
-<li>ai_outputに生成されたCIF曲線を確認する</li>
+<li>ai_outputフォルダに生成されたCIF曲線を確認する</li>
 <li>Codexのサポートを受けながら、解析結果が正しいか最終レビューを行う</li>
 </ul>
 <div class="float">
 <img src="../reference/figures/cif_cancer_death_analysis_overall.png" alt="期待される解析結果（プロンプトによってグループごとの結果が生成されることもある）"><div class="figcaption">期待される解析結果（プロンプトによってグループごとの結果が生成されることもある）</div>
 </div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="インストール">インストール<a class="anchor" aria-label="anchor" href="#%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB"></a>
+</h2>
+<p><code>airsetup</code>パッケージはGitHubからインストールできます。</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"gestimation/airsetup"</span><span class="op">)</span></span></code></pre></div>
+<p>このパッケージはまだアルファ版のためCRANに提出していませんが、<code>testthat</code>を用いた100件以上のテストに合格しています。<code><a href="../reference/airsetup.html">airsetup()</a></code>を実行した結果、指定したパス以外に影響を与えることはありません。もし、AIがこのワークフローの中でどのようにふるまうのかに興味を持たれたなら、<code><a href="../reference/airsetup_demo.html">airsetup_demo()</a></code>で生成される<code>AGENTS.md</code>、フォルダ構造、コンテキスト資料をご覧ください。</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gestimation/airsetup" class="external-link">airsetup</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/airsetup_demo.html">airsetup_demo</a></span><span class="op">(</span><span class="st">"C:/demo"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
