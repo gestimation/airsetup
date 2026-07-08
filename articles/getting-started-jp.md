@@ -8,6 +8,13 @@
 - AIのアクセス権限をユーザーが管理しやすくなり、
 - 決まった場所に品質管理結果やログが残るようになる
 
+``` r
+
+# パッケージを読み込んで、パスを指定するだけ
+library(airsetup)
+airsetup("C:/demo")
+```
+
 ![\`airsetup()\`が生成するフォルダ構造](../reference/figures/screenshot_ai_project.png)
 
 [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md)が生成するフォルダ構造
@@ -50,11 +57,6 @@ pak::pak("gestimation/airsetup")
   - `AGENTS.md`
   - `QC_STATUS.md`
 - `AGENTS.md`を通じて、AI作業領域とR作業領域を分離し、品質管理を行うようにAIに指示する
-- [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md)を実行して、QCスキルテンプレートを作成する（オプション）
-  - `QC_SKILL_CONTEXT.md`
-  - `QC_SKILL_PLAN.md`
-  - `QC_SKILL_RESULT.md`
-  - `SKILLS_INDEX.md`
 
 ``` r
 
@@ -62,7 +64,6 @@ library(airsetup)
 
 root_dir <- "C:/demo"
 airsetup(root_dir)
-airskill(root_dir)
 ```
 
 ![AIエージェントとRStudioの作業空間](../reference/figures/screenshot_root.png)
