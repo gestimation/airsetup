@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">airsetup</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
 <!-- badges: end -->
 <p>Clear boundaries, flexible QC, and traceable structure for AI-assisted R analysis.</p>
 <p><code>airsetup</code> creates a small, opinionated folder structure for R analysis projects where AI agents help write scripts, inspect visible dummy data, and review outputs, while hidden analysis data stays outside the AI-visible workspace.</p>
-<p>It does not provide statistical analysis functions. Instead, it prepares separated folders, a minimal <code>AGENTS.md</code>, a <code>QC_STATUS.md</code> tracker, and optional lightweight QC skill templates for context review, plan review, and result review.</p>
+<p>It does not provide statistical analysis functions. Instead, it prepares separated folders, a minimal <code>AGENTS.md</code>, a <code>QC_STATUS.md</code> tracker, and optional lightweight QC skill templates for context review, plan review, result review, and M11-informed semantic review.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -126,6 +126,179 @@ An example of R project folder
 </ul>
 </div>
 <div class="section level2">
+<h2 id="generated-folders-and-files">Generated folders and files<a class="anchor" aria-label="anchor" href="#generated-folders-and-files"></a>
+</h2>
+<p><code>airsetup</code> separates files created by package functions from files that AI agents may create later during planning, QC, and coding.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Created by</th>
+<th>Path</th>
+<th>Role</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/airsetup.html">airsetup()</a></code></td>
+<td>
+<code>ai_project/source/</code> and <code>ai_project/source/initial_YYYYMMDD/</code>
+</td>
+<td>Source and reference materials visible to AI.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup.html">airsetup()</a></code></td>
+<td>
+<code>ai_project/ai_visible_data/</code> and <code>ai_project/ai_visible_data/initial_YYYYMMDD/</code>
+</td>
+<td>Dummy or visible data that AI may inspect.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup.html">airsetup()</a></code></td>
+<td><code>ai_project/ai_output/</code></td>
+<td>AI-generated scripts, plans, notes, and working outputs.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup.html">airsetup()</a></code></td>
+<td><code>ai_project/r_output/</code></td>
+<td>Outputs from R scripts that the user runs.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup.html">airsetup()</a></code></td>
+<td><code>ai_project/qc/</code></td>
+<td>QC reports, review evidence, discrepancy notes, and QC summaries.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup.html">airsetup()</a></code></td>
+<td><code>ai_project/log/</code></td>
+<td>Work logs and decision records.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup.html">airsetup()</a></code></td>
+<td><code>ai_project/AGENTS.md</code></td>
+<td>Working rules for AI agents.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup.html">airsetup()</a></code></td>
+<td><code>ai_project/QC_STATUS.md</code></td>
+<td>Current QC status, open questions, and links to detailed QC materials.</td>
+</tr>
+<tr>
+<td>
+<code><a href="reference/airsetup.html">airsetup()</a></code> in <code>split</code> mode</td>
+<td>
+<code>r_project/ai_hidden_data/</code> and <code>r_project/ai_hidden_data/initial_YYYYMMDD/</code>
+</td>
+<td>Analysis data area that AI must not inspect.</td>
+</tr>
+<tr>
+<td>
+<code><a href="reference/airsetup.html">airsetup()</a></code> in <code>split</code> mode</td>
+<td><code>r_project/.gitignore</code></td>
+<td>Defaults that avoid committing hidden analysis data.</td>
+</tr>
+<tr>
+<td>
+<code><a href="reference/airsetup.html">airsetup()</a></code> in <code>split</code> mode</td>
+<td><code>r_project/README_DO_NOT_SHARE_WITH_AI.md</code></td>
+<td>Local reminder that the folder is for human/R execution.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airskill.html">airskill()</a></code></td>
+<td><code>ai_project/source/skills/SKILLS_INDEX.md</code></td>
+<td>Index and selection guide for QC skill files.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airskill.html">airskill()</a></code></td>
+<td><code>ai_project/source/skills/QC_SKILL_CONTEXT.md</code></td>
+<td>Lightweight context QC skill.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airskill.html">airskill()</a></code></td>
+<td><code>ai_project/source/skills/QC_SKILL_PLAN.md</code></td>
+<td>Plan and SAP implementability QC skill.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airskill.html">airskill()</a></code></td>
+<td><code>ai_project/source/skills/QC_SKILL_RESULT.md</code></td>
+<td>Result consistency and interpretation QC skill.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airskill.html">airskill()</a></code></td>
+<td><code>ai_project/source/skills/QC_SKILL_M11SEMANTIC.md</code></td>
+<td>M11-informed semantic context QC skill for complex clinical-trial materials.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup_demo.html">airsetup_demo()</a></code></td>
+<td><code>ai_project/source/initial_YYYYMMDD/definition_demodata.txt</code></td>
+<td>Demo data definition.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup_demo.html">airsetup_demo()</a></code></td>
+<td><code>ai_project/ai_visible_data/initial_YYYYMMDD/demodata.rds</code></td>
+<td>AI-visible demo data.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airsetup_demo.html">airsetup_demo()</a></code></td>
+<td><code>r_project/ai_hidden_data/initial_YYYYMMDD/demodata.rds</code></td>
+<td>Demo R-execution data.</td>
+</tr>
+</tbody>
+</table>
+<p>Some files are not created automatically. They are recommended output locations for AI agents when the relevant workflow step is actually performed.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Workflow step</th>
+<th>Recommended path</th>
+<th>Role</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Context QC</td>
+<td><code>ai_project/qc/context-qc-001.md</code></td>
+<td>Lightweight context QC report.</td>
+</tr>
+<tr>
+<td>Plan QC</td>
+<td><code>ai_project/qc/plan-qc-001.md</code></td>
+<td>Coding plan or SAP QC report.</td>
+</tr>
+<tr>
+<td>Result QC</td>
+<td><code>ai_project/qc/result-qc-001.md</code></td>
+<td>Analysis result QC report.</td>
+</tr>
+<tr>
+<td>SAP drafting, when useful</td>
+<td><code>ai_project/ai_output/SAP.md</code></td>
+<td>Draft project-specific SAP or analysis specification.</td>
+</tr>
+<tr>
+<td>SAP decisions, when useful</td>
+<td><code>ai_project/ai_output/SAP_DECISIONS.md</code></td>
+<td>Source-specified, user-approved, proposed, and unresolved analysis decisions.</td>
+</tr>
+<tr>
+<td>M11 semantic mapping</td>
+<td><code>ai_project/ai_output/m11semantic/M11SEMANTIC_MAP.md</code></td>
+<td>M11-informed semantic map for R planning and coding.</td>
+</tr>
+<tr>
+<td>M11 semantic QC</td>
+<td><code>ai_project/qc/m11semantic/M11SEMANTIC_QC_SUMMARY.md</code></td>
+<td>QC-oriented readiness summary for the M11 semantic map.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
 <h2 id="clear-boundaries-with-separated-folders">Clear boundaries with separated folders<a class="anchor" aria-label="anchor" href="#clear-boundaries-with-separated-folders"></a>
 </h2>
 <p>The package separates what AI can inspect from what R can use for real analysis. The visible and hidden data areas would share the same internal structure:</p>
@@ -176,7 +349,8 @@ An example of AI-hidden data folder
 <li><p>QC_SKILL_CONTEXT.md: checks whether the supplied analysis context is clear enough before drafting a plan or generating R code.</p></li>
 <li><p>QC_SKILL_PLAN.md: checks whether an coding plan or SAP is clear enough for R implementation.</p></li>
 <li><p>QC_SKILL_RESULT.md: checks whether analysis results are internally consistent, traceable, aligned with the plan, and safe to interpret.</p></li>
-<li><p>SKILLS_IDEX.md: explains the skill files.</p></li>
+<li><p>QC_SKILL_M11SEMANTIC.md: supports M11-informed semantic organization across multiple clinical-trial materials before R planning or R coding. It is generated by default but should be used only for M11/electronic-protocol tasks or complex clinical-trial semantic review, not ordinary context QC.</p></li>
+<li><p>SKILLS_INDEX.md: explains the skill files.</p></li>
 </ul>
 <p>The skills use a compact QC report format with domain-level status, issue severity, readiness for next steps, cannot-assess items, AI assumption risks, and recommended handoff actions.</p>
 <p>They are intentionally lightweight. A Pass from these skills does not mean formal statistical approval, independent validation, regulatory approval, or final scientific acceptance.</p>
@@ -225,7 +399,7 @@ An example of AI-hidden data folder
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

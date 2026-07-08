@@ -45,22 +45,24 @@ A data frame with columns `file`, `path`, `status`, and `overwritten`.
 ``` r
 demo_dir <- file.path(tempdir(), "airsetup_demo_example")
 airsetup_demo(demo_dir)
-#>                           file
-#> 1              SKILLS_INDEX.md
-#> 2          QC_SKILL_CONTEXT.md
-#> 3             QC_SKILL_PLAN.md
-#> 4           QC_SKILL_RESULT.md
-#> 5                 demodata.rds
-#> 6                 demodata.rds
-#> 7 data_definition_demodata.txt
-#>                                                              path  status
-#> 1                        ai_project/source/skills/SKILLS_INDEX.md created
-#> 2                    ai_project/source/skills/QC_SKILL_CONTEXT.md created
-#> 3                       ai_project/source/skills/QC_SKILL_PLAN.md created
-#> 4                     ai_project/source/skills/QC_SKILL_RESULT.md created
-#> 5        ai_project/ai_visible_data/initial_20260708/demodata.rds created
-#> 6          r_project/ai_hidden_data/initial_20260708/demodata.rds created
-#> 7 ai_project/source/initial_20260708/data_definition_demodata.txt created
+#>                      file
+#> 1         SKILLS_INDEX.md
+#> 2     QC_SKILL_CONTEXT.md
+#> 3        QC_SKILL_PLAN.md
+#> 4      QC_SKILL_RESULT.md
+#> 5 QC_SKILL_M11SEMANTIC.md
+#> 6            demodata.rds
+#> 7            demodata.rds
+#> 8 definition_demodata.txt
+#>                                                         path  status
+#> 1                   ai_project/source/skills/SKILLS_INDEX.md created
+#> 2               ai_project/source/skills/QC_SKILL_CONTEXT.md created
+#> 3                  ai_project/source/skills/QC_SKILL_PLAN.md created
+#> 4                ai_project/source/skills/QC_SKILL_RESULT.md created
+#> 5           ai_project/source/skills/QC_SKILL_M11SEMANTIC.md created
+#> 6   ai_project/ai_visible_data/initial_20260708/demodata.rds created
+#> 7     r_project/ai_hidden_data/initial_20260708/demodata.rds created
+#> 8 ai_project/source/initial_20260708/definition_demodata.txt created
 #>   overwritten
 #> 1       FALSE
 #> 2       FALSE
@@ -69,6 +71,7 @@ airsetup_demo(demo_dir)
 #> 5       FALSE
 #> 6       FALSE
 #> 7       FALSE
+#> 8       FALSE
 aircheck(demo_dir)
 #>                                           item   type
 #> 1                            ai_project/source folder

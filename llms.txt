@@ -11,7 +11,7 @@ AI-visible workspace.
 It does not provide statistical analysis functions. Instead, it prepares
 separated folders, a minimal `AGENTS.md`, a `QC_STATUS.md` tracker, and
 optional lightweight QC skill templates for context review, plan review,
-and result review.
+result review, and M11-informed semantic review.
 
 ## Installation
 
@@ -95,6 +95,47 @@ It contains a hidden-data area and local reminders:
 - `README_DO_NOT_SHARE_WITH_AI.md`: a local reminder that this folder is
   for human/R execution, not AI inspection.
 
+## Generated folders and files
+
+`airsetup` separates files created by package functions from files that
+AI agents may create later during planning, QC, and coding.
+
+| Created by | Path | Role |
+|----|----|----|
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) | `ai_project/source/` and `ai_project/source/initial_YYYYMMDD/` | Source and reference materials visible to AI. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) | `ai_project/ai_visible_data/` and `ai_project/ai_visible_data/initial_YYYYMMDD/` | Dummy or visible data that AI may inspect. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) | `ai_project/ai_output/` | AI-generated scripts, plans, notes, and working outputs. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) | `ai_project/r_output/` | Outputs from R scripts that the user runs. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) | `ai_project/qc/` | QC reports, review evidence, discrepancy notes, and QC summaries. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) | `ai_project/log/` | Work logs and decision records. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) | `ai_project/AGENTS.md` | Working rules for AI agents. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) | `ai_project/QC_STATUS.md` | Current QC status, open questions, and links to detailed QC materials. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) in `split` mode | `r_project/ai_hidden_data/` and `r_project/ai_hidden_data/initial_YYYYMMDD/` | Analysis data area that AI must not inspect. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) in `split` mode | `r_project/.gitignore` | Defaults that avoid committing hidden analysis data. |
+| [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md) in `split` mode | `r_project/README_DO_NOT_SHARE_WITH_AI.md` | Local reminder that the folder is for human/R execution. |
+| [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/source/skills/SKILLS_INDEX.md` | Index and selection guide for QC skill files. |
+| [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/source/skills/QC_SKILL_CONTEXT.md` | Lightweight context QC skill. |
+| [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/source/skills/QC_SKILL_PLAN.md` | Plan and SAP implementability QC skill. |
+| [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/source/skills/QC_SKILL_RESULT.md` | Result consistency and interpretation QC skill. |
+| [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/source/skills/QC_SKILL_M11SEMANTIC.md` | M11-informed semantic context QC skill for complex clinical-trial materials. |
+| [`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md) | `ai_project/source/initial_YYYYMMDD/definition_demodata.txt` | Demo data definition. |
+| [`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md) | `ai_project/ai_visible_data/initial_YYYYMMDD/demodata.rds` | AI-visible demo data. |
+| [`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md) | `r_project/ai_hidden_data/initial_YYYYMMDD/demodata.rds` | Demo R-execution data. |
+
+Some files are not created automatically. They are recommended output
+locations for AI agents when the relevant workflow step is actually
+performed.
+
+| Workflow step | Recommended path | Role |
+|----|----|----|
+| Context QC | `ai_project/qc/context-qc-001.md` | Lightweight context QC report. |
+| Plan QC | `ai_project/qc/plan-qc-001.md` | Coding plan or SAP QC report. |
+| Result QC | `ai_project/qc/result-qc-001.md` | Analysis result QC report. |
+| SAP drafting, when useful | `ai_project/ai_output/SAP.md` | Draft project-specific SAP or analysis specification. |
+| SAP decisions, when useful | `ai_project/ai_output/SAP_DECISIONS.md` | Source-specified, user-approved, proposed, and unresolved analysis decisions. |
+| M11 semantic mapping | `ai_project/ai_output/m11semantic/M11SEMANTIC_MAP.md` | M11-informed semantic map for R planning and coding. |
+| M11 semantic QC | `ai_project/qc/m11semantic/M11SEMANTIC_QC_SUMMARY.md` | QC-oriented readiness summary for the M11 semantic map. |
+
 ## Clear boundaries with separated folders
 
 The package separates what AI can inspect from what R can use for real
@@ -174,7 +215,13 @@ an AI-assisted R workflow.
 - QC_SKILL_RESULT.md: checks whether analysis results are internally
   consistent, traceable, aligned with the plan, and safe to interpret.
 
-- SKILLS_IDEX.md: explains the skill files.
+- QC_SKILL_M11SEMANTIC.md: supports M11-informed semantic organization
+  across multiple clinical-trial materials before R planning or R
+  coding. It is generated by default but should be used only for
+  M11/electronic-protocol tasks or complex clinical-trial semantic
+  review, not ordinary context QC.
+
+- SKILLS_INDEX.md: explains the skill files.
 
 The skills use a compact QC report format with domain-level status,
 issue severity, readiness for next steps, cannot-assess items, AI
