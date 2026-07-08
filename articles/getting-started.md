@@ -219,15 +219,16 @@ setwd("C:/demo/r_project/ai_hidden_data")
 - With support from Codex, perform the final review of whether the
   analysis results are correct.
 
+![Expected analysis result (flow chart, it may be further stratified to
+group)](../reference/figures/flowchart.png)
+
+Expected analysis result (flow chart, it may be further stratified to
+group)
+
 ![Expected analysis result (cumulative incidence
-curves)](../reference/figures/flowchart.png)
+curves)](../reference/figures/cif_cancer_death_analysis_run_cif_by_rx.png)
 
 Expected analysis result (cumulative incidence curves)
-
-![Expected analysis result (flow
-chart)](../reference/figures/cif_cancer_death_analysis_run_cif_by_rx.png)
-
-Expected analysis result (flow chart)
 
 ## Installation
 

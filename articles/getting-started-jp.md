@@ -179,9 +179,9 @@ setwd("C:/demo/r_project/ai_hidden_data")
 - ai_outputフォルダに生成された図を確認する
 - Codexのサポートを受けながら、解析結果が正しいか最終レビューを行う
 
-![期待される解析結果（フローチャート）](../reference/figures/flowchart.png)
+![期待される解析結果（フローチャート、指示によってはグループ別の結果が生成されることもある）](../reference/figures/flowchart.png)
 
-期待される解析結果（フローチャート）
+期待される解析結果（フローチャート、指示によってはグループ別の結果が生成されることもある）
 
 ![期待される解析結果（累積発生曲線）](../reference/figures/cif_cancer_death_analysis_run_cif_by_rx.png)
 
