@@ -119,15 +119,16 @@ Codexのインターフェース
 - 確認して問題がなければ、承認し、コーディングに進む
 
 ``` text
-プロンプト「demodata.rds、data_definition_demodata.txtを参照してください。この解析は、
-アウトカムであるがん死亡を、累積発生曲線を用いて記述することが目的です。関心イベントはがん死亡です。
-がん死亡以外の死亡は競合リスクとして扱います。イベント変数 epsilon のコーディングは、
-0 = alive/censored、1 = cancer death、2 = non-cancer deathの予定です。
-治療ごとの記述してください。ランダム化・epsilonの内訳を表すフローチャートと累積発生曲線がアウトプットです。
-フローチャートの推定方法は、https://gestimation.github.io/cifmodeling/reference/cifflowchart.htmlを
-参考にしてください。
-累積発生曲線の推定方法は、https://gestimation.github.io/cifmodeling/reference/cifplot.htmlを
-参考にしてください。まずQCスキルを使い、コンテキストがRコーディングに進めるほど明確か評価してください」
+プロンプト「demodata.rds、data_definition_demodata.txtを参照してください。
+この解析は、アウトカムであるがん死亡を、累積発生曲線を用いて記述することが
+目的です。関心イベントはがん死亡です。がん死亡以外の死亡は競合リスクとして
+扱います。イベント変数 epsilon のコーディングは、0 = alive/censored、1 = cancer death、
+2 = non-cancer deathの予定です。治療ごとにデータを記述してください。ランダム化・
+epsilonの内訳を表すフローチャートと累積発生曲線がアウトプットです。フローチャートの
+推定方法は、https://gestimation.github.io/cifmodeling/reference/cifflowchart.htmlを
+参考にしてください。累積発生曲線の推定方法は、
+https://gestimation.github.io/cifmodeling/reference/cifplot.htmlを参考にしてください。
+まずQCスキルを使い、コンテキストがRコーディングに進めるほど明確か評価してください」
 ```
 
 ``` text
