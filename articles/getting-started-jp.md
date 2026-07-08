@@ -108,7 +108,7 @@ Codexのインターフェース
 - Codexにプロンプトを入力する
 
 ``` text
-プロンプト「プロジェクトフォルダ内のファイルを確認してください」
+プロンプト「ai_projectフォルダ内のファイルを確認してください」
 ```
 
 ### ステップ3. ユーザーとCodexによるコーディングプランの確認
@@ -119,10 +119,13 @@ Codexのインターフェース
 
 ``` text
 プロンプト「demodata.rds、data_definition_demodata.txtを参照してください。この解析は、
-アウトカムであるがん死亡を累積発生曲線を用いて記述することが目的です。関心イベントはがん死亡です。
+アウトカムであるがん死亡を、累積発生曲線を用いて記述することが目的です。関心イベントはがん死亡です。
 がん死亡以外の死亡は競合リスクとして扱います。イベント変数 epsilon のコーディングは、
-0 = alive/censored、1 = cancer death、2 = non-cancer death の予定です。
-累積発生曲線の推定方法については、https://gestimation.github.io/cifmodeling/reference/cifplot.htmlを
+0 = alive/censored、1 = cancer death、2 = non-cancer deathの予定です。
+治療ごとの記述してください。ランダム化・epsilonの内訳を表すフローチャートと累積発生曲線がアウトプットです。
+フローチャートの推定方法は、https://gestimation.github.io/cifmodeling/reference/cifflowchart.htmlを
+参考にしてください。
+累積発生曲線の推定方法は、https://gestimation.github.io/cifmodeling/reference/cifplot.htmlを
 参考にしてください。まずQCスキルを使い、コンテキストがRコーディングに進めるほど明確か評価してください」
 ```
 
@@ -173,12 +176,16 @@ setwd("C:/demo/r_project/ai_hidden_data")
 
 ### ステップ3. ユーザーとCodexによる結果の確認
 
-- ai_outputフォルダに生成されたCIF曲線を確認する
+- ai_outputフォルダに生成された図を確認する
 - Codexのサポートを受けながら、解析結果が正しいか最終レビューを行う
 
-![期待される解析結果（プロンプトによってグループごとの結果が生成されることもある）](../reference/figures/cif_cancer_death_analysis_overall.png)
+![期待される解析結果（フローチャート）](../reference/figures/flowchart.png)
 
-期待される解析結果（プロンプトによってグループごとの結果が生成されることもある）
+期待される解析結果（フローチャート）
+
+![期待される解析結果（累積発生曲線）](../reference/figures/cif_cancer_death_analysis_run_cif_by_rx.png)
+
+期待される解析結果（累積発生曲線）
 
 ## インストール
 

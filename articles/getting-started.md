@@ -138,7 +138,7 @@ airsetup_demo(root_dir)
 - Enter a prompt in Codex.
 
 ``` text
-Prompt: "Please inspect the files in the project folder."
+Prompt: "Please inspect the files in ai_project folder."
 ```
 
 ### Step 3. Review a coding plan with Codex
@@ -150,11 +150,13 @@ Prompt: "Please inspect the files in the project folder."
 
 ``` text
 Prompt: "Please refer to demodata.rds and data_definition_demodata.txt. The goal
-of this analysis is to describe the outcome, cancer death, using cumulative
-incidence curves. The event of interest is cancer death. Deaths other than
-cancer death should be treated as competing risks. The planned coding for the
-event variable epsilon is 0 = alive/censored, 1 = cancer death, and
-2 = non-cancer death. For the cumulative incidence curve estimation method,
+of this analysis is to describe the outcome, cancer death, using a flowchart and 
+cumulative incidence curves by treatment groups. The event of interest is cancer death. 
+Deaths other than cancer death should be treated as competing risks. The planned 
+coding for the event variable epsilon is 0 = alive/censored, 1 = cancer death, and
+2 = non-cancer death. For the flowchart generation, refer to 
+https://gestimation.github.io/cifmodeling/reference/cifflowchart.html. 
+For the cumulative incidence curve estimation method,
 refer to https://gestimation.github.io/cifmodeling/reference/cifplot.html.
 First, use the QC skill to evaluate whether the context is clear enough to
 proceed to R coding."
@@ -213,16 +215,19 @@ setwd("C:/demo/r_project/ai_hidden_data")
 
 ### Step 3. Review results with Codex
 
-- Check the CIF curve generated in the `ai_output` folder.
+- Check the figures generated in the `ai_output` folder.
 - With support from Codex, perform the final review of whether the
   analysis results are correct.
 
-![Expected analysis result (depending on the prompt, group-specific
-results may be
-generated)](../reference/figures/cif_cancer_death_analysis_overall.png)
+![Expected analysis result (cumulative incidence
+curves)](../reference/figures/flowchart.png)
 
-Expected analysis result (depending on the prompt, group-specific
-results may be generated)
+Expected analysis result (cumulative incidence curves)
+
+![Expected analysis result (flow
+chart)](../reference/figures/cif_cancer_death_analysis_run_cif_by_rx.png)
+
+Expected analysis result (flow chart)
 
 ## Installation
 
