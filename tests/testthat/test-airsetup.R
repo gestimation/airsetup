@@ -85,12 +85,12 @@ test_that("airsetup_demo creates project, skills, and bundled demo materials", {
   expect_true(all(c("file", "path", "status", "overwritten") %in% names(report)))
   expect_true(any(report$file == "QC_SKILL_CONTEXT.md"))
   expect_true(any(report$file == "demodata.rds"))
-  expect_true(any(report$file == "data_definition_demodata.txt"))
+  expect_true(any(report$file == "definition_demodata.txt"))
 
   initial <- initial_dir_name()
   visible_data <- file.path(path, "ai_project", "ai_visible_data", initial, "demodata.rds")
   hidden_data <- file.path(path, "r_project", "ai_hidden_data", initial, "demodata.rds")
-  definition <- file.path(path, "ai_project", "source", initial, "data_definition_demodata.txt")
+  definition <- file.path(path, "ai_project", "source", initial, "definition_demodata.txt")
 
   expect_true(file.exists(visible_data))
   expect_true(file.exists(hidden_data))

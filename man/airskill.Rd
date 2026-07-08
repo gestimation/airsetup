@@ -6,7 +6,7 @@
 \usage{
 airskill(
   path = ".",
-  skills = c("context", "plan", "result"),
+  skills = c("context", "plan", "result", "m11_semantic"),
   overwrite = FALSE,
   quiet = FALSE
 )
@@ -15,7 +15,7 @@ airskill(
 \item{path}{Project root created by \code{\link[=airsetup]{airsetup()}}.}
 
 \item{skills}{Character vector of skills to add. Supported values are
-\code{"context"}, \code{"plan"}, and \code{"result"}.}
+\code{"context"}, \code{"plan"}, \code{"result"}, and \code{"m11_semantic"}.}
 
 \item{overwrite}{Logical. If \code{FALSE}, existing files are not overwritten.}
 
@@ -34,4 +34,5 @@ project_dir <- file.path(tempdir(), "airskill_example")
 airsetup(project_dir, mode = "ai_only")
 airskill(project_dir)
 airskill(project_dir, skills = c("context", "plan"))
+airskill(project_dir, skills = "m11_semantic")
 }

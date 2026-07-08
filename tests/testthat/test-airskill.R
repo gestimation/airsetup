@@ -12,7 +12,8 @@ test_that("airskill creates QC skill files", {
       "SKILLS_INDEX.md",
       "QC_SKILL_CONTEXT.md",
       "QC_SKILL_PLAN.md",
-      "QC_SKILL_RESULT.md"
+      "QC_SKILL_RESULT.md",
+      "QC_SKILL_M11SEMANTIC.md"
     )
   )
   expect_true(all(report$status == "created"))
@@ -24,15 +25,26 @@ test_that("airskill creates QC skill files", {
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_PLAN.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_RESULT.md")))
+  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_M11SEMANTIC.md")))
 
   index <- paste(readLines(file.path(skills_dir, "SKILLS_INDEX.md"), warn = FALSE), collapse = "\n")
   expect_match(index, "Do not load all skill files unless needed.", fixed = TRUE)
   expect_match(index, "Carry unresolved issues forward to `QC_STATUS.md`.", fixed = TRUE)
+  expect_match(index, "Use `QC_SKILL_M11SEMANTIC.md` when:", fixed = TRUE)
+  expect_match(index, "Use `QC_SKILL_CONTEXT.md` instead.", fixed = TRUE)
 
   context <- paste(readLines(file.path(skills_dir, "QC_SKILL_CONTEXT.md"), warn = FALSE), collapse = "\n")
   expect_match(context, "## 12. Handoff to next workflow step", fixed = TRUE)
   expect_match(context, "Do not assign a numeric score.", fixed = TRUE)
   expect_match(context, "AI assumption risks", fixed = TRUE)
+
+  m11semantic <- paste(readLines(file.path(skills_dir, "QC_SKILL_M11SEMANTIC.md"), warn = FALSE), collapse = "\n")
+  expect_match(m11semantic, "M11-informed semantic organization", fixed = TRUE)
+  expect_match(m11semantic, "ai_project/ai_output/m11semantic/M11SEMANTIC_MAP.md", fixed = TRUE)
+  expect_match(m11semantic, "ai_project/qc/m11semantic/M11SEMANTIC_QC_SUMMARY.md", fixed = TRUE)
+  expect_match(m11semantic, "Do not claim M11 compliance.", fixed = TRUE)
+  expect_match(m11semantic, "Do not also use the common AI & R QC Report format.", fixed = TRUE)
+  expect_false(grepl("# AI & R QC Report", m11semantic, fixed = TRUE))
 })
 
 test_that("airskill selected skills creates index plus selected files", {
@@ -48,6 +60,21 @@ test_that("airskill selected skills creates index plus selected files", {
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
   expect_false(file.exists(file.path(skills_dir, "QC_SKILL_PLAN.md")))
   expect_false(file.exists(file.path(skills_dir, "QC_SKILL_RESULT.md")))
+  expect_false(file.exists(file.path(skills_dir, "QC_SKILL_M11SEMANTIC.md")))
+})
+
+test_that("airskill can create only the M11 semantic skill", {
+  path <- tempfile("airskill-")
+  airsetup(path, mode = "ai_only")
+
+  report <- airskill(path, skills = "m11_semantic", quiet = TRUE)
+
+  expect_equal(report$file, c("SKILLS_INDEX.md", "QC_SKILL_M11SEMANTIC.md"))
+
+  skills_dir <- file.path(path, "ai_project", "source", "skills")
+  expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
+  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_M11SEMANTIC.md")))
+  expect_false(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
 })
 
 test_that("airskill preserves existing files by default and overwrites when requested", {

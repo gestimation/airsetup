@@ -9,7 +9,7 @@ airsetup project. The files are written under
 ``` r
 airskill(
   path = ".",
-  skills = c("context", "plan", "result"),
+  skills = c("context", "plan", "result", "m11_semantic"),
   overwrite = FALSE,
   quiet = FALSE
 )
@@ -25,7 +25,7 @@ airskill(
 - skills:
 
   Character vector of skills to add. Supported values are `"context"`,
-  `"plan"`, and `"result"`.
+  `"plan"`, `"result"`, and `"m11_semantic"`.
 
 - overwrite:
 
@@ -71,4 +71,6 @@ airskill(project_dir, skills = c("context", "plan"))
 #> 1       FALSE
 #> 2       FALSE
 #> 3       FALSE
+airskill(project_dir, skills = "m11_semantic")
+#> Error: Unsupported skill value: m11_semantic. Supported values are: context, plan, result.
 ```

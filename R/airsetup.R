@@ -583,8 +583,8 @@ airsetup_demo <- function(path, japanese = TRUE, skills = TRUE, overwrite = FALS
       writer = function(out) write_rds_if_allowed(prostate, out, overwrite = overwrite)
     ),
     list(
-      file = "data_definition_demodata.txt",
-      path = file.path("ai_project", "source", initial, "data_definition_demodata.txt"),
+      file = "definition_demodata.txt",
+      path = file.path("ai_project", "source", initial, "definition_demodata.txt"),
       writer = function(out) write_demo_data_definition(out, overwrite = overwrite)
     )
   )
