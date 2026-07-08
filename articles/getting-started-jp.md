@@ -20,29 +20,29 @@
 - 統計解析ワークフローの作業記録を支援する
 - ユーザーは意思決定、結果解釈、アウトプットについて責任を持つ
 
-これから紹介する`airsetup`パッケージは、AIエージェントが支援するRワークフローのためのフォルダを生成します。統計解析のための関数は提供されませんが、その代わりフォルダ構造、最小限の`AGENTS.md`、`QC_STATUS.md`トラッカー、そしてオプションとして軽快なQCスキルテンプレートが用意されています。
+これから紹介する`airsetup`パッケージは、AIエージェントが支援するRワークフローのためのフォルダを生成します。統計解析のための関数は提供されませんが、その代わりフォルダ構造、最小限の`AGENTS.md`、`QC_STATUS.md`トラッカー、そしてオプションとしてQCスキルテンプレートが用意されています。
 
 コーディングの正確性を確認し、QCを行う方法は1つではありません。あるプロジェクトではダブルプログラミングを採用するかもしれませんし、別のプロジェクトでは目視チェックを行うかもしれません。AI
 &
-Rワークフローにおける自己QCをサポートするために、3つのQCスキルテンプレートが用意されています。
-
-- `QC_SKILL_CONTEXT.md`:
-  計画のドラフトやRコーディングに先立って、コンテキスト情報が明確かどうかを確認します
-- `QC_SKILL_PLAN.md`:
-  コーディング計画または統計解析計画（SAP）が、Rで実装するためにじゅうぶんな情報を持っているかどうかを確認します。
-- `QC_SKILL_RESULT.md`:
-  解析結果が内部的に一貫しており、計画に沿ったもので、安全に解釈できるかどうかを確認します
+Rワークフローにおける自己QCをサポートするために、コンテキスト、統計解析計画（SAP）、解析結果を確認するための軽快なQCスキルテンプレートが利用できます。
 
 ## チュートリアル1. セットアップ
 
 3つのチュートリアルに従って、AI &
 Rワークフローを体験してみてください。最初のチュートリアルでは、AIエージェントにタスクを依頼する前の環境設定までを扱います。ここではCodexアプリを用いていますが、AIエージェントツールに関する制約は特にありません。
 
-### ステップ1. R、RStudio、Codexアプリをインストール
+### ステップ1. R、RStudio、`airsetup`パッケージ、Codexアプリをインストール
 
-- R本体をインストールする
+- R本体をインストール
 - RStudioインストーラーを[Positサイト](https://posit.co/downloads)からダウンロード
 - Codexアプリインストーラーを[OpenAIサイト](https://openai.com/ja-JP/codex)からダウンロード
+- `airsetup`パッケージをGitHubからインストール
+
+``` r
+
+# install.packages("pak")
+pak::pak("gestimation/airsetup")
+```
 
 ### ステップ2. プロジェクトフォルダ作成（airsetup）
 
@@ -187,7 +187,7 @@ setwd("C:/demo/r_project/ai_hidden_data")
 
 期待される解析結果（累積発生曲線）
 
-## インストール
+## 最後に
 
 `airsetup`パッケージはGitHubからインストールできます。
 
@@ -197,7 +197,18 @@ setwd("C:/demo/r_project/ai_hidden_data")
 pak::pak("gestimation/airsetup")
 ```
 
-このパッケージはまだアルファ版のためCRANに提出していませんが、`testthat`を用いた100件以上のテストに合格しています。[`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md)を実行した結果、指定したパス以外に影響を与えることはありません。もし、AIがこのワークフローの中でどのようにふるまうのかに興味を持たれたなら、[`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md)で生成される`AGENTS.md`、フォルダ構造、コンテキスト資料をご覧ください。
+このパッケージはまだアルファ版のためCRANに提出していませんが、`testthat`を用いた100件以上のテストに合格しています。[`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md)を実行した結果、指定したパス以外に影響を与えることはありません。
+
+[`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md)を用いたこのチュートリアルでは、オプションのQCスキルテンプレートがsource/skillsフォルダ内に生成されています。プロンプトで「QCスキル」と指示することで、より質の高い確認作業を行うことができます。
+
+- `QC_SKILL_CONTEXT.md`:
+  計画のドラフトやRコーディングに先立って、コンテキスト情報が明確かどうかを確認します
+- `QC_SKILL_PLAN.md`:
+  コーディング計画または統計解析計画（SAP）が、Rで実装するためにじゅうぶんな情報を持っているかどうかを確認します。
+- `QC_SKILL_RESULT.md`:
+  解析結果が内部的に一貫しており、計画に沿ったもので、安全に解釈できるかどうかを確認します
+
+もし、AIがこのワークフローの中でどのようにふるまうのかに興味を持たれたなら、[`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md)で生成される`AGENTS.md`、フォルダ構造、コンテキスト資料をご覧ください。
 
 ``` r
 
