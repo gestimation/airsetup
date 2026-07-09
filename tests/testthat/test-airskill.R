@@ -37,6 +37,14 @@ test_that("airskill creates QC skill files", {
   expect_match(context, "## 12. Handoff to next workflow step", fixed = TRUE)
   expect_match(context, "Do not assign a numeric score.", fixed = TRUE)
   expect_match(context, "AI assumption risks", fixed = TRUE)
+  expect_match(context, "R package QC updates for `QC_STATUS.md`", fixed = TRUE)
+  expect_match(context, "Package and reproducibility constraints", fixed = TRUE)
+
+  plan <- paste(readLines(file.path(skills_dir, "QC_SKILL_PLAN.md"), warn = FALSE), collapse = "\n")
+  expect_match(plan, "planned package, main function, CRAN status", fixed = TRUE)
+
+  result <- paste(readLines(file.path(skills_dir, "QC_SKILL_RESULT.md"), warn = FALSE), collapse = "\n")
+  expect_match(result, "package versions, installation or namespace messages", fixed = TRUE)
 
   m11semantic <- paste(readLines(file.path(skills_dir, "QC_SKILL_M11SEMANTIC.md"), warn = FALSE), collapse = "\n")
   expect_match(m11semantic, "M11-informed semantic organization", fixed = TRUE)

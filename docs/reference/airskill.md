@@ -49,16 +49,19 @@ airskill(project_dir)
 #> created: ai_project/source/skills/QC_SKILL_CONTEXT.md
 #> created: ai_project/source/skills/QC_SKILL_PLAN.md
 #> created: ai_project/source/skills/QC_SKILL_RESULT.md
-#>                  file                                         path  status
-#> 1     SKILLS_INDEX.md     ai_project/source/skills/SKILLS_INDEX.md created
-#> 2 QC_SKILL_CONTEXT.md ai_project/source/skills/QC_SKILL_CONTEXT.md created
-#> 3    QC_SKILL_PLAN.md    ai_project/source/skills/QC_SKILL_PLAN.md created
-#> 4  QC_SKILL_RESULT.md  ai_project/source/skills/QC_SKILL_RESULT.md created
-#>   overwritten
-#> 1       FALSE
-#> 2       FALSE
-#> 3       FALSE
-#> 4       FALSE
+#> created: ai_project/source/skills/QC_SKILL_M11SEMANTIC.md
+#>                      file                                             path
+#> 1         SKILLS_INDEX.md         ai_project/source/skills/SKILLS_INDEX.md
+#> 2     QC_SKILL_CONTEXT.md     ai_project/source/skills/QC_SKILL_CONTEXT.md
+#> 3        QC_SKILL_PLAN.md        ai_project/source/skills/QC_SKILL_PLAN.md
+#> 4      QC_SKILL_RESULT.md      ai_project/source/skills/QC_SKILL_RESULT.md
+#> 5 QC_SKILL_M11SEMANTIC.md ai_project/source/skills/QC_SKILL_M11SEMANTIC.md
+#>    status overwritten
+#> 1 created       FALSE
+#> 2 created       FALSE
+#> 3 created       FALSE
+#> 4 created       FALSE
+#> 5 created       FALSE
 airskill(project_dir, skills = c("context", "plan"))
 #> skipped: ai_project/source/skills/SKILLS_INDEX.md
 #> skipped: ai_project/source/skills/QC_SKILL_CONTEXT.md
@@ -72,5 +75,12 @@ airskill(project_dir, skills = c("context", "plan"))
 #> 2       FALSE
 #> 3       FALSE
 airskill(project_dir, skills = "m11_semantic")
-#> Error: Unsupported skill value: m11_semantic. Supported values are: context, plan, result.
+#> skipped: ai_project/source/skills/SKILLS_INDEX.md
+#> skipped: ai_project/source/skills/QC_SKILL_M11SEMANTIC.md
+#>                      file                                             path
+#> 1         SKILLS_INDEX.md         ai_project/source/skills/SKILLS_INDEX.md
+#> 2 QC_SKILL_M11SEMANTIC.md ai_project/source/skills/QC_SKILL_M11SEMANTIC.md
+#>    status overwritten
+#> 1 skipped       FALSE
+#> 2 skipped       FALSE
 ```

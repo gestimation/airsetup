@@ -168,6 +168,8 @@ test_that("AGENTS.md is generated from the canonical English template by default
   expect_match(text, "## Statistical Analysis Plan and Analysis Decisions", fixed = TRUE)
   expect_match(text, "`ai_output/SAP.md`", fixed = TRUE)
   expect_match(text, "`ai_output/SAP_DECISIONS.md`", fixed = TRUE)
+  expect_match(text, "record a concise package QC entry", fixed = TRUE)
+  expect_match(text, "`sessionInfo()`", fixed = TRUE)
   expect_match(text, "Codex must not list, open, copy, move, summarize", fixed = TRUE)
   expect_match(text, "## Human Approval", fixed = TRUE)
   expect_match(text, "## Output Language", fixed = TRUE)
@@ -210,10 +212,15 @@ test_that("QC_STATUS.md is generated as a minimal root status file", {
   airsetup(path, mode = "ai_only")
 
   qc_status <- readLines(file.path(path, "ai_project", "QC_STATUS.md"), warn = FALSE)
+  text <- paste(qc_status, collapse = "\n")
 
   expect_identical(qc_status, qc_status_template())
   expect_equal(qc_status[1], "# QC_STATUS.md")
-  expect_true(any(grepl("No QC items have been registered yet.", qc_status, fixed = TRUE)))
+  expect_match(text, "## R Package QC", fixed = TRUE)
+  expect_match(text, "cifmodeling", fixed = TRUE)
+  expect_match(text, "CRAN listing checked; availability/runtime not checked", fixed = TRUE)
+  expect_match(text, "## QC Items", fixed = TRUE)
+  expect_match(text, "No QC items have been registered yet.", fixed = TRUE)
 })
 
 test_that("split mode r_project scaffold is minimal and protects hidden data", {
