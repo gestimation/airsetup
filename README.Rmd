@@ -76,7 +76,7 @@ project rules.
 ![An example of AI project folder](man/figures/screenshot_ai_project.png)
 
 It contains folders for source materials, AI-visible data, AI-generated files, R
-outputs, QC evidence, logs, and optional QC skill templates:
+outputs, QC evidence, logs, and AI/agent control files:
 
 - `source/`: source specifications, reference documents, and analysis
   instructions, such as protocols, SAPs, and database definitions.
@@ -85,7 +85,8 @@ outputs, QC evidence, logs, and optional QC skill templates:
 - `r_output/`: outputs produced when R scripts are run by the user.
 - `qc/`: QC evidence, review materials, comparison files, and discrepancy notes.
 - `log/`: notes, decision records, and investigation logs.
-- `skills/`: generated QC skill templates.
+- `agent_control/`: agent role definitions, agent control index, and generated
+  QC skill templates.
 - `AGENTS.md`: working rules for AI agents.
 - `QC_STATUS.md`: the current QC status and open review items.
 
@@ -96,8 +97,6 @@ With `split = TRUE`, `r_project/` is also created next to `ai_project/`.
 It contains a hidden-data area and local reminders:
 
 - `ai_hidden_data/`: analysis data that AI agents must not inspect directly.
-- `r_scripts/`: local R scripts maintained or run outside the AI-visible
-  workspace.
 - `.gitignore`: defaults that avoid committing hidden analysis data.
 - `README_DO_NOT_SHARE_WITH_AI.md`: a local reminder that this folder is for
   human/R execution, not AI inspection.
@@ -115,20 +114,20 @@ may create later during planning, QC, and coding.
 | `airsetup()` | `ai_project/r_output/` | Outputs from R scripts that the user runs. |
 | `airsetup()` | `ai_project/qc/` | QC reports, review evidence, discrepancy notes, and QC summaries. |
 | `airsetup()` | `ai_project/log/` | Work logs and decision records. |
+| `airsetup()` | `ai_project/agent_control/` | AI/agent control files, agent role definitions, and QC skill templates. |
+| `airsetup()` | `ai_project/agent_control/AGENT_CONTROL_INDEX.md` | Index and selection guide for agent control files. |
 | `airsetup()` | `ai_project/AGENTS.md` | Working rules for AI agents. |
 | `airsetup()` | `ai_project/QC_STATUS.md` | Current QC status, open questions, and links to detailed QC materials. |
 | `airsetup(split = TRUE)` | `r_project/ai_hidden_data/` and `r_project/ai_hidden_data/initial_YYYYMMDD/` | Analysis data area that AI must not inspect. |
-| `airsetup(split = TRUE)` | `r_project/r_scripts/` | Local R scripts outside the AI-visible workspace. |
 | `airsetup(split = TRUE)` | `r_project/.gitignore` | Defaults that avoid committing hidden analysis data. |
 | `airsetup(split = TRUE)` | `r_project/README_DO_NOT_SHARE_WITH_AI.md` | Local reminder that the folder is for human/R execution. |
-| `airskill()` | `ai_project/skills/SKILLS_INDEX.md` | Index and selection guide for QC skill files. |
-| `airskill()` | `ai_project/skills/QC_SKILL_CONTEXT.md` | Lightweight context QC skill. |
-| `airskill()` | `ai_project/skills/QC_SKILL_PLAN.md` | Plan and SAP implementability QC skill. |
-| `airskill()` | `ai_project/skills/QC_SKILL_RESULT.md` | Result consistency and interpretation QC skill. |
-| `airskill()` | `ai_project/skills/QC_SKILL_M11SEMANTIC.md` | M11-informed semantic context QC skill for complex clinical-trial materials. |
-| `airsetup(qc_agent = TRUE)` | `ai_project/agent_specs/WORKFLOW_AGENT.md` | Workflow agent role and Plan gate constraints. |
-| `airsetup(qc_agent = TRUE)` | `ai_project/agent_specs/QC_AGENT.md` | Independent QC agent role and decision rules. |
-| `airsetup(qc_agent = TRUE)` | `ai_project/qc/review/` and `ai_project/qc/decisions/` | Independent QC review and decision areas. |
+| `airskill()` | `ai_project/agent_control/QC_SKILL_CONTEXT.md` | Lightweight context QC skill. |
+| `airskill()` | `ai_project/agent_control/QC_SKILL_PLAN.md` | Plan and SAP implementability QC skill. |
+| `airskill()` | `ai_project/agent_control/QC_SKILL_RESULT.md` | Result consistency and interpretation QC skill. |
+| `airskill()` | `ai_project/agent_control/QC_SKILL_M11SEMANTIC.md` | M11-informed semantic context QC skill for complex clinical-trial materials. |
+| `airsetup(qc_agent = TRUE)` | `ai_project/agent_control/WORKFLOW_AGENT.md` | Workflow agent role and Plan gate constraints. |
+| `airsetup(qc_agent = TRUE)` | `ai_project/agent_control/QC_AGENT.md` | Independent QC agent role and decision rules. |
+| `airsetup(qc_agent = TRUE)` | `ai_project/qc/review/` | Independent QC review and decision areas. |
 | `airsetup(qc_agent = TRUE)` | `ai_project/log/QC_REVIEW_LOG.md` and `ai_project/log/DECISION_LOG.md` | QC review and decision logs. |
 | `airsetup_demo()` | `ai_project/source/initial_YYYYMMDD/definition_demodata.txt` | Demo data definition. |
 | `airsetup_demo()` | `ai_project/ai_visible_data/initial_YYYYMMDD/demodata.rds` | AI-visible demo data. |
@@ -187,14 +186,16 @@ The generated `AGENTS.md` is intentionally practical. It tells AI agents:
   analysis-set flags, visit coding, or missing-value coding;
 - that Workflow agent outputs belong under `ai_output/`, QC agent outputs belong
   under `qc/`, and QC agents must not directly overwrite Workflow outputs;
+- that detailed agent role definitions and QC skill instructions are stored
+  under `agent_control/`;
 - to ask for human approval when a decision requires domain judgment.
 
 The generated file is not an access-control mechanism. It is a project-level
 working rule that makes the boundary explicit and repeatable.
 
-When `qc_agent = TRUE`, `AGENTS.md`, `agent_specs/WORKFLOW_AGENT.md`, and
-`agent_specs/QC_AGENT.md` all state the Plan gate rule: the Workflow agent must
-not proceed to final R code generation until the QC agent records
+When `qc_agent = TRUE`, `AGENTS.md`, `agent_control/WORKFLOW_AGENT.md`, and
+`agent_control/QC_AGENT.md` all state the Plan gate rule: the Workflow agent
+must not proceed to final R code generation until the QC agent records
 `APPROVE_NEXT_STEP`. Before that approval, context confirmation, M11SEMANTIC
 extraction, SAP or analysis-plan drafting, data requirements tables, endpoint
 map drafts, metadata inspection plans, and pseudocode are allowed. Final R
@@ -229,7 +230,8 @@ consistent, traceable, aligned with the plan, and safe to interpret.
 
 - `QC_SKILL_M11SEMANTIC.md`: supports M11-informed semantic organization across multiple clinical-trial materials before R planning or R coding. It is generated by default but should be used only for M11/electronic-protocol tasks or complex clinical-trial semantic review, not ordinary context QC.
 
-- `SKILLS_INDEX.md`: explains the skill files.
+- `AGENT_CONTROL_INDEX.md`: explains the agent control files and available QC
+  skills.
 
 The skills use a compact QC report format with domain-level status, issue severity, readiness for next steps, cannot-assess items, AI assumption risks, and recommended handoff actions.
 

@@ -12,7 +12,7 @@ aircheck(path, split = TRUE, skills = TRUE, qc_agent = FALSE)
 \item{split}{Logical. If \code{TRUE}, check the sibling \code{r_project} scaffold.}
 
 \item{skills}{Logical. If \code{TRUE}, check QC skill templates under
-\verb{ai_project/skills/}.}
+\verb{ai_project/agent_control/}.}
 
 \item{qc_agent}{Logical. If \code{TRUE}, check independent QC agent scaffolding.}
 }

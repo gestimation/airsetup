@@ -1,7 +1,7 @@
 #' Add AI & R QC skill templates
 #'
 #' `airskill()` adds lightweight QC skill Markdown files to an existing
-#' airsetup project. The files are written under `ai_project/skills/`.
+#' airsetup project. The files are written under `ai_project/agent_control/`.
 #'
 #' @param path Project root created by [airsetup()].
 #' @param skills Character vector of skills to add. Supported values are
@@ -44,7 +44,7 @@ airskill <- function(path = ".",
     )
   }
 
-  skills_dir <- file.path(ai_project, "skills")
+  skills_dir <- file.path(ai_project, "agent_control")
   dir.create(skills_dir, recursive = TRUE, showWarnings = FALSE)
 
   specs <- airskill_file_specs(skills)
@@ -62,12 +62,12 @@ airskill <- function(path = ".",
     }
 
     if (!quiet) {
-      message(sprintf("%s: %s", status, file.path("ai_project", "skills", spec$file)))
+      message(sprintf("%s: %s", status, file.path("ai_project", "agent_control", spec$file)))
     }
 
     data.frame(
       file = spec$file,
-      path = file.path("ai_project", "skills", spec$file),
+      path = file.path("ai_project", "agent_control", spec$file),
       status = status,
       overwritten = isTRUE(written && existed),
       stringsAsFactors = FALSE
@@ -116,20 +116,28 @@ airskill_file_specs <- function(skills) {
   )
 
   c(
-    list(list(file = "SKILLS_INDEX.md", template = skills_index_template)),
+    list(list(file = "AGENT_CONTROL_INDEX.md", template = agent_control_index_template)),
     unname(skill_specs[skills])
   )
 }
 
-skills_index_template <- function() {
+agent_control_index_template <- function() {
   c(
-    "# AI & R Skills Index",
+    "# AGENT_CONTROL_INDEX.md",
     "",
-    "This directory contains lightweight QC skills for the AI & R workflow.",
+    "This directory contains AI/agent control files for the AI & R workflow.",
     "",
-    "Use these skills selectively. Do not load all skill files unless needed.",
+    "Use these files selectively. Do not load all agent control files unless needed.",
+    "",
+    "## Agent role definitions",
+    "",
+    "- WORKFLOW_AGENT.md, when generated: Workflow agent role, output boundary, and Plan gate constraints.",
+    "- QC_AGENT.md, when generated: Independent QC agent role, review boundary, and decision rules.",
     "",
     "## Available skills",
+    "",
+    "The following QC skill files are generated when `skills = TRUE` or when",
+    "`airskill()` is run for the selected skill.",
     "",
     "### QC_SKILL_CONTEXT.md",
     "",

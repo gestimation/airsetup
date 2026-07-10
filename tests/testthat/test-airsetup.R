@@ -18,7 +18,8 @@ expect_airsetup_default_structure <- function(path) {
       "ai_output",
       "r_output",
       "qc",
-      "log"
+      "log",
+      "agent_control"
     )
   )
   expect_true(all(dir.exists(expected_ai_dirs)))
@@ -29,13 +30,14 @@ expect_airsetup_default_structure <- function(path) {
   expect_true(file.exists(file.path(path, "ai_project", "AGENTS.md")))
   expect_true(file.exists(file.path(path, "ai_project", "QC_STATUS.md")))
 
-  skills_dir <- file.path(path, "ai_project", "skills")
-  expect_true(dir.exists(skills_dir))
-  expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
-  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
-  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_M11SEMANTIC.md")))
-  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_PLAN.md")))
-  expect_true(file.exists(file.path(skills_dir, "QC_SKILL_RESULT.md")))
+  agent_control_dir <- file.path(path, "ai_project", "agent_control")
+  expect_true(dir.exists(agent_control_dir))
+  expect_true(file.exists(file.path(agent_control_dir, "AGENT_CONTROL_INDEX.md")))
+  expect_true(file.exists(file.path(agent_control_dir, "QC_SKILL_CONTEXT.md")))
+  expect_true(file.exists(file.path(agent_control_dir, "QC_SKILL_M11SEMANTIC.md")))
+  expect_true(file.exists(file.path(agent_control_dir, "QC_SKILL_PLAN.md")))
+  expect_true(file.exists(file.path(agent_control_dir, "QC_SKILL_RESULT.md")))
+  expect_false(dir.exists(file.path(path, "ai_project", "skills")))
 }
 
 test_that("default airsetup creates split project with skills but no independent QC agent", {
@@ -48,7 +50,7 @@ test_that("default airsetup creates split project with skills but no independent
 
   expect_true(dir.exists(file.path(path, "r_project", "ai_hidden_data")))
   expect_one_dated_initial_dir(file.path(path, "r_project", "ai_hidden_data"))
-  expect_true(dir.exists(file.path(path, "r_project", "r_scripts")))
+  expect_false(dir.exists(file.path(path, "r_project", "r_scripts")))
   expect_false(dir.exists(file.path(path, "r_project", "r_output")))
   expect_true(file.exists(file.path(path, "r_project", ".gitignore")))
   expect_true(file.exists(file.path(path, "r_project", "README_DO_NOT_SHARE_WITH_AI.md")))
@@ -77,6 +79,9 @@ test_that("skills FALSE does not create skills folder", {
 
   expect_true(dir.exists(file.path(path, "ai_project")))
   expect_true(dir.exists(file.path(path, "r_project")))
+  expect_true(dir.exists(file.path(path, "ai_project", "agent_control")))
+  expect_true(file.exists(file.path(path, "ai_project", "agent_control", "AGENT_CONTROL_INDEX.md")))
+  expect_false(file.exists(file.path(path, "ai_project", "agent_control", "QC_SKILL_CONTEXT.md")))
   expect_false(dir.exists(file.path(path, "ai_project", "skills")))
   expect_false(dir.exists(file.path(path, "ai_project", "source", "skills")))
 })
@@ -85,19 +90,18 @@ test_that("qc_agent TRUE creates independent QC agent scaffold and gate rules", 
   path <- tempfile("airsetup-")
   airsetup(path, qc_agent = TRUE)
 
-  expect_true(dir.exists(file.path(path, "ai_project", "agent_specs")))
-  expect_true(file.exists(file.path(path, "ai_project", "agent_specs", "WORKFLOW_AGENT.md")))
-  expect_true(file.exists(file.path(path, "ai_project", "agent_specs", "QC_AGENT.md")))
+  expect_false(dir.exists(file.path(path, "ai_project", "agent_specs")))
+  expect_true(file.exists(file.path(path, "ai_project", "agent_control", "WORKFLOW_AGENT.md")))
+  expect_true(file.exists(file.path(path, "ai_project", "agent_control", "QC_AGENT.md")))
   expect_true(dir.exists(file.path(path, "ai_project", "qc", "review")))
-  expect_true(dir.exists(file.path(path, "ai_project", "qc", "decisions")))
   expect_true(file.exists(file.path(path, "ai_project", "qc", "review", "QC_REVIEW_REPORT.md")))
   expect_true(file.exists(file.path(path, "ai_project", "qc", "review", "QC_DECISION.md")))
   expect_true(file.exists(file.path(path, "ai_project", "log", "QC_REVIEW_LOG.md")))
   expect_true(file.exists(file.path(path, "ai_project", "log", "DECISION_LOG.md")))
 
   agents <- paste(readLines(file.path(path, "ai_project", "AGENTS.md"), warn = FALSE), collapse = "\n")
-  workflow <- paste(readLines(file.path(path, "ai_project", "agent_specs", "WORKFLOW_AGENT.md"), warn = FALSE), collapse = "\n")
-  qc_agent <- paste(readLines(file.path(path, "ai_project", "agent_specs", "QC_AGENT.md"), warn = FALSE), collapse = "\n")
+  workflow <- paste(readLines(file.path(path, "ai_project", "agent_control", "WORKFLOW_AGENT.md"), warn = FALSE), collapse = "\n")
+  qc_agent <- paste(readLines(file.path(path, "ai_project", "agent_control", "QC_AGENT.md"), warn = FALSE), collapse = "\n")
   decision <- paste(readLines(file.path(path, "ai_project", "qc", "review", "QC_DECISION.md"), warn = FALSE), collapse = "\n")
 
   expect_match(agents, "APPROVE_NEXT_STEP", fixed = TRUE)
@@ -137,7 +141,7 @@ test_that("airsetup_demo creates project, optional QC agent, skills, and bundled
   expect_true(file.exists(visible_data))
   expect_true(file.exists(hidden_data))
   expect_true(file.exists(definition))
-  expect_true(file.exists(file.path(path, "ai_project", "agent_specs", "QC_AGENT.md")))
+  expect_true(file.exists(file.path(path, "ai_project", "agent_control", "QC_AGENT.md")))
 
   expect_equal(nrow(readRDS(visible_data)), 3L)
   expect_equal(nrow(readRDS(hidden_data)), 502L)
@@ -162,6 +166,9 @@ test_that("airsetup_demo can skip skills and preserves demo materials by default
   report <- airsetup_demo(path, skills = FALSE, overwrite = FALSE)
 
   expect_false(any(report$file == "QC_SKILL_CONTEXT.md"))
+  expect_true(dir.exists(file.path(path, "ai_project", "agent_control")))
+  expect_true(file.exists(file.path(path, "ai_project", "agent_control", "AGENT_CONTROL_INDEX.md")))
+  expect_false(file.exists(file.path(path, "ai_project", "agent_control", "QC_SKILL_CONTEXT.md")))
   expect_false(dir.exists(file.path(path, "ai_project", "skills")))
   expect_false(dir.exists(file.path(path, "ai_project", "source", "skills")))
   expect_true(any(report$path == file.path("ai_project", "ai_visible_data", initial, "demodata.rds") & report$status == "skipped"))
@@ -215,8 +222,10 @@ test_that("AGENTS.md records shared rules and English output language by default
   expect_match(text, "`../r_project/ai_hidden_data/`, when split project structure is used", fixed = TRUE)
   expect_match(text, "`ai_output/`", fixed = TRUE)
   expect_match(text, "`r_output/`", fixed = TRUE)
-  expect_match(text, "`skills/`, if present", fixed = TRUE)
-  expect_match(text, "Skill templates belong here, not under `source/`.", fixed = TRUE)
+  expect_match(text, "`agent_control/`", fixed = TRUE)
+  expect_match(text, "Detailed agent role definitions and QC skill instructions are stored here.", fixed = TRUE)
+  expect_match(text, "`QC_SKILL_*.md` files are created here when `skills = TRUE`.", fixed = TRUE)
+  expect_match(text, "Do not create `agent_specs/` or `skills/`", fixed = TRUE)
   expect_match(text, "Separate facts written in source documents", fixed = TRUE)
   expect_match(text, "Do not silently assume treatment-group coding", fixed = TRUE)
   expect_match(text, "Workflow agent deliverables belong under `ai_output/`", fixed = TRUE)
@@ -292,7 +301,7 @@ test_that("split r_project scaffold protects hidden data", {
   expect_match(readme_text, "../ai_project/r_output/", fixed = TRUE)
 
   expect_true(dir.exists(file.path(path, "r_project", "ai_hidden_data")))
-  expect_true(dir.exists(file.path(path, "r_project", "r_scripts")))
+  expect_false(dir.exists(file.path(path, "r_project", "r_scripts")))
   expect_false(dir.exists(file.path(path, "r_project", "r_output")))
   expect_one_dated_initial_dir(file.path(path, "r_project", "ai_hidden_data"))
   expect_false(dir.exists(file.path(path, "r_project", "ai_hidden_data", "initial")))
@@ -321,11 +330,12 @@ test_that("aircheck reports missing and found selected items", {
   expect_true("ai_project/ai_visible_data/initial_YYYYMMDD" %in% report2$item)
   expect_true("ai_project/ai_output" %in% report2$item)
   expect_true("ai_project/r_output" %in% report2$item)
-  expect_true("ai_project/skills/QC_SKILL_CONTEXT.md" %in% report2$item)
-  expect_true("ai_project/agent_specs/WORKFLOW_AGENT.md" %in% report2$item)
+  expect_true("ai_project/agent_control/AGENT_CONTROL_INDEX.md" %in% report2$item)
+  expect_true("ai_project/agent_control/QC_SKILL_CONTEXT.md" %in% report2$item)
+  expect_true("ai_project/agent_control/WORKFLOW_AGENT.md" %in% report2$item)
   expect_true("ai_project/qc/review/QC_DECISION.md" %in% report2$item)
   expect_true("r_project/ai_hidden_data" %in% report2$item)
-  expect_true("r_project/r_scripts" %in% report2$item)
+  expect_false("r_project/r_scripts" %in% report2$item)
   expect_false(paste0("r_project/", "r_output") %in% report2$item)
 
   expect_false("ai_project/source/initial" %in% report2$item)
@@ -344,6 +354,9 @@ test_that("aircheck can check ai-only structure without optional scaffolds", {
   expect_false(any(grepl("^r_project/", report$path)))
   expect_false(any(grepl(paste0("source/", "skills"), report$path, fixed = TRUE)))
   expect_false(any(grepl("ai_project/skills", report$path, fixed = TRUE)))
+  expect_true("ai_project/agent_control" %in% report$item)
+  expect_true("ai_project/agent_control/AGENT_CONTROL_INDEX.md" %in% report$item)
+  expect_false(any(grepl("QC_SKILL_", report$path, fixed = TRUE)))
   expect_true("ai_project/source" %in% report$item)
   expect_true("ai_project/source/initial_YYYYMMDD" %in% report$item)
   expect_true("ai_project/ai_visible_data" %in% report$item)
@@ -361,7 +374,7 @@ test_that("qc_agent templates include Plan gate enforcement", {
   path <- tempfile("airsetup-")
   airsetup(path, qc_agent = TRUE)
   agents <- readLines(file.path(path, "ai_project", "AGENTS.md"))
-  workflow <- readLines(file.path(path, "ai_project", "agent_specs", "WORKFLOW_AGENT.md"))
+  workflow <- readLines(file.path(path, "ai_project", "agent_control", "WORKFLOW_AGENT.md"))
 
   expect_true(any(grepl("Plan gate", agents)))
   expect_true(any(grepl("APPROVE_NEXT_STEP", agents)))

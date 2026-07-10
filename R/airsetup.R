@@ -24,7 +24,8 @@ required_dirs <- function() {
     "ai_output",
     "r_output",
     "qc",
-    "log"
+    "log",
+    "agent_control"
   )
 }
 
@@ -72,12 +73,6 @@ agents_md_template <- function(japanese = FALSE,
   validate_flag(split, "split")
   validate_flag(skills, "skills")
 
-  skills_header <- if (isTRUE(skills)) {
-    "- `skills/`"
-  } else {
-    "- `skills/`, if present"
-  }
-
   hidden_data_header <- if (isTRUE(split)) {
     "- `../r_project/ai_hidden_data/`"
   } else {
@@ -108,10 +103,15 @@ agents_md_template <- function(japanese = FALSE,
     "  - Treat this folder as read-only. Codex must not overwrite, move, or delete",
     "    source materials.",
     "",
-    skills_header,
-    "  - Stores generated QC skill templates.",
-    "  - Skill templates belong here, not under `source/`.",
-    "  - Codex may read these files when the user asks for QC skill support.",
+    "- `agent_control/`",
+    "  - Stores AI/agent control files.",
+    "  - Detailed agent role definitions and QC skill instructions are stored here.",
+    "  - `AGENT_CONTROL_INDEX.md` explains available agent-control files.",
+    "  - `WORKFLOW_AGENT.md` and `QC_AGENT.md` are created here when",
+    "    `qc_agent = TRUE`.",
+    "  - `QC_SKILL_*.md` files are created here when `skills = TRUE`.",
+    "  - Do not create `agent_specs/` or `skills/`; agent-control files belong",
+    "    under `agent_control/`.",
     "",
     "- `ai_visible_data/`",
     "  - Stores dummy or visible data that Codex is allowed to inspect.",
@@ -749,7 +749,7 @@ write_demo_data_definition <- function(path, overwrite = FALSE) {
 #' @param split Logical. If `TRUE`, create sibling `ai_project` and `r_project`
 #'   folders. If `FALSE`, create only `ai_project`.
 #' @param skills Logical. If `TRUE`, add QC skill templates under
-#'   `ai_project/skills/`.
+#'   `ai_project/agent_control/`.
 #' @param qc_agent Logical. If `TRUE`, add independent QC agent specifications
 #'   and Plan gate review folders.
 #' @param japanese Logical. If `TRUE`, generated `AGENTS.md` instructs Codex to
@@ -920,8 +920,8 @@ airsetup_demo <- function(path,
 #'   instructs Codex to use English by default.
 #' @param split Logical. If `TRUE`, generated `AGENTS.md` describes the sibling
 #'   `r_project` hidden-data area as part of the active scaffold.
-#' @param skills Logical. If `TRUE`, generated `AGENTS.md` describes `skills/`
-#'   as part of the active scaffold.
+#' @param skills Logical. If `TRUE`, generated `AGENTS.md` describes QC skill
+#'   files under `agent_control/` as part of the active scaffold.
 #' @param qc_agent Logical. If `TRUE`, create independent QC agent scaffolding.
 #' @param overwrite Logical. If `TRUE`, overwrite generated files that already
 #'   exist.
@@ -955,12 +955,26 @@ create_ai_project_structure <- function(path,
     overwrite = overwrite
   )
   create_qc_status_md(path, overwrite = overwrite)
+  create_agent_control_index(path, overwrite = overwrite)
 
   if (isTRUE(qc_agent)) {
     create_qc_agent_scaffold(path, overwrite = overwrite)
   }
 
   invisible(normalizePath(path, winslash = "/", mustWork = TRUE))
+}
+
+#' Create agent control index
+#'
+#' @param path AI project directory.
+#' @param overwrite Logical. If `TRUE`, overwrite an existing index file.
+#'
+#' @return Invisibly returns the index path.
+#' @noRd
+create_agent_control_index <- function(path, overwrite = FALSE) {
+  out <- file.path(path, "agent_control", "AGENT_CONTROL_INDEX.md")
+  write_if_allowed(out, agent_control_index_template(), overwrite = overwrite)
+  invisible(out)
 }
 
 #' Create the AI-hidden R execution scaffold
@@ -975,7 +989,7 @@ create_r_project_scaffold <- function(path, overwrite = FALSE) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
   initial <- initial_dir_name()
 
-  for (dir in c("ai_hidden_data", file.path("ai_hidden_data", initial), "r_scripts")) {
+  for (dir in c("ai_hidden_data", file.path("ai_hidden_data", initial))) {
     dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
   }
 
@@ -1026,17 +1040,17 @@ create_r_project_scaffold <- function(path, overwrite = FALSE) {
 #' @return Invisibly returns the normalized AI project path.
 #' @noRd
 create_qc_agent_scaffold <- function(path, overwrite = FALSE) {
-  for (dir in c("agent_specs", file.path("qc", "review"), file.path("qc", "decisions"))) {
+  for (dir in c("agent_control", file.path("qc", "review"))) {
     dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
   }
 
   write_if_allowed(
-    file.path(path, "agent_specs", "WORKFLOW_AGENT.md"),
+    file.path(path, "agent_control", "WORKFLOW_AGENT.md"),
     workflow_agent_template(),
     overwrite = overwrite
   )
   write_if_allowed(
-    file.path(path, "agent_specs", "QC_AGENT.md"),
+    file.path(path, "agent_control", "QC_AGENT.md"),
     qc_agent_template(),
     overwrite = overwrite
   )
@@ -1074,8 +1088,8 @@ create_qc_agent_scaffold <- function(path, overwrite = FALSE) {
 #'   independent QC agent Plan gate rules.
 #' @param split Logical. If `TRUE`, generated `AGENTS.md` describes the sibling
 #'   `r_project` hidden-data area as part of the active scaffold.
-#' @param skills Logical. If `TRUE`, generated `AGENTS.md` describes `skills/`
-#'   as part of the active scaffold.
+#' @param skills Logical. If `TRUE`, generated `AGENTS.md` describes QC skill
+#'   files under `agent_control/` as part of the active scaffold.
 #' @param overwrite Logical. If `TRUE`, overwrite an existing `AGENTS.md`.
 #'
 #' @return Invisibly returns the `AGENTS.md` path.
@@ -1124,7 +1138,7 @@ create_qc_status_md <- function(path, overwrite = FALSE) {
 #' @param path Parent project directory to check.
 #' @param split Logical. If `TRUE`, check the sibling `r_project` scaffold.
 #' @param skills Logical. If `TRUE`, check QC skill templates under
-#'   `ai_project/skills/`.
+#'   `ai_project/agent_control/`.
 #' @param qc_agent Logical. If `TRUE`, check independent QC agent scaffolding.
 #'
 #' @return A data.frame with columns `item`, `type`, `path`, `exists`,
@@ -1190,12 +1204,27 @@ aircheck <- function(path, split = TRUE, skills = TRUE, qc_agent = FALSE) {
 
   out <- rbind(out, ai_initial_checks)
 
+  agent_control_index <- file.path("ai_project", "agent_control", "AGENT_CONTROL_INDEX.md")
+  agent_control_index_out <- data.frame(
+    item = agent_control_index,
+    type = "file",
+    path = agent_control_index,
+    exists = file.exists(file.path(path, agent_control_index)),
+    required = TRUE,
+    stringsAsFactors = FALSE
+  )
+  agent_control_index_out$message <- ifelse(
+    agent_control_index_out$exists,
+    "Found",
+    "Missing required item"
+  )
+  out <- rbind(out, agent_control_index_out)
+
   if (isTRUE(skills)) {
     skill_items <- file.path(
       "ai_project",
-      "skills",
+      "agent_control",
       c(
-        "SKILLS_INDEX.md",
         "QC_SKILL_CONTEXT.md",
         "QC_SKILL_PLAN.md",
         "QC_SKILL_RESULT.md",
@@ -1219,12 +1248,11 @@ aircheck <- function(path, split = TRUE, skills = TRUE, qc_agent = FALSE) {
       "r_project",
       c(
         "ai_hidden_data",
-        "r_scripts",
         ".gitignore",
         "README_DO_NOT_SHARE_WITH_AI.md"
       )
     )
-    r_types <- c("folder", "folder", "file", "file")
+    r_types <- c("folder", "file", "file")
 
     r_full <- file.path(path, r_items)
     r_exists <- ifelse(r_types == "folder", dir.exists(r_full), file.exists(r_full))
@@ -1270,11 +1298,9 @@ aircheck <- function(path, split = TRUE, skills = TRUE, qc_agent = FALSE) {
     qc_agent_items <- file.path(
       "ai_project",
       c(
-        "agent_specs",
-        file.path("agent_specs", "WORKFLOW_AGENT.md"),
-        file.path("agent_specs", "QC_AGENT.md"),
+        file.path("agent_control", "WORKFLOW_AGENT.md"),
+        file.path("agent_control", "QC_AGENT.md"),
         file.path("qc", "review"),
-        file.path("qc", "decisions"),
         file.path("qc", "review", "QC_REVIEW_REPORT.md"),
         file.path("qc", "review", "QC_DECISION.md"),
         file.path("log", "QC_REVIEW_LOG.md"),
@@ -1282,10 +1308,8 @@ aircheck <- function(path, split = TRUE, skills = TRUE, qc_agent = FALSE) {
       )
     )
     qc_agent_types <- c(
-      "folder",
       "file",
       "file",
-      "folder",
       "folder",
       "file",
       "file",

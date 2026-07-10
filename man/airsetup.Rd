@@ -20,7 +20,7 @@ airsetup(
 folders. If \code{FALSE}, create only \code{ai_project}.}
 
 \item{skills}{Logical. If \code{TRUE}, add QC skill templates under
-\verb{ai_project/skills/}.}
+\verb{ai_project/agent_control/}.}
 
 \item{qc_agent}{Logical. If \code{TRUE}, add independent QC agent specifications
 and Plan gate review folders.}

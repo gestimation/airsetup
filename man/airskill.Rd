@@ -27,7 +27,7 @@ A data frame with columns \code{file}, \code{path}, \code{status}, and
 }
 \description{
 \code{airskill()} adds lightweight QC skill Markdown files to an existing
-airsetup project. The files are written under \verb{ai_project/skills/}.
+airsetup project. The files are written under \verb{ai_project/agent_control/}.
 }
 \examples{
 project_dir <- file.path(tempdir(), "airskill_example")

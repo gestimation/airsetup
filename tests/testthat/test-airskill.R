@@ -9,27 +9,28 @@ test_that("airskill creates QC skill files", {
   expect_equal(
     report$file,
     c(
-      "SKILLS_INDEX.md",
+      "AGENT_CONTROL_INDEX.md",
       "QC_SKILL_CONTEXT.md",
       "QC_SKILL_PLAN.md",
       "QC_SKILL_RESULT.md",
       "QC_SKILL_M11SEMANTIC.md"
     )
   )
-  expect_true(all(report$status == "created"))
+  expect_equal(report$status, c("skipped", "created", "created", "created", "created"))
   expect_true(all(!report$overwritten))
 
-  skills_dir <- file.path(path, "ai_project", "skills")
+  skills_dir <- file.path(path, "ai_project", "agent_control")
   expect_true(dir.exists(skills_dir))
+  expect_false(dir.exists(file.path(path, "ai_project", "skills")))
   expect_false(dir.exists(file.path(path, "ai_project", "source", "skills")))
-  expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
+  expect_true(file.exists(file.path(skills_dir, "AGENT_CONTROL_INDEX.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_PLAN.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_RESULT.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_M11SEMANTIC.md")))
 
-  index <- paste(readLines(file.path(skills_dir, "SKILLS_INDEX.md"), warn = FALSE), collapse = "\n")
-  expect_match(index, "Do not load all skill files unless needed.", fixed = TRUE)
+  index <- paste(readLines(file.path(skills_dir, "AGENT_CONTROL_INDEX.md"), warn = FALSE), collapse = "\n")
+  expect_match(index, "Do not load all agent control files unless needed.", fixed = TRUE)
   expect_match(index, "Carry unresolved issues forward to `QC_STATUS.md`.", fixed = TRUE)
   expect_match(index, "Use `QC_SKILL_M11SEMANTIC.md` when:", fixed = TRUE)
   expect_match(index, "Use `QC_SKILL_CONTEXT.md` instead.", fixed = TRUE)
@@ -62,10 +63,11 @@ test_that("airskill selected skills creates index plus selected files", {
 
   report <- airskill(path, skills = "context", quiet = TRUE)
 
-  expect_equal(report$file, c("SKILLS_INDEX.md", "QC_SKILL_CONTEXT.md"))
+  expect_equal(report$file, c("AGENT_CONTROL_INDEX.md", "QC_SKILL_CONTEXT.md"))
+  expect_equal(report$status, c("skipped", "created"))
 
-  skills_dir <- file.path(path, "ai_project", "skills")
-  expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
+  skills_dir <- file.path(path, "ai_project", "agent_control")
+  expect_true(file.exists(file.path(skills_dir, "AGENT_CONTROL_INDEX.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
   expect_false(file.exists(file.path(skills_dir, "QC_SKILL_PLAN.md")))
   expect_false(file.exists(file.path(skills_dir, "QC_SKILL_RESULT.md")))
@@ -78,10 +80,11 @@ test_that("airskill can create only the M11 semantic skill", {
 
   report <- airskill(path, skills = "m11_semantic", quiet = TRUE)
 
-  expect_equal(report$file, c("SKILLS_INDEX.md", "QC_SKILL_M11SEMANTIC.md"))
+  expect_equal(report$file, c("AGENT_CONTROL_INDEX.md", "QC_SKILL_M11SEMANTIC.md"))
+  expect_equal(report$status, c("skipped", "created"))
 
-  skills_dir <- file.path(path, "ai_project", "skills")
-  expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
+  skills_dir <- file.path(path, "ai_project", "agent_control")
+  expect_true(file.exists(file.path(skills_dir, "AGENT_CONTROL_INDEX.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_M11SEMANTIC.md")))
   expect_false(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
 })
@@ -91,7 +94,7 @@ test_that("airskill preserves existing files by default and overwrites when requ
   airsetup(path, split = FALSE, skills = FALSE)
   airskill(path, skills = "context", quiet = TRUE)
 
-  context <- file.path(path, "ai_project", "skills", "QC_SKILL_CONTEXT.md")
+  context <- file.path(path, "ai_project", "agent_control", "QC_SKILL_CONTEXT.md")
   writeLines("custom context skill", context)
 
   skipped <- airskill(path, skills = "context", overwrite = FALSE, quiet = TRUE)

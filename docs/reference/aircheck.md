@@ -21,7 +21,7 @@ aircheck(path, split = TRUE, skills = TRUE, qc_agent = FALSE)
 - skills:
 
   Logical. If `TRUE`, check QC skill templates under
-  `ai_project/skills/`.
+  `ai_project/agent_control/`.
 
 - qc_agent:
 
@@ -49,10 +49,17 @@ aircheck(project_dir)
 #> 8                      ai_project/QC_STATUS.md   file
 #> 9           ai_project/source/initial_YYYYMMDD folder
 #> 10 ai_project/ai_visible_data/initial_YYYYMMDD folder
-#> 11                        r_project/.gitignore   file
-#> 12    r_project/README_DO_NOT_SHARE_WITH_AI.md   file
-#> 13                    r_project/ai_hidden_data folder
-#> 14   r_project/ai_hidden_data/initial_YYYYMMDD folder
+#> 11           ai_project/skills/SKILLS_INDEX.md   file
+#> 12       ai_project/skills/QC_SKILL_CONTEXT.md   file
+#> 13          ai_project/skills/QC_SKILL_PLAN.md   file
+#> 14        ai_project/skills/QC_SKILL_RESULT.md   file
+#> 15   ai_project/skills/QC_SKILL_M11SEMANTIC.md   file
+#> 16                    r_project/ai_hidden_data folder
+#> 17                         r_project/r_scripts folder
+#> 18                        r_project/.gitignore   file
+#> 19    r_project/README_DO_NOT_SHARE_WITH_AI.md   file
+#> 20                    r_project/ai_hidden_data folder
+#> 21   r_project/ai_hidden_data/initial_YYYYMMDD folder
 #>                                           path exists required
 #> 1                            ai_project/source   TRUE     TRUE
 #> 2                   ai_project/ai_visible_data   TRUE     TRUE
@@ -64,10 +71,17 @@ aircheck(project_dir)
 #> 8                      ai_project/QC_STATUS.md   TRUE     TRUE
 #> 9           ai_project/source/initial_YYYYMMDD   TRUE     TRUE
 #> 10 ai_project/ai_visible_data/initial_YYYYMMDD   TRUE     TRUE
-#> 11                        r_project/.gitignore   TRUE     TRUE
-#> 12    r_project/README_DO_NOT_SHARE_WITH_AI.md   TRUE     TRUE
-#> 13                    r_project/ai_hidden_data   TRUE     TRUE
-#> 14   r_project/ai_hidden_data/initial_YYYYMMDD   TRUE     TRUE
+#> 11           ai_project/skills/SKILLS_INDEX.md   TRUE     TRUE
+#> 12       ai_project/skills/QC_SKILL_CONTEXT.md   TRUE     TRUE
+#> 13          ai_project/skills/QC_SKILL_PLAN.md   TRUE     TRUE
+#> 14        ai_project/skills/QC_SKILL_RESULT.md   TRUE     TRUE
+#> 15   ai_project/skills/QC_SKILL_M11SEMANTIC.md   TRUE     TRUE
+#> 16                    r_project/ai_hidden_data   TRUE     TRUE
+#> 17                         r_project/r_scripts   TRUE     TRUE
+#> 18                        r_project/.gitignore   TRUE     TRUE
+#> 19    r_project/README_DO_NOT_SHARE_WITH_AI.md   TRUE     TRUE
+#> 20                    r_project/ai_hidden_data   TRUE     TRUE
+#> 21   r_project/ai_hidden_data/initial_YYYYMMDD   TRUE     TRUE
 #>                       message
 #> 1                       Found
 #> 2                       Found
@@ -83,4 +97,11 @@ aircheck(project_dir)
 #> 12                      Found
 #> 13                      Found
 #> 14                      Found
+#> 15                      Found
+#> 16                      Found
+#> 17                      Found
+#> 18                      Found
+#> 19                      Found
+#> 20                      Found
+#> 21                      Found
 ```

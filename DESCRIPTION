@@ -7,10 +7,11 @@ Author: gestimation Toolkit
 Maintainer: gestimation Toolkit <maintainer@example.com>
 Description: Lightweight workflow infrastructure for setting up minimal
     AI-assisted R analysis projects. The package creates a controlled AI-visible project
-    folder with source, dummy-data, AI-output, R-output, QC, and log areas,
+    folder with source, dummy-data, AI-output, R-output, QC, log, and
+    agent-control areas,
     plus AGENTS.md guidance, QC skill templates, including QC_SKILL_CONTEXT.md,
     QC_SKILL_PLAN.md, QC_SKILL_RESULT.md, QC_SKILL_M11SEMANTIC.md,
-    SKILLS_INDEX.md, and a QC_STATUS.md
+    AGENT_CONTROL_INDEX.md, and a QC_STATUS.md
     tracker. With split = TRUE, it also creates a sibling R execution folder for non-AI-visible
     analysis data. With qc_agent = TRUE, it adds independent QC agent scaffolding and
     Plan gate rules. The package does not implement statistical analysis functions.
