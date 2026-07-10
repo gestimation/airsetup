@@ -1,7 +1,7 @@
 #' Add AI & R QC skill templates
 #'
 #' `airskill()` adds lightweight QC skill Markdown files to an existing
-#' airsetup project. The files are written under `ai_project/source/skills/`.
+#' airsetup project. The files are written under `ai_project/skills/`.
 #'
 #' @param path Project root created by [airsetup()].
 #' @param skills Character vector of skills to add. Supported values are
@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' project_dir <- file.path(tempdir(), "airskill_example")
-#' airsetup(project_dir, mode = "ai_only")
+#' airsetup(project_dir, split = FALSE, skills = FALSE)
 #' airskill(project_dir)
 #' airskill(project_dir, skills = c("context", "plan"))
 #' airskill(project_dir, skills = "m11_semantic")
@@ -44,7 +44,7 @@ airskill <- function(path = ".",
     )
   }
 
-  skills_dir <- file.path(ai_project, "source", "skills")
+  skills_dir <- file.path(ai_project, "skills")
   dir.create(skills_dir, recursive = TRUE, showWarnings = FALSE)
 
   specs <- airskill_file_specs(skills)
@@ -62,12 +62,12 @@ airskill <- function(path = ".",
     }
 
     if (!quiet) {
-      message(sprintf("%s: %s", status, file.path("ai_project", "source", "skills", spec$file)))
+      message(sprintf("%s: %s", status, file.path("ai_project", "skills", spec$file)))
     }
 
     data.frame(
       file = spec$file,
-      path = file.path("ai_project", "source", "skills", spec$file),
+      path = file.path("ai_project", "skills", spec$file),
       status = status,
       overwritten = isTRUE(written && existed),
       stringsAsFactors = FALSE

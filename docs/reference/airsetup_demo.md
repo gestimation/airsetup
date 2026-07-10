@@ -11,7 +11,13 @@ and source folders.
 ## Usage
 
 ``` r
-airsetup_demo(path, japanese = TRUE, skills = TRUE, overwrite = FALSE)
+airsetup_demo(
+  path,
+  japanese = TRUE,
+  skills = TRUE,
+  qc_agent = FALSE,
+  overwrite = FALSE
+)
 ```
 
 ## Arguments
@@ -30,6 +36,11 @@ airsetup_demo(path, japanese = TRUE, skills = TRUE, overwrite = FALSE)
   Logical. If `TRUE`, also run
   [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md)
   to add QC skill templates.
+
+- qc_agent:
+
+  Logical. If `TRUE`, add independent QC agent specifications and Plan
+  gate review folders.
 
 - overwrite:
 
@@ -60,9 +71,9 @@ airsetup_demo(demo_dir)
 #> 3                  ai_project/source/skills/QC_SKILL_PLAN.md created
 #> 4                ai_project/source/skills/QC_SKILL_RESULT.md created
 #> 5           ai_project/source/skills/QC_SKILL_M11SEMANTIC.md created
-#> 6   ai_project/ai_visible_data/initial_20260709/demodata.rds created
-#> 7     r_project/ai_hidden_data/initial_20260709/demodata.rds created
-#> 8 ai_project/source/initial_20260709/definition_demodata.txt created
+#> 6   ai_project/ai_visible_data/initial_20260710/demodata.rds created
+#> 7     r_project/ai_hidden_data/initial_20260710/demodata.rds created
+#> 8 ai_project/source/initial_20260710/definition_demodata.txt created
 #>   overwritten
 #> 1       FALSE
 #> 2       FALSE

@@ -54,7 +54,7 @@
 <!-- badges: end -->
 <p>Clear boundaries, flexible QC, and traceable structure for AI-assisted R analysis.</p>
 <p><code>airsetup</code> creates a small, opinionated folder structure for R analysis projects where AI agents help write scripts, inspect visible dummy data, and review outputs, while hidden analysis data stays outside the AI-visible workspace.</p>
-<p>It does not provide statistical analysis functions. Instead, it prepares separated folders, a minimal <code>AGENTS.md</code>, a <code>QC_STATUS.md</code> tracker, and optional lightweight QC skill templates for context review, plan review, result review, and M11-informed semantic review.</p>
+<p>It does not provide statistical analysis functions. Instead, it prepares separated folders, a minimal <code>AGENTS.md</code>, a <code>QC_STATUS.md</code> tracker, optional lightweight QC skill templates for context review, plan review, result review, and M11-informed semantic review, and optional independent QC agent scaffolding.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -73,13 +73,17 @@
 <span></span>
 <span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span></span>
 <span>  path <span class="op">=</span> <span class="va">project_dir</span>,</span>
-<span>  mode <span class="op">=</span> <span class="st">"split"</span>,</span>
+<span>  qc_agent <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  japanese <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/aircheck.html">aircheck</a></span><span class="op">(</span><span class="va">project_dir</span>, mode <span class="op">=</span> <span class="st">"split"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/airskill.html">airskill</a></span><span class="op">(</span><span class="va">project_dir</span><span class="op">)</span></span></code></pre></div>
-<p>In <code>split</code> mode, <code><a href="reference/airsetup.html">airsetup()</a></code> creates two sibling folders:</p>
+<span><span class="fu"><a href="reference/aircheck.html">aircheck</a></span><span class="op">(</span><span class="va">project_dir</span>, qc_agent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="st">"project"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="st">"project"</span>, qc_agent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="st">"project"</span>, split <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="st">"project"</span>, skills <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>By default, <code><a href="reference/airsetup.html">airsetup()</a></code> uses <code>split = TRUE</code>, <code>skills = TRUE</code>, and <code>qc_agent = FALSE</code>. With <code>split = TRUE</code>, it creates two sibling folders:</p>
 <pre class="text"><code>my_analysis/
 +-- ai_project/
 +-- r_project/</code></pre>
@@ -93,10 +97,10 @@ An example of split project root
 <p><code>ai_project/</code> is the workspace AI agents may inspect and edit according to the project rules.</p>
 <figure><img src="reference/figures/screenshot_ai_project.png" alt="An example of AI project folder"><figcaption aria-hidden="true">
 An example of AI project folder
-</figcaption></figure><p>It contains folders for source materials, AI-visible data, AI-generated files, R outputs, QC evidence, and logs:</p>
+</figcaption></figure><p>It contains folders for source materials, AI-visible data, AI-generated files, R outputs, QC evidence, logs, and optional QC skill templates:</p>
 <ul>
 <li>
-<code>source/</code>: source specifications, reference documents, and analysis instructions.</li>
+<code>source/</code>: source specifications, reference documents, and analysis instructions, such as protocols, SAPs, and database definitions.</li>
 <li>
 <code>ai_visible_data/</code>: dummy or visible data that AI agents may inspect.</li>
 <li>
@@ -108,17 +112,21 @@ An example of AI project folder
 <li>
 <code>log/</code>: notes, decision records, and investigation logs.</li>
 <li>
+<code>skills/</code>: generated QC skill templates.</li>
+<li>
 <code>AGENTS.md</code>: working rules for AI agents.</li>
 <li>
 <code>QC_STATUS.md</code>: the current QC status and open review items.</li>
 </ul>
-<p>In <code>split</code> mode, <code>r_project/</code> is also created next to <code>ai_project/</code>.</p>
+<p>With <code>split = TRUE</code>, <code>r_project/</code> is also created next to <code>ai_project/</code>.</p>
 <figure><img src="reference/figures/screenshot_r_project.png" alt="An example of R project folder"><figcaption aria-hidden="true">
 An example of R project folder
 </figcaption></figure><p>It contains a hidden-data area and local reminders:</p>
 <ul>
 <li>
 <code>ai_hidden_data/</code>: analysis data that AI agents must not inspect directly.</li>
+<li>
+<code>r_scripts/</code>: local R scripts maintained or run outside the AI-visible workspace.</li>
 <li>
 <code>.gitignore</code>: defaults that avoid committing hidden analysis data.</li>
 <li>
@@ -186,49 +194,75 @@ An example of R project folder
 <td>Current QC status, open questions, and links to detailed QC materials.</td>
 </tr>
 <tr>
-<td>
-<code><a href="reference/airsetup.html">airsetup()</a></code> in <code>split</code> mode</td>
+<td><code>airsetup(split = TRUE)</code></td>
 <td>
 <code>r_project/ai_hidden_data/</code> and <code>r_project/ai_hidden_data/initial_YYYYMMDD/</code>
 </td>
 <td>Analysis data area that AI must not inspect.</td>
 </tr>
 <tr>
-<td>
-<code><a href="reference/airsetup.html">airsetup()</a></code> in <code>split</code> mode</td>
+<td><code>airsetup(split = TRUE)</code></td>
+<td><code>r_project/r_scripts/</code></td>
+<td>Local R scripts outside the AI-visible workspace.</td>
+</tr>
+<tr>
+<td><code>airsetup(split = TRUE)</code></td>
 <td><code>r_project/.gitignore</code></td>
 <td>Defaults that avoid committing hidden analysis data.</td>
 </tr>
 <tr>
-<td>
-<code><a href="reference/airsetup.html">airsetup()</a></code> in <code>split</code> mode</td>
+<td><code>airsetup(split = TRUE)</code></td>
 <td><code>r_project/README_DO_NOT_SHARE_WITH_AI.md</code></td>
 <td>Local reminder that the folder is for human/R execution.</td>
 </tr>
 <tr>
 <td><code><a href="reference/airskill.html">airskill()</a></code></td>
-<td><code>ai_project/source/skills/SKILLS_INDEX.md</code></td>
+<td><code>ai_project/skills/SKILLS_INDEX.md</code></td>
 <td>Index and selection guide for QC skill files.</td>
 </tr>
 <tr>
 <td><code><a href="reference/airskill.html">airskill()</a></code></td>
-<td><code>ai_project/source/skills/QC_SKILL_CONTEXT.md</code></td>
+<td><code>ai_project/skills/QC_SKILL_CONTEXT.md</code></td>
 <td>Lightweight context QC skill.</td>
 </tr>
 <tr>
 <td><code><a href="reference/airskill.html">airskill()</a></code></td>
-<td><code>ai_project/source/skills/QC_SKILL_PLAN.md</code></td>
+<td><code>ai_project/skills/QC_SKILL_PLAN.md</code></td>
 <td>Plan and SAP implementability QC skill.</td>
 </tr>
 <tr>
 <td><code><a href="reference/airskill.html">airskill()</a></code></td>
-<td><code>ai_project/source/skills/QC_SKILL_RESULT.md</code></td>
+<td><code>ai_project/skills/QC_SKILL_RESULT.md</code></td>
 <td>Result consistency and interpretation QC skill.</td>
 </tr>
 <tr>
 <td><code><a href="reference/airskill.html">airskill()</a></code></td>
-<td><code>ai_project/source/skills/QC_SKILL_M11SEMANTIC.md</code></td>
+<td><code>ai_project/skills/QC_SKILL_M11SEMANTIC.md</code></td>
 <td>M11-informed semantic context QC skill for complex clinical-trial materials.</td>
+</tr>
+<tr>
+<td><code>airsetup(qc_agent = TRUE)</code></td>
+<td><code>ai_project/agent_specs/WORKFLOW_AGENT.md</code></td>
+<td>Workflow agent role and Plan gate constraints.</td>
+</tr>
+<tr>
+<td><code>airsetup(qc_agent = TRUE)</code></td>
+<td><code>ai_project/agent_specs/QC_AGENT.md</code></td>
+<td>Independent QC agent role and decision rules.</td>
+</tr>
+<tr>
+<td><code>airsetup(qc_agent = TRUE)</code></td>
+<td>
+<code>ai_project/qc/review/</code> and <code>ai_project/qc/decisions/</code>
+</td>
+<td>Independent QC review and decision areas.</td>
+</tr>
+<tr>
+<td><code>airsetup(qc_agent = TRUE)</code></td>
+<td>
+<code>ai_project/log/QC_REVIEW_LOG.md</code> and <code>ai_project/log/DECISION_LOG.md</code>
+</td>
+<td>QC review and decision logs.</td>
 </tr>
 <tr>
 <td><code><a href="reference/airsetup_demo.html">airsetup_demo()</a></code></td>
@@ -302,9 +336,9 @@ An example of R project folder
 <h2 id="clear-boundaries-with-separated-folders">Clear boundaries with separated folders<a class="anchor" aria-label="anchor" href="#clear-boundaries-with-separated-folders"></a>
 </h2>
 <p>The package separates what AI can inspect from what R can use for real analysis. The visible and hidden data areas would share the same internal structure:</p>
-<pre class="text"><code>ai_project/ai_visible_data/initial/
-r_project/ai_hidden_data/initial/</code></pre>
-<p>For example, a dummy or empty data set <code>prostate.csv</code> may be placed in <code>ai_project/ai_visible_data/initial/</code>, while a real data set <code>prostate.csv</code> with the same file name and the same data structure may be placed in <code>r_project/ai_hidden_data/initial/</code>.</p>
+<pre class="text"><code>ai_project/ai_visible_data/initial_YYYYMMDD/
+r_project/ai_hidden_data/initial_YYYYMMDD/</code></pre>
+<p>For example, a small AI-visible data set <code>demodata.rds</code> may be placed in <code>ai_project/ai_visible_data/initial_YYYYMMDD/</code>, while a full analysis data set with the same file name and the same data structure may be placed in <code>r_project/ai_hidden_data/initial_YYYYMMDD/</code>.</p>
 <figure><img src="reference/figures/screenshot_ai_project_ai_visible_data_initial.png" alt="An example of AI-visible data folder"><figcaption aria-hidden="true">
 An example of AI-visible data folder
 </figcaption></figure><figure><img src="reference/figures/screenshot_r_project_ai_hidden_data_initial.png" alt="An example of AI-hidden data folder"><figcaption aria-hidden="true">
@@ -322,9 +356,13 @@ An example of AI-hidden data folder
 <li>where R outputs and QC evidence should live;</li>
 <li>to check <code>QC_STATUS.md</code> before substantive work;</li>
 <li>to distinguish AI risk assessment from user-approved QC decisions;</li>
+<li>to separate document facts, candidate inferences, unresolved issues, and implementation assumptions;</li>
+<li>not to silently assume treatment-group coding, endpoint-variable mapping, analysis-set flags, visit coding, or missing-value coding;</li>
+<li>that Workflow agent outputs belong under <code>ai_output/</code>, QC agent outputs belong under <code>qc/</code>, and QC agents must not directly overwrite Workflow outputs;</li>
 <li>to ask for human approval when a decision requires domain judgment.</li>
 </ul>
 <p>The generated file is not an access-control mechanism. It is a project-level working rule that makes the boundary explicit and repeatable.</p>
+<p>When <code>qc_agent = TRUE</code>, <code>AGENTS.md</code>, <code>agent_specs/WORKFLOW_AGENT.md</code>, and <code>agent_specs/QC_AGENT.md</code> all state the Plan gate rule: the Workflow agent must not proceed to final R code generation until the QC agent records <code>APPROVE_NEXT_STEP</code>. Before that approval, context confirmation, M11SEMANTIC extraction, SAP or analysis-plan drafting, data requirements tables, endpoint map drafts, metadata inspection plans, and pseudocode are allowed. Final R analysis scripts, final endpoint or analysis-set derivation code, final table/figure scripts, and final statistical model implementations are not.</p>
 </div>
 <div class="section level2">
 <h2 id="flexible-qc-and-traceability">Flexible QC and traceability<a class="anchor" aria-label="anchor" href="#flexible-qc-and-traceability"></a>

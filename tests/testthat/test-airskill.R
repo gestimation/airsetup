@@ -1,6 +1,6 @@
 test_that("airskill creates QC skill files", {
   path <- tempfile("airskill-")
-  airsetup(path, mode = "ai_only")
+  airsetup(path, split = FALSE, skills = FALSE)
 
   report <- airskill(path, quiet = TRUE)
 
@@ -19,8 +19,9 @@ test_that("airskill creates QC skill files", {
   expect_true(all(report$status == "created"))
   expect_true(all(!report$overwritten))
 
-  skills_dir <- file.path(path, "ai_project", "source", "skills")
+  skills_dir <- file.path(path, "ai_project", "skills")
   expect_true(dir.exists(skills_dir))
+  expect_false(dir.exists(file.path(path, "ai_project", "source", "skills")))
   expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_PLAN.md")))
@@ -57,13 +58,13 @@ test_that("airskill creates QC skill files", {
 
 test_that("airskill selected skills creates index plus selected files", {
   path <- tempfile("airskill-")
-  airsetup(path, mode = "ai_only")
+  airsetup(path, split = FALSE, skills = FALSE)
 
   report <- airskill(path, skills = "context", quiet = TRUE)
 
   expect_equal(report$file, c("SKILLS_INDEX.md", "QC_SKILL_CONTEXT.md"))
 
-  skills_dir <- file.path(path, "ai_project", "source", "skills")
+  skills_dir <- file.path(path, "ai_project", "skills")
   expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
   expect_false(file.exists(file.path(skills_dir, "QC_SKILL_PLAN.md")))
@@ -73,13 +74,13 @@ test_that("airskill selected skills creates index plus selected files", {
 
 test_that("airskill can create only the M11 semantic skill", {
   path <- tempfile("airskill-")
-  airsetup(path, mode = "ai_only")
+  airsetup(path, split = FALSE, skills = FALSE)
 
   report <- airskill(path, skills = "m11_semantic", quiet = TRUE)
 
   expect_equal(report$file, c("SKILLS_INDEX.md", "QC_SKILL_M11SEMANTIC.md"))
 
-  skills_dir <- file.path(path, "ai_project", "source", "skills")
+  skills_dir <- file.path(path, "ai_project", "skills")
   expect_true(file.exists(file.path(skills_dir, "SKILLS_INDEX.md")))
   expect_true(file.exists(file.path(skills_dir, "QC_SKILL_M11SEMANTIC.md")))
   expect_false(file.exists(file.path(skills_dir, "QC_SKILL_CONTEXT.md")))
@@ -87,10 +88,10 @@ test_that("airskill can create only the M11 semantic skill", {
 
 test_that("airskill preserves existing files by default and overwrites when requested", {
   path <- tempfile("airskill-")
-  airsetup(path, mode = "ai_only")
+  airsetup(path, split = FALSE, skills = FALSE)
   airskill(path, skills = "context", quiet = TRUE)
 
-  context <- file.path(path, "ai_project", "source", "skills", "QC_SKILL_CONTEXT.md")
+  context <- file.path(path, "ai_project", "skills", "QC_SKILL_CONTEXT.md")
   writeLines("custom context skill", context)
 
   skipped <- airskill(path, skills = "context", overwrite = FALSE, quiet = TRUE)
@@ -110,7 +111,7 @@ test_that("airskill validates skill names and project structure", {
   expect_error(airskill(path, quiet = TRUE), "airsetup project root")
   expect_error(airskill(tempfile("missing-"), quiet = TRUE))
 
-  airsetup(path, mode = "ai_only")
+  airsetup(path, split = FALSE, skills = FALSE)
   expect_error(airskill(path, skills = "other", quiet = TRUE), "Unsupported skill value")
   expect_error(airskill(path, skills = character(), quiet = TRUE), "`skills` must be")
   expect_error(airskill(path, overwrite = NA, quiet = TRUE), "`overwrite` must be")

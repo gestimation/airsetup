@@ -49,7 +49,13 @@ initial data and source folders.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">airsetup_demo</span><span class="op">(</span><span class="va">path</span>, japanese <span class="op">=</span> <span class="cn">TRUE</span>, skills <span class="op">=</span> <span class="cn">TRUE</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">airsetup_demo</span><span class="op">(</span></span>
+<span>  <span class="va">path</span>,</span>
+<span>  japanese <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  skills <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  qc_agent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -68,6 +74,11 @@ write narrative output documents in Japanese by default.</p></dd>
 <dt id="arg-skills">skills<a class="anchor" aria-label="anchor" href="#arg-skills"></a></dt>
 <dd><p>Logical. If <code>TRUE</code>, also run <code><a href="airskill.html">airskill()</a></code> to add QC skill
 templates.</p></dd>
+
+
+<dt id="arg-qc-agent">qc_agent<a class="anchor" aria-label="anchor" href="#arg-qc-agent"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, add independent QC agent specifications
+and Plan gate review folders.</p></dd>
 
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
@@ -100,9 +111,9 @@ materials that already exist.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3                  ai_project/source/skills/QC_SKILL_PLAN.md created</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4                ai_project/source/skills/QC_SKILL_RESULT.md created</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5           ai_project/source/skills/QC_SKILL_M11SEMANTIC.md created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   ai_project/ai_visible_data/initial_20260709/demodata.rds created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     r_project/ai_hidden_data/initial_20260709/demodata.rds created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 ai_project/source/initial_20260709/definition_demodata.txt created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   ai_project/ai_visible_data/initial_20260710/demodata.rds created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     r_project/ai_hidden_data/initial_20260710/demodata.rds created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 ai_project/source/initial_20260710/definition_demodata.txt created</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   overwritten</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2       FALSE</span>

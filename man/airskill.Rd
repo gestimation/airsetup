@@ -27,11 +27,11 @@ A data frame with columns \code{file}, \code{path}, \code{status}, and
 }
 \description{
 \code{airskill()} adds lightweight QC skill Markdown files to an existing
-airsetup project. The files are written under \verb{ai_project/source/skills/}.
+airsetup project. The files are written under \verb{ai_project/skills/}.
 }
 \examples{
 project_dir <- file.path(tempdir(), "airskill_example")
-airsetup(project_dir, mode = "ai_only")
+airsetup(project_dir, split = FALSE, skills = FALSE)
 airskill(project_dir)
 airskill(project_dir, skills = c("context", "plan"))
 airskill(project_dir, skills = "m11_semantic")

@@ -6,7 +6,9 @@
 \usage{
 airsetup(
   path,
-  mode = c("split", "ai_only"),
+  split = TRUE,
+  skills = TRUE,
+  qc_agent = FALSE,
   japanese = FALSE,
   overwrite = FALSE
 )
@@ -14,8 +16,14 @@ airsetup(
 \arguments{
 \item{path}{Parent directory to create or update.}
 
-\item{mode}{Project layout mode. \code{"split"} creates sibling \code{ai_project} and
-\code{r_project} folders. \code{"ai_only"} creates only \code{ai_project}.}
+\item{split}{Logical. If \code{TRUE}, create sibling \code{ai_project} and \code{r_project}
+folders. If \code{FALSE}, create only \code{ai_project}.}
+
+\item{skills}{Logical. If \code{TRUE}, add QC skill templates under
+\verb{ai_project/skills/}.}
+
+\item{qc_agent}{Logical. If \code{TRUE}, add independent QC agent specifications
+and Plan gate review folders.}
 
 \item{japanese}{Logical. If \code{TRUE}, generated \code{AGENTS.md} instructs Codex to
 write narrative output documents in Japanese by default. If \code{FALSE}, it
@@ -34,17 +42,11 @@ Set up an AI-assisted analysis project structure
 \examples{
 project_dir <- file.path(tempdir(), "airsetup_example")
 
-airsetup(
-  path = project_dir,
-  mode = "split",
-  japanese = FALSE,
-  overwrite = FALSE
-)
+airsetup(project_dir)
+airsetup(project_dir, qc_agent = TRUE)
+airsetup(project_dir, split = FALSE)
+airsetup(project_dir, skills = FALSE)
 
-aircheck(project_dir, mode = "split")
-
-ai_only_dir <- file.path(tempdir(), "airsetup_ai_only_example")
-airsetup(ai_only_dir, mode = "ai_only", japanese = TRUE)
-aircheck(ai_only_dir, mode = "ai_only")
+aircheck(project_dir)
 
 }

@@ -3,14 +3,17 @@ Title: AI-Assisted R Workflow with QC and Clear Boundaries
 Version: 0.0.3
 Authors@R:
     person("gestimation", "Toolkit", , "maintainer@example.com", role = c("aut", "cre"))
+Author: gestimation Toolkit
+Maintainer: gestimation Toolkit <maintainer@example.com>
 Description: Lightweight workflow infrastructure for setting up minimal
-    AI-assisted R analysis projects. The package creates a controlled AI-visible project 
+    AI-assisted R analysis projects. The package creates a controlled AI-visible project
     folder with source, dummy-data, AI-output, R-output, QC, and log areas,
-    plus AGENTS.md guidance, QC skill templates, including QC_SKILL_CONTEXT.md, 
+    plus AGENTS.md guidance, QC skill templates, including QC_SKILL_CONTEXT.md,
     QC_SKILL_PLAN.md, QC_SKILL_RESULT.md, QC_SKILL_M11SEMANTIC.md,
     SKILLS_INDEX.md, and a QC_STATUS.md
-    tracker. In split mode, it also creates a sibling R execution folder for non-AI-visible 
-    analysis data. The package does not implement statistical analysis functions.
+    tracker. With split = TRUE, it also creates a sibling R execution folder for non-AI-visible
+    analysis data. With qc_agent = TRUE, it adds independent QC agent scaffolding and
+    Plan gate rules. The package does not implement statistical analysis functions.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

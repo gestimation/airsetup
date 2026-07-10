@@ -4,7 +4,13 @@
 \alias{airsetup_demo}
 \title{Set up a demo AI-assisted analysis project}
 \usage{
-airsetup_demo(path, japanese = TRUE, skills = TRUE, overwrite = FALSE)
+airsetup_demo(
+  path,
+  japanese = TRUE,
+  skills = TRUE,
+  qc_agent = FALSE,
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{path}{Parent directory to create or update.}
@@ -14,6 +20,9 @@ write narrative output documents in Japanese by default.}
 
 \item{skills}{Logical. If \code{TRUE}, also run \code{\link[=airskill]{airskill()}} to add QC skill
 templates.}
+
+\item{qc_agent}{Logical. If \code{TRUE}, add independent QC agent specifications
+and Plan gate review folders.}
 
 \item{overwrite}{Logical. If \code{TRUE}, overwrite generated files and demo
 materials that already exist.}

@@ -5,7 +5,7 @@ Check an airsetup project structure
 ## Usage
 
 ``` r
-aircheck(path, mode = c("split", "ai_only"))
+aircheck(path, split = TRUE, skills = TRUE, qc_agent = FALSE)
 ```
 
 ## Arguments
@@ -14,10 +14,18 @@ aircheck(path, mode = c("split", "ai_only"))
 
   Parent project directory to check.
 
-- mode:
+- split:
 
-  Project layout mode to check. `"split"` checks sibling `ai_project`
-  and `r_project` folders. `"ai_only"` checks only `ai_project`.
+  Logical. If `TRUE`, check the sibling `r_project` scaffold.
+
+- skills:
+
+  Logical. If `TRUE`, check QC skill templates under
+  `ai_project/skills/`.
+
+- qc_agent:
+
+  Logical. If `TRUE`, check independent QC agent scaffolding.
 
 ## Value
 
@@ -28,8 +36,8 @@ and `message`.
 
 ``` r
 project_dir <- file.path(tempdir(), "aircheck_example")
-airsetup(project_dir, mode = "split")
-aircheck(project_dir, mode = "split")
+airsetup(project_dir)
+aircheck(project_dir)
 #>                                           item   type
 #> 1                            ai_project/source folder
 #> 2                   ai_project/ai_visible_data folder

@@ -4,14 +4,17 @@
 \alias{aircheck}
 \title{Check an airsetup project structure}
 \usage{
-aircheck(path, mode = c("split", "ai_only"))
+aircheck(path, split = TRUE, skills = TRUE, qc_agent = FALSE)
 }
 \arguments{
 \item{path}{Parent project directory to check.}
 
-\item{mode}{Project layout mode to check. \code{"split"} checks sibling
-\code{ai_project} and \code{r_project} folders. \code{"ai_only"} checks only
-\code{ai_project}.}
+\item{split}{Logical. If \code{TRUE}, check the sibling \code{r_project} scaffold.}
+
+\item{skills}{Logical. If \code{TRUE}, check QC skill templates under
+\verb{ai_project/skills/}.}
+
+\item{qc_agent}{Logical. If \code{TRUE}, check independent QC agent scaffolding.}
 }
 \value{
 A data.frame with columns \code{item}, \code{type}, \code{path}, \code{exists},
@@ -22,7 +25,7 @@ Check an airsetup project structure
 }
 \examples{
 project_dir <- file.path(tempdir(), "aircheck_example")
-airsetup(project_dir, mode = "split")
-aircheck(project_dir, mode = "split")
+airsetup(project_dir)
+aircheck(project_dir)
 
 }

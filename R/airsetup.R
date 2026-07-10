@@ -54,9 +54,40 @@ write_if_allowed <- function(path, lines, overwrite = FALSE) {
   TRUE
 }
 
-agents_md_template <- function(japanese = FALSE) {
+validate_flag <- function(value, name) {
+  if (!is.logical(value) || length(value) != 1L || is.na(value)) {
+    stop(sprintf("`%s` must be TRUE or FALSE.", name), call. = FALSE)
+  }
+  invisible(value)
+}
+
+agents_md_template <- function(japanese = FALSE,
+                               qc_agent = FALSE,
+                               split = TRUE,
+                               skills = TRUE) {
   if (!is.logical(japanese) || length(japanese) != 1L || is.na(japanese)) {
     stop("`japanese` must be TRUE or FALSE.", call. = FALSE)
+  }
+  validate_flag(qc_agent, "qc_agent")
+  validate_flag(split, "split")
+  validate_flag(skills, "skills")
+
+  skills_header <- if (isTRUE(skills)) {
+    "- `skills/`"
+  } else {
+    "- `skills/`, if present"
+  }
+
+  hidden_data_header <- if (isTRUE(split)) {
+    "- `../r_project/ai_hidden_data/`"
+  } else {
+    "- `../r_project/ai_hidden_data/`, when split project structure is used"
+  }
+
+  hidden_data_reference <- if (isTRUE(split)) {
+    "`../r_project/ai_hidden_data/`"
+  } else {
+    "the split-project hidden-data area (`../r_project/ai_hidden_data/`, when split project structure is used)"
   }
 
   base <- c(
@@ -72,8 +103,15 @@ agents_md_template <- function(japanese = FALSE) {
     "  - Stores source specifications, reference documents, and original materials.",
     "  - Initial materials should be placed under `source/initial_YYYYMMDD/`.",
     "  - Additional materials should be placed under `source/addition_YYYYMMDD/`.",
+    "  - Use this folder for protocols, SAPs, database definitions, and other",
+    "    source materials. Do not place generated QC skill templates here.",
     "  - Treat this folder as read-only. Codex must not overwrite, move, or delete",
     "    source materials.",
+    "",
+    skills_header,
+    "  - Stores generated QC skill templates.",
+    "  - Skill templates belong here, not under `source/`.",
+    "  - Codex may read these files when the user asks for QC skill support.",
     "",
     "- `ai_visible_data/`",
     "  - Stores dummy or visible data that Codex is allowed to inspect.",
@@ -86,7 +124,7 @@ agents_md_template <- function(japanese = FALSE) {
     "    visible data, unless the user explicitly asks Codex to run them.",
     "  - This folder is append-only. Later additions do not replace earlier files.",
     "",
-    "- `../r_project/ai_hidden_data/`",
+    hidden_data_header,
     "  - Stores analysis data that Codex must not inspect directly.",
     "  - It is assumed to follow the same folder convention as visible data:",
     "    `initial_YYYYMMDD/` for initial data and `addition_YYYYMMDD/` for additions.",
@@ -116,6 +154,8 @@ agents_md_template <- function(japanese = FALSE) {
     "    and validation notes.",
     "  - Codex must not treat QC conclusions requiring human judgment as final",
     "    without user approval.",
+    "  - QC agent deliverables belong under `qc/`. The QC agent must not directly",
+    "    overwrite Workflow agent outputs.",
     "",
     "- `log/`",
     "  - Stores Codex work logs, investigation notes, decision traces, and execution",
@@ -154,7 +194,7 @@ agents_md_template <- function(japanese = FALSE) {
     "  supporting files under `ai_output/`.",
     "- When applicable, Codex creates two versions of an R workflow:",
     "  - a dummy-data version that reads from `ai_visible_data/`;",
-    "  - an analysis-data version that reads from `../r_project/ai_hidden_data/`.",
+    paste0("  - an analysis-data version that reads from ", hidden_data_reference, "."),
     "- R scripts should use project-relative paths where possible.",
     "- When multiple data batches exist, scripts must not automatically assume that",
     "  the latest `addition_YYYYMMDD/` folder is approved for the current analysis.",
@@ -165,7 +205,7 @@ agents_md_template <- function(japanese = FALSE) {
     "  include the addition, but should not treat it as the default analysis input",
     "  without user approval.",
     "- Even when creating analysis-data scripts, Codex must not inspect",
-    "  `../r_project/ai_hidden_data/`.",
+    paste0("  ", hidden_data_reference, "."),
     "- The user runs R scripts manually and places results under `r_output/`.",
     "- Codex must not run generated R scripts by default. If Codex believes an R",
     "  script should be run for debugging or validation, Codex must ask the user",
@@ -177,8 +217,28 @@ agents_md_template <- function(japanese = FALSE) {
     "- Important decisions and investigation notes that affect later work may also be",
     "  recorded under `log/`.",
     "",
+    "## Evidence and Assumption Separation",
+    "",
+    "- Separate facts written in source documents from candidate inferences,",
+    "  unresolved issues, and implementation assumptions.",
+    "- Do not silently assume treatment-group coding, endpoint-variable mapping,",
+    "  analysis-set flags, visit coding, or missing-value coding.",
+    "- When these items are unclear, write the uncertainty explicitly and ask for",
+    "  clarification or prepare a draft that marks the assumption as unapproved.",
+    "- Do not inspect hidden data without an explicit user instruction.",
+    "",
+    "## Agent Output Boundaries",
+    "",
+    "- Workflow agent deliverables belong under `ai_output/`.",
+    "- QC agent deliverables belong under `qc/`.",
+    "- The QC agent must not directly overwrite Workflow agent outputs.",
+    "",
     "## R Script Generation Rules",
     "",
+    "- If independent QC agent mode is enabled (`qc_agent = TRUE`), final R script",
+    "  generation is allowed only after the Plan gate has been reviewed by the QC",
+    "  agent and the QC agent records `APPROVE_NEXT_STEP` in",
+    "  `qc/review/QC_DECISION.md`.",
     "- Codex-generated R scripts must be saved under `ai_output/`.",
     "- Codex must not create or modify R scripts under `scripts/` unless the user",
     "  explicitly requests it.",
@@ -244,7 +304,7 @@ agents_md_template <- function(japanese = FALSE) {
     "  - acceptance of additional data batches into the current analysis assumption;",
     "  - any situation where the hidden analysis data would need to be inspected.",
     "- Inspecting, listing, moving, copying, summarizing, or otherwise using",
-    "  `../r_project/ai_hidden_data/` directly is prohibited.",
+    paste0("  ", hidden_data_reference, " directly is prohibited."),
     "",
     "## Edit Boundaries",
     "",
@@ -255,6 +315,46 @@ agents_md_template <- function(japanese = FALSE) {
     "- When QC evidence leads to script changes, record the basis and status in",
     "  `QC_STATUS.md`."
   )
+
+  qc_agent_rule <- if (isTRUE(qc_agent)) {
+    c(
+      "",
+      "## Independent QC Agent Plan Gate",
+      "",
+      "- Independent QC agent mode is enabled for this project.",
+      "- The Workflow agent must not proceed to final R code generation until the",
+      "  Plan gate has been reviewed by the QC agent and the QC agent records",
+      "  `APPROVE_NEXT_STEP` in `qc/review/QC_DECISION.md`.",
+      "- Before Plan gate approval, the Workflow agent may work on:",
+      "  - context confirmation;",
+      "  - M11SEMANTIC extraction;",
+      "  - SAP or analysis-plan drafts;",
+      "  - data requirements tables;",
+      "  - endpoint map drafts;",
+      "  - metadata inspection plans;",
+      "  - pseudocode or algorithm explanations.",
+      "- Before Plan gate approval, the Workflow agent must not create:",
+      "  - final R analysis scripts;",
+      "  - final endpoint derivation code;",
+      "  - final analysis-set derivation code;",
+      "  - final table or figure generation scripts;",
+      "  - final statistical model implementations.",
+      "- QC agent decisions must be one of `APPROVE_NEXT_STEP`,",
+      "  `REQUEST_REVISION`, or `BLOCK`.",
+      "- QC reviews must be saved under `qc/review/`, and decision records must",
+      "  include Gate, Decision, Reviewer, Date, Approved scope, and Conditions or",
+      "  blocking issues."
+    )
+  } else {
+    c(
+      "",
+      "## Independent QC Agent Plan Gate",
+      "",
+      "- If independent QC agent mode is later added to this project, final R code",
+      "  generation must wait until the QC agent records `APPROVE_NEXT_STEP` for",
+      "  the Plan gate."
+    )
+  }
 
   sap_rule <- c(
     "",
@@ -290,7 +390,7 @@ agents_md_template <- function(japanese = FALSE) {
     "  `r_output/` unless the user explicitly requests or approves the change.",
     "  Such changes must be recorded as post hoc or revised decisions in",
     "  `SAP_DECISIONS.md`.",
-    "- Codex must not inspect `../r_project/ai_hidden_data/` to prepare, revise,",
+    paste0("- Codex must not inspect ", hidden_data_reference, " to prepare, revise,"),
     "  or interpret SAP-related files.",
     "",
     "## Planned R Implementation in SAP",
@@ -339,7 +439,7 @@ agents_md_template <- function(japanese = FALSE) {
     "- Codex must not choose or revise R functions based on observed analysis",
     "  results in `r_output/` unless the user explicitly approves a post hoc or",
     "  revised decision. Such changes must be recorded in `SAP_DECISIONS.md`.",
-    "- Codex must not inspect `../r_project/ai_hidden_data/` to decide which R",
+    paste0("- Codex must not inspect ", hidden_data_reference, " to decide which R"),
     "  functions should be listed in the SAP."
   )
 
@@ -377,13 +477,11 @@ agents_md_template <- function(japanese = FALSE) {
     )
   }
 
-  c(base, sap_rule, language_rule)
+  c(base, qc_agent_rule, sap_rule, language_rule)
 }
 
 validate_japanese <- function(japanese) {
-  if (!is.logical(japanese) || length(japanese) != 1L || is.na(japanese)) {
-    stop("`japanese` must be TRUE or FALSE.", call. = FALSE)
-  }
+  validate_flag(japanese, "japanese")
   invisible(japanese)
 }
 
@@ -428,6 +526,153 @@ qc_status_template <- function() {
     "## QC Items",
     "",
     "No QC items have been registered yet."
+  )
+}
+
+workflow_agent_template <- function() {
+  c(
+    "# WORKFLOW_AGENT.md",
+    "",
+    "Role: prepare analysis context, planning outputs, and implementation drafts.",
+    "",
+    "## Output Boundary",
+    "",
+    "- Write Workflow agent deliverables under `ai_output/`.",
+    "- Do not write QC agent review outputs.",
+    "- Do not directly modify QC agent decisions.",
+    "",
+    "## Plan Gate Enforcement",
+    "",
+    "- Before final R code generation, check `qc/review/QC_DECISION.md`.",
+    "- Do not proceed to final R code generation unless the QC agent decision for",
+    "  the Plan gate is `APPROVE_NEXT_STEP`.",
+    "",
+    "## Allowed Before Plan Gate Approval",
+    "",
+    "- Context confirmation",
+    "- M11SEMANTIC extraction",
+    "- SAP or analysis-plan drafts",
+    "- Data requirements table",
+    "- Endpoint map draft",
+    "- Metadata inspection plan",
+    "- Pseudocode or algorithm explanation",
+    "",
+    "## Prohibited Before Plan Gate Approval",
+    "",
+    "- Final R analysis script creation",
+    "- Final endpoint derivation code creation",
+    "- Final analysis-set derivation code creation",
+    "- Final table or figure generation script creation",
+    "- Final statistical model implementation creation",
+    "",
+    "## Assumption Rules",
+    "",
+    "- Separate document facts, candidate inferences, unresolved issues, and",
+    "  implementation assumptions.",
+    "- Do not silently assume treatment-group coding, endpoint-variable mapping,",
+    "  analysis-set flags, visit coding, or missing-value coding.",
+    "- Do not inspect hidden data unless the user explicitly instructs it."
+  )
+}
+
+qc_agent_template <- function() {
+  c(
+    "# QC_AGENT.md",
+    "",
+    "Role: independently review Workflow agent outputs and issue gate decisions.",
+    "",
+    "## Output Boundary",
+    "",
+    "- Write QC agent outputs under `qc/`.",
+    "- Do not directly overwrite Workflow agent outputs under `ai_output/`.",
+    "",
+    "## Plan Gate Decision",
+    "",
+    "- Review the Workflow agent's Plan gate materials before final R code generation.",
+    "- Issue exactly one of the following decisions:",
+    "  - `APPROVE_NEXT_STEP`",
+    "  - `REQUEST_REVISION`",
+    "  - `BLOCK`",
+    "- Save the review report to `qc/review/QC_REVIEW_REPORT.md`.",
+    "- Save the decision to `qc/review/QC_DECISION.md`.",
+    "",
+    "## QC_DECISION.md Required Fields",
+    "",
+    "- Gate",
+    "- Decision",
+    "- Reviewer",
+    "- Date",
+    "- Approved scope",
+    "- Conditions or blocking issues",
+    "",
+    "## Review Focus",
+    "",
+    "- Confirm that document facts, candidate inferences, unresolved issues, and",
+    "  implementation assumptions are separated.",
+    "- Check that treatment-group coding, endpoint-variable mapping, analysis-set",
+    "  flags, visit coding, and missing-value coding are not silently assumed.",
+    "- Confirm that hidden data were not inspected without explicit user instruction.",
+    "- Confirm that final R code generation has not started before Plan gate approval."
+  )
+}
+
+qc_review_report_template <- function() {
+  c(
+    "# QC_REVIEW_REPORT.md",
+    "",
+    "## Gate",
+    "",
+    "Plan gate",
+    "",
+    "## Reviewed Materials",
+    "",
+    "- Not yet reviewed.",
+    "",
+    "## Findings",
+    "",
+    "- Not yet reviewed.",
+    "",
+    "## Recommendation",
+    "",
+    "- Not yet reviewed."
+  )
+}
+
+qc_decision_template <- function() {
+  c(
+    "# QC_DECISION.md",
+    "",
+    "Gate: Plan gate",
+    "Decision: REQUEST_REVISION",
+    "Reviewer: QC agent",
+    "Date: YYYY-MM-DD",
+    "Approved scope: Not approved yet.",
+    "Conditions or blocking issues: Initial placeholder. Replace after QC review.",
+    "",
+    "Allowed decisions: APPROVE_NEXT_STEP, REQUEST_REVISION, BLOCK."
+  )
+}
+
+qc_review_log_template <- function() {
+  c(
+    "# QC_REVIEW_LOG.md",
+    "",
+    "Use this log for concise QC review history and links to detailed review files.",
+    "",
+    "| Date | Gate | Decision | Review file | Notes |",
+    "|---|---|---|---|---|"
+  )
+}
+
+decision_log_template <- function() {
+  c(
+    "# DECISION_LOG.md",
+    "",
+    "Use this log for decisions that affect analysis planning, implementation,",
+    "or workflow gating.",
+    "",
+    "| Date | Decision | Owner | Evidence or link | Notes |",
+    "|---|---|---|---|---|"
   )
 }
 
@@ -501,8 +746,12 @@ write_demo_data_definition <- function(path, overwrite = FALSE) {
 #' Set up an AI-assisted analysis project structure
 #'
 #' @param path Parent directory to create or update.
-#' @param mode Project layout mode. `"split"` creates sibling `ai_project` and
-#'   `r_project` folders. `"ai_only"` creates only `ai_project`.
+#' @param split Logical. If `TRUE`, create sibling `ai_project` and `r_project`
+#'   folders. If `FALSE`, create only `ai_project`.
+#' @param skills Logical. If `TRUE`, add QC skill templates under
+#'   `ai_project/skills/`.
+#' @param qc_agent Logical. If `TRUE`, add independent QC agent specifications
+#'   and Plan gate review folders.
 #' @param japanese Logical. If `TRUE`, generated `AGENTS.md` instructs Codex to
 #'   write narrative output documents in Japanese by default. If `FALSE`, it
 #'   instructs Codex to use English by default. This does not override scripts,
@@ -515,36 +764,45 @@ write_demo_data_definition <- function(path, overwrite = FALSE) {
 #' @examples
 #' project_dir <- file.path(tempdir(), "airsetup_example")
 #'
-#' airsetup(
-#'   path = project_dir,
-#'   mode = "split",
-#'   japanese = FALSE,
-#'   overwrite = FALSE
-#' )
+#' airsetup(project_dir)
+#' airsetup(project_dir, qc_agent = TRUE)
+#' airsetup(project_dir, split = FALSE)
+#' airsetup(project_dir, skills = FALSE)
 #'
-#' aircheck(project_dir, mode = "split")
-#'
-#' ai_only_dir <- file.path(tempdir(), "airsetup_ai_only_example")
-#' airsetup(ai_only_dir, mode = "ai_only", japanese = TRUE)
-#' aircheck(ai_only_dir, mode = "ai_only")
+#' aircheck(project_dir)
 #'
 #' @export
-airsetup <- function(path, mode = c("split", "ai_only"), japanese = FALSE, overwrite = FALSE) {
+airsetup <- function(path,
+                     split = TRUE,
+                     skills = TRUE,
+                     qc_agent = FALSE,
+                     japanese = FALSE,
+                     overwrite = FALSE) {
   if (!is.character(path) || length(path) != 1L || !nzchar(path)) {
     stop("`path` must be a non-empty string.", call. = FALSE)
   }
-  mode <- match.arg(mode)
+  validate_flag(split, "split")
+  validate_flag(skills, "skills")
+  validate_flag(qc_agent, "qc_agent")
   validate_japanese(japanese)
+  validate_flag(overwrite, "overwrite")
 
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
 
   create_ai_project_structure(
     file.path(path, "ai_project"),
+    split = split,
+    skills = skills,
     japanese = japanese,
+    qc_agent = qc_agent,
     overwrite = overwrite
   )
 
-  if (identical(mode, "split")) {
+  if (isTRUE(skills)) {
+    airskill(path, overwrite = overwrite, quiet = TRUE)
+  }
+
+  if (isTRUE(split)) {
     create_r_project_scaffold(file.path(path, "r_project"), overwrite = overwrite)
   }
 
@@ -563,6 +821,8 @@ airsetup <- function(path, mode = c("split", "ai_only"), japanese = FALSE, overw
 #'   write narrative output documents in Japanese by default.
 #' @param skills Logical. If `TRUE`, also run [airskill()] to add QC skill
 #'   templates.
+#' @param qc_agent Logical. If `TRUE`, add independent QC agent specifications
+#'   and Plan gate review folders.
 #' @param overwrite Logical. If `TRUE`, overwrite generated files and demo
 #'   materials that already exist.
 #'
@@ -575,19 +835,27 @@ airsetup <- function(path, mode = c("split", "ai_only"), japanese = FALSE, overw
 #' aircheck(demo_dir)
 #'
 #' @export
-airsetup_demo <- function(path, japanese = TRUE, skills = TRUE, overwrite = FALSE) {
+airsetup_demo <- function(path,
+                          japanese = TRUE,
+                          skills = TRUE,
+                          qc_agent = FALSE,
+                          overwrite = FALSE) {
   if (!is.character(path) || length(path) != 1L || !nzchar(path)) {
     stop("`path` must be a non-empty string.", call. = FALSE)
   }
   validate_japanese(japanese)
-  if (!is.logical(skills) || length(skills) != 1L || is.na(skills)) {
-    stop("`skills` must be TRUE or FALSE.", call. = FALSE)
-  }
-  if (!is.logical(overwrite) || length(overwrite) != 1L || is.na(overwrite)) {
-    stop("`overwrite` must be TRUE or FALSE.", call. = FALSE)
-  }
+  validate_flag(skills, "skills")
+  validate_flag(qc_agent, "qc_agent")
+  validate_flag(overwrite, "overwrite")
 
-  airsetup(path, mode = "split", japanese = japanese, overwrite = overwrite)
+  airsetup(
+    path,
+    split = TRUE,
+    skills = FALSE,
+    qc_agent = qc_agent,
+    japanese = japanese,
+    overwrite = overwrite
+  )
 
   skill_report <- NULL
   if (isTRUE(skills)) {
@@ -650,13 +918,26 @@ airsetup_demo <- function(path, japanese = TRUE, skills = TRUE, overwrite = FALS
 #' @param japanese Logical. If `TRUE`, generated `AGENTS.md` instructs Codex to
 #'   write narrative output documents in Japanese by default. If `FALSE`, it
 #'   instructs Codex to use English by default.
+#' @param split Logical. If `TRUE`, generated `AGENTS.md` describes the sibling
+#'   `r_project` hidden-data area as part of the active scaffold.
+#' @param skills Logical. If `TRUE`, generated `AGENTS.md` describes `skills/`
+#'   as part of the active scaffold.
+#' @param qc_agent Logical. If `TRUE`, create independent QC agent scaffolding.
 #' @param overwrite Logical. If `TRUE`, overwrite generated files that already
 #'   exist.
 #'
 #' @return Invisibly returns the normalized AI project path.
 #' @noRd
-create_ai_project_structure <- function(path, japanese = FALSE, overwrite = FALSE) {
+create_ai_project_structure <- function(path,
+                                        split = TRUE,
+                                        skills = TRUE,
+                                        japanese = FALSE,
+                                        qc_agent = FALSE,
+                                        overwrite = FALSE) {
+  validate_flag(split, "split")
+  validate_flag(skills, "skills")
   validate_japanese(japanese)
+  validate_flag(qc_agent, "qc_agent")
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
 
   for (dir in required_dirs()) {
@@ -665,8 +946,19 @@ create_ai_project_structure <- function(path, japanese = FALSE, overwrite = FALS
 
   create_ai_initial_dirs(path)
 
-  create_agents_md(path, japanese = japanese, overwrite = overwrite)
+  create_agents_md(
+    path,
+    split = split,
+    skills = skills,
+    japanese = japanese,
+    qc_agent = qc_agent,
+    overwrite = overwrite
+  )
   create_qc_status_md(path, overwrite = overwrite)
+
+  if (isTRUE(qc_agent)) {
+    create_qc_agent_scaffold(path, overwrite = overwrite)
+  }
 
   invisible(normalizePath(path, winslash = "/", mustWork = TRUE))
 }
@@ -683,7 +975,7 @@ create_r_project_scaffold <- function(path, overwrite = FALSE) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
   initial <- initial_dir_name()
 
-  for (dir in c("ai_hidden_data", file.path("ai_hidden_data", initial))) {
+  for (dir in c("ai_hidden_data", file.path("ai_hidden_data", initial), "r_scripts")) {
     dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
   }
 
@@ -725,21 +1017,91 @@ create_r_project_scaffold <- function(path, overwrite = FALSE) {
   invisible(normalizePath(path, winslash = "/", mustWork = TRUE))
 }
 
+#' Create independent QC agent scaffold
+#'
+#' @param path AI project directory.
+#' @param overwrite Logical. If `TRUE`, overwrite generated files that already
+#'   exist.
+#'
+#' @return Invisibly returns the normalized AI project path.
+#' @noRd
+create_qc_agent_scaffold <- function(path, overwrite = FALSE) {
+  for (dir in c("agent_specs", file.path("qc", "review"), file.path("qc", "decisions"))) {
+    dir.create(file.path(path, dir), recursive = TRUE, showWarnings = FALSE)
+  }
+
+  write_if_allowed(
+    file.path(path, "agent_specs", "WORKFLOW_AGENT.md"),
+    workflow_agent_template(),
+    overwrite = overwrite
+  )
+  write_if_allowed(
+    file.path(path, "agent_specs", "QC_AGENT.md"),
+    qc_agent_template(),
+    overwrite = overwrite
+  )
+  write_if_allowed(
+    file.path(path, "qc", "review", "QC_REVIEW_REPORT.md"),
+    qc_review_report_template(),
+    overwrite = overwrite
+  )
+  write_if_allowed(
+    file.path(path, "qc", "review", "QC_DECISION.md"),
+    qc_decision_template(),
+    overwrite = overwrite
+  )
+  write_if_allowed(
+    file.path(path, "log", "QC_REVIEW_LOG.md"),
+    qc_review_log_template(),
+    overwrite = overwrite
+  )
+  write_if_allowed(
+    file.path(path, "log", "DECISION_LOG.md"),
+    decision_log_template(),
+    overwrite = overwrite
+  )
+
+  invisible(normalizePath(path, winslash = "/", mustWork = TRUE))
+}
+
 #' Create project AGENTS.md instructions
 #'
 #' @param path Project directory.
 #' @param japanese Logical. If `TRUE`, generated `AGENTS.md` instructs Codex to
 #'   write narrative output documents in Japanese by default. If `FALSE`, it
 #'   instructs Codex to use English by default.
+#' @param qc_agent Logical. If `TRUE`, generated `AGENTS.md` includes active
+#'   independent QC agent Plan gate rules.
+#' @param split Logical. If `TRUE`, generated `AGENTS.md` describes the sibling
+#'   `r_project` hidden-data area as part of the active scaffold.
+#' @param skills Logical. If `TRUE`, generated `AGENTS.md` describes `skills/`
+#'   as part of the active scaffold.
 #' @param overwrite Logical. If `TRUE`, overwrite an existing `AGENTS.md`.
 #'
 #' @return Invisibly returns the `AGENTS.md` path.
 #' @noRd
-create_agents_md <- function(path, japanese = FALSE, overwrite = FALSE) {
+create_agents_md <- function(path,
+                             japanese = FALSE,
+                             qc_agent = FALSE,
+                             split = TRUE,
+                             skills = TRUE,
+                             overwrite = FALSE) {
   validate_japanese(japanese)
+  validate_flag(qc_agent, "qc_agent")
+  validate_flag(split, "split")
+  validate_flag(skills, "skills")
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
   out <- file.path(path, "AGENTS.md")
-  write_if_allowed(out, agents_md_template(japanese = japanese), overwrite = overwrite)
+  write_if_allowed(
+    out,
+    agents_md_template(
+      japanese = japanese,
+      qc_agent = qc_agent,
+      split = split,
+      skills = skills
+    ),
+    overwrite = overwrite
+  )
   invisible(out)
 }
 
@@ -760,25 +1122,28 @@ create_qc_status_md <- function(path, overwrite = FALSE) {
 #' Check an airsetup project structure
 #'
 #' @param path Parent project directory to check.
-#' @param mode Project layout mode to check. `"split"` checks sibling
-#'   `ai_project` and `r_project` folders. `"ai_only"` checks only
-#'   `ai_project`.
+#' @param split Logical. If `TRUE`, check the sibling `r_project` scaffold.
+#' @param skills Logical. If `TRUE`, check QC skill templates under
+#'   `ai_project/skills/`.
+#' @param qc_agent Logical. If `TRUE`, check independent QC agent scaffolding.
 #'
 #' @return A data.frame with columns `item`, `type`, `path`, `exists`,
 #'   `required`, and `message`.
 #'
 #' @examples
 #' project_dir <- file.path(tempdir(), "aircheck_example")
-#' airsetup(project_dir, mode = "split")
-#' aircheck(project_dir, mode = "split")
+#' airsetup(project_dir)
+#' aircheck(project_dir)
 #'
 #' @export
-aircheck <- function(path, mode = c("split", "ai_only")) {
+aircheck <- function(path, split = TRUE, skills = TRUE, qc_agent = FALSE) {
   if (!is.character(path) || length(path) != 1L || !nzchar(path)) {
     stop("`path` must be a non-empty string.", call. = FALSE)
   }
 
-  mode <- match.arg(mode)
+  validate_flag(split, "split")
+  validate_flag(skills, "skills")
+  validate_flag(qc_agent, "qc_agent")
 
   ai_items <- file.path("ai_project", c(required_dirs(), required_files()))
   ai_types <- c(rep("folder", length(required_dirs())), rep("file", length(required_files())))
@@ -825,12 +1190,44 @@ aircheck <- function(path, mode = c("split", "ai_only")) {
 
   out <- rbind(out, ai_initial_checks)
 
-  if (identical(mode, "split")) {
-    r_items <- file.path("r_project", c(".gitignore", "README_DO_NOT_SHARE_WITH_AI.md"))
-    r_types <- rep("file", length(r_items))
+  if (isTRUE(skills)) {
+    skill_items <- file.path(
+      "ai_project",
+      "skills",
+      c(
+        "SKILLS_INDEX.md",
+        "QC_SKILL_CONTEXT.md",
+        "QC_SKILL_PLAN.md",
+        "QC_SKILL_RESULT.md",
+        "QC_SKILL_M11SEMANTIC.md"
+      )
+    )
+    skill_out <- data.frame(
+      item = skill_items,
+      type = rep("file", length(skill_items)),
+      path = skill_items,
+      exists = file.exists(file.path(path, skill_items)),
+      required = TRUE,
+      stringsAsFactors = FALSE
+    )
+    skill_out$message <- ifelse(skill_out$exists, "Found", "Missing required item")
+    out <- rbind(out, skill_out)
+  }
+
+  if (isTRUE(split)) {
+    r_items <- file.path(
+      "r_project",
+      c(
+        "ai_hidden_data",
+        "r_scripts",
+        ".gitignore",
+        "README_DO_NOT_SHARE_WITH_AI.md"
+      )
+    )
+    r_types <- c("folder", "folder", "file", "file")
 
     r_full <- file.path(path, r_items)
-    r_exists <- file.exists(r_full)
+    r_exists <- ifelse(r_types == "folder", dir.exists(r_full), file.exists(r_full))
 
     r_out <- data.frame(
       item = r_items,
@@ -867,6 +1264,46 @@ aircheck <- function(path, mode = c("split", "ai_only")) {
     )
 
     out <- rbind(out, r_out, r_initial_checks)
+  }
+
+  if (isTRUE(qc_agent)) {
+    qc_agent_items <- file.path(
+      "ai_project",
+      c(
+        "agent_specs",
+        file.path("agent_specs", "WORKFLOW_AGENT.md"),
+        file.path("agent_specs", "QC_AGENT.md"),
+        file.path("qc", "review"),
+        file.path("qc", "decisions"),
+        file.path("qc", "review", "QC_REVIEW_REPORT.md"),
+        file.path("qc", "review", "QC_DECISION.md"),
+        file.path("log", "QC_REVIEW_LOG.md"),
+        file.path("log", "DECISION_LOG.md")
+      )
+    )
+    qc_agent_types <- c(
+      "folder",
+      "file",
+      "file",
+      "folder",
+      "folder",
+      "file",
+      "file",
+      "file",
+      "file"
+    )
+    qc_agent_full <- file.path(path, qc_agent_items)
+    qc_agent_exists <- ifelse(qc_agent_types == "folder", dir.exists(qc_agent_full), file.exists(qc_agent_full))
+    qc_agent_out <- data.frame(
+      item = qc_agent_items,
+      type = qc_agent_types,
+      path = qc_agent_items,
+      exists = qc_agent_exists,
+      required = TRUE,
+      stringsAsFactors = FALSE
+    )
+    qc_agent_out$message <- ifelse(qc_agent_out$exists, "Found", "Missing required item")
+    out <- rbind(out, qc_agent_out)
   }
 
   rownames(out) <- NULL
