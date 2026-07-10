@@ -42,7 +42,8 @@
 <li>Project layout is now controlled by explicit logical arguments: <code>split</code>, <code>skills</code>, and <code>qc_agent</code>.</li>
 <li>
 <code>split = TRUE</code> replaces the old split layout behavior, while <code>split = FALSE</code> creates only <code>ai_project/</code>.</li>
-<li>QC skill templates are now created under <code>ai_project/skills/</code>; <code>source/</code> is reserved for protocols, SAPs, database definitions, and other source materials.</li>
+<li>AI/agent control files are now centralized under <code>ai_project/agent_control/</code>. QC skill templates are created there when <code>skills = TRUE</code>, and independent Workflow/QC agent role files are created there when <code>qc_agent = TRUE</code>. Legacy <code>ai_project/skills/</code> and <code>ai_project/agent_specs/</code> directories are no longer created. <code>source/</code> is reserved for protocols, SAPs, database definitions, and other source materials.</li>
+<li>The split-project scaffold no longer creates <code>r_project/r_scripts/</code>.</li>
 <li>User-run R outputs are centralized under <code>ai_project/r_output/</code>; <code>r_project/r_output/</code> is no longer created.</li>
 <li>
 <code>qc_agent = TRUE</code> adds independent QC agent scaffolding and documents the Plan gate rule that final R code generation must wait for <code>APPROVE_NEXT_STEP</code>.</li>
