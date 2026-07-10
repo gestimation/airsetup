@@ -40,7 +40,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">aircheck</span><span class="op">(</span><span class="va">path</span>, mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"split"</span>, <span class="st">"ai_only"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">aircheck</span><span class="op">(</span><span class="va">path</span>, split <span class="op">=</span> <span class="cn">TRUE</span>, skills <span class="op">=</span> <span class="cn">TRUE</span>, qc_agent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -51,10 +51,17 @@
 <dd><p>Parent project directory to check.</p></dd>
 
 
-<dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
-<dd><p>Project layout mode to check. <code>"split"</code> checks sibling
-<code>ai_project</code> and <code>r_project</code> folders. <code>"ai_only"</code> checks only
-<code>ai_project</code>.</p></dd>
+<dt id="arg-split">split<a class="anchor" aria-label="anchor" href="#arg-split"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, check the sibling <code>r_project</code> scaffold.</p></dd>
+
+
+<dt id="arg-skills">skills<a class="anchor" aria-label="anchor" href="#arg-skills"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, check QC skill templates under
+<code>ai_project/skills/</code>.</p></dd>
+
+
+<dt id="arg-qc-agent">qc_agent<a class="anchor" aria-label="anchor" href="#arg-qc-agent"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, check independent QC agent scaffolding.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -66,8 +73,8 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">project_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"aircheck_example"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="airsetup.html">airsetup</a></span><span class="op">(</span><span class="va">project_dir</span>, mode <span class="op">=</span> <span class="st">"split"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">aircheck</span><span class="op">(</span><span class="va">project_dir</span>, mode <span class="op">=</span> <span class="st">"split"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="airsetup.html">airsetup</a></span><span class="op">(</span><span class="va">project_dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">aircheck</span><span class="op">(</span><span class="va">project_dir</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                           item   type</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                            ai_project/source folder</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                   ai_project/ai_visible_data folder</span>
@@ -79,10 +86,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8                      ai_project/QC_STATUS.md   file</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9           ai_project/source/initial_YYYYMMDD folder</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10 ai_project/ai_visible_data/initial_YYYYMMDD folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                        r_project/.gitignore   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    r_project/README_DO_NOT_SHARE_WITH_AI.md   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13                    r_project/ai_hidden_data folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14   r_project/ai_hidden_data/initial_YYYYMMDD folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11           ai_project/skills/SKILLS_INDEX.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       ai_project/skills/QC_SKILL_CONTEXT.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          ai_project/skills/QC_SKILL_PLAN.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        ai_project/skills/QC_SKILL_RESULT.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15   ai_project/skills/QC_SKILL_M11SEMANTIC.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                    r_project/ai_hidden_data folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                         r_project/r_scripts folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                        r_project/.gitignore   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19    r_project/README_DO_NOT_SHARE_WITH_AI.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                    r_project/ai_hidden_data folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   r_project/ai_hidden_data/initial_YYYYMMDD folder</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                           path exists required</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                            ai_project/source   TRUE     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                   ai_project/ai_visible_data   TRUE     TRUE</span>
@@ -94,10 +108,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8                      ai_project/QC_STATUS.md   TRUE     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9           ai_project/source/initial_YYYYMMDD   TRUE     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10 ai_project/ai_visible_data/initial_YYYYMMDD   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                        r_project/.gitignore   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    r_project/README_DO_NOT_SHARE_WITH_AI.md   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13                    r_project/ai_hidden_data   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14   r_project/ai_hidden_data/initial_YYYYMMDD   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11           ai_project/skills/SKILLS_INDEX.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       ai_project/skills/QC_SKILL_CONTEXT.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          ai_project/skills/QC_SKILL_PLAN.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        ai_project/skills/QC_SKILL_RESULT.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15   ai_project/skills/QC_SKILL_M11SEMANTIC.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                    r_project/ai_hidden_data   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                         r_project/r_scripts   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                        r_project/.gitignore   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19    r_project/README_DO_NOT_SHARE_WITH_AI.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                    r_project/ai_hidden_data   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   r_project/ai_hidden_data/initial_YYYYMMDD   TRUE     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       message</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                       Found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                       Found</span>
@@ -113,6 +134,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12                      Found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13                      Found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14                      Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                      Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                      Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                      Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                      Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                      Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                      Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                      Found</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
