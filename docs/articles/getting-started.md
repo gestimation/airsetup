@@ -210,7 +210,7 @@ setwd("C:/demo/r_project/ai_hidden_data")
 
 ### Step 3. Review results with Codex
 
-- Check the figures generated in the `ai_output` folder.
+- Check the figures generated in the `r`\_output\` folder.
 - With support from Codex, perform the final review of whether the
   analysis results are correct.
 
@@ -242,9 +242,9 @@ has no effect on any paths other than the one specified.
 
 In this tutorial using
 [`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md),
-an optional QC skill template is generated in the source/skills folder.
-By specifying a skill in the prompt, you can perform higher-quality QC
-tasks.
+an optional QC skill template is generated in the agent_control/skills
+folder. By specifying a skill in the prompt, you can perform
+higher-quality QC tasks.
 
 - `QC_SKILL_CONTEXT.md`: checks whether the context is clear enough
   before drafting a plan or writing R code.

@@ -97,7 +97,7 @@ materials that already exist.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">demo_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"airsetup_demo_example"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">airsetup_demo</span><span class="op">(</span><span class="va">demo_dir</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         SKILLS_INDEX.md</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  AGENT_CONTROL_INDEX.md</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     QC_SKILL_CONTEXT.md</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3        QC_SKILL_PLAN.md</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4      QC_SKILL_RESULT.md</span>
@@ -106,14 +106,14 @@ materials that already exist.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7            demodata.rds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8 definition_demodata.txt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                         path  status</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                          ai_project/skills/SKILLS_INDEX.md created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                      ai_project/skills/QC_SKILL_CONTEXT.md created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                         ai_project/skills/QC_SKILL_PLAN.md created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       ai_project/skills/QC_SKILL_RESULT.md created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  ai_project/skills/QC_SKILL_M11SEMANTIC.md created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   ai_project/ai_visible_data/initial_20260710/demodata.rds created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     r_project/ai_hidden_data/initial_20260710/demodata.rds created</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 ai_project/source/initial_20260710/definition_demodata.txt created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            ai_project/agent_control/AGENT_CONTROL_INDEX.md skipped</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               ai_project/agent_control/QC_SKILL_CONTEXT.md created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  ai_project/agent_control/QC_SKILL_PLAN.md created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                ai_project/agent_control/QC_SKILL_RESULT.md created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           ai_project/agent_control/QC_SKILL_M11SEMANTIC.md created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   ai_project/ai_visible_data/initial_20260713/demodata.rds created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     r_project/ai_hidden_data/initial_20260713/demodata.rds created</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 ai_project/source/initial_20260713/definition_demodata.txt created</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   overwritten</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2       FALSE</span>
@@ -124,50 +124,50 @@ materials that already exist.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7       FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8       FALSE</span>
 <span class="r-in"><span><span class="fu"><a href="aircheck.html">aircheck</a></span><span class="op">(</span><span class="va">demo_dir</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                           item   type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                            ai_project/source folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   ai_project/ai_visible_data folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                         ai_project/ai_output folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                          ai_project/r_output folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                ai_project/qc folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                               ai_project/log folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                         ai_project/AGENTS.md   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                      ai_project/QC_STATUS.md   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9           ai_project/source/initial_YYYYMMDD folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 ai_project/ai_visible_data/initial_YYYYMMDD folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11           ai_project/skills/SKILLS_INDEX.md   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       ai_project/skills/QC_SKILL_CONTEXT.md   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13          ai_project/skills/QC_SKILL_PLAN.md   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14        ai_project/skills/QC_SKILL_RESULT.md   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   ai_project/skills/QC_SKILL_M11SEMANTIC.md   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16                    r_project/ai_hidden_data folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                         r_project/r_scripts folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18                        r_project/.gitignore   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19    r_project/README_DO_NOT_SHARE_WITH_AI.md   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20                    r_project/ai_hidden_data folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   r_project/ai_hidden_data/initial_YYYYMMDD folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                           path exists required</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                            ai_project/source   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   ai_project/ai_visible_data   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                         ai_project/ai_output   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                          ai_project/r_output   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                ai_project/qc   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                               ai_project/log   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                         ai_project/AGENTS.md   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                      ai_project/QC_STATUS.md   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9           ai_project/source/initial_YYYYMMDD   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 ai_project/ai_visible_data/initial_YYYYMMDD   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11           ai_project/skills/SKILLS_INDEX.md   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       ai_project/skills/QC_SKILL_CONTEXT.md   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13          ai_project/skills/QC_SKILL_PLAN.md   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14        ai_project/skills/QC_SKILL_RESULT.md   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   ai_project/skills/QC_SKILL_M11SEMANTIC.md   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16                    r_project/ai_hidden_data   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                         r_project/r_scripts   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18                        r_project/.gitignore   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19    r_project/README_DO_NOT_SHARE_WITH_AI.md   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20                    r_project/ai_hidden_data   TRUE     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   r_project/ai_hidden_data/initial_YYYYMMDD   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                item   type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                 ai_project/source folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                        ai_project/ai_visible_data folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                              ai_project/ai_output folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                               ai_project/r_output folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                     ai_project/qc folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                    ai_project/log folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                          ai_project/agent_control folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                              ai_project/AGENTS.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                           ai_project/QC_STATUS.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10               ai_project/source/initial_YYYYMMDD folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11      ai_project/ai_visible_data/initial_YYYYMMDD folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  ai_project/agent_control/AGENT_CONTROL_INDEX.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     ai_project/agent_control/QC_SKILL_CONTEXT.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        ai_project/agent_control/QC_SKILL_PLAN.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15      ai_project/agent_control/QC_SKILL_RESULT.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 ai_project/agent_control/QC_SKILL_M11SEMANTIC.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                         r_project/ai_hidden_data folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                             r_project/.gitignore   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19         r_project/README_DO_NOT_SHARE_WITH_AI.md   file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                         r_project/ai_hidden_data folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21        r_project/ai_hidden_data/initial_YYYYMMDD folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                path exists required</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                 ai_project/source   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                        ai_project/ai_visible_data   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                              ai_project/ai_output   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                               ai_project/r_output   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                     ai_project/qc   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                    ai_project/log   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                          ai_project/agent_control   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                              ai_project/AGENTS.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                           ai_project/QC_STATUS.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10               ai_project/source/initial_YYYYMMDD   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11      ai_project/ai_visible_data/initial_YYYYMMDD   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  ai_project/agent_control/AGENT_CONTROL_INDEX.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     ai_project/agent_control/QC_SKILL_CONTEXT.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        ai_project/agent_control/QC_SKILL_PLAN.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15      ai_project/agent_control/QC_SKILL_RESULT.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 ai_project/agent_control/QC_SKILL_M11SEMANTIC.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                         r_project/ai_hidden_data   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                             r_project/.gitignore   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19         r_project/README_DO_NOT_SHARE_WITH_AI.md   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                         r_project/ai_hidden_data   TRUE     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21        r_project/ai_hidden_data/initial_YYYYMMDD   TRUE     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       message</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                       Found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                       Found</span>
@@ -177,9 +177,9 @@ materials that already exist.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6                       Found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7                       Found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8                       Found</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Found dated initial folder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       Found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10 Found dated initial folder</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                      Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 Found dated initial folder</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12                      Found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13                      Found</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14                      Found</span>
