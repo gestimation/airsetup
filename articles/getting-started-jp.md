@@ -178,7 +178,7 @@ setwd("C:/demo/r_project/ai_hidden_data")
 
 ### ステップ3. ユーザーとCodexによる結果の確認
 
-- ai_outputフォルダに生成された図を確認する
+- r_outputフォルダに生成された図を確認する
 - Codexのサポートを受けながら、解析結果が正しいか最終レビューを行う
 
 ![期待される解析結果（フローチャート、指示によってはグループ別の結果が生成されることもある）](../reference/figures/flowchart.png)
@@ -201,7 +201,7 @@ pak::pak("gestimation/airsetup")
 
 このパッケージはまだアルファ版のためCRANに提出していませんが、`testthat`を用いた100件以上のテストに合格しています。[`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md)を実行した結果、指定したパス以外に影響を与えることはありません。
 
-[`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md)を用いたこのチュートリアルでは、オプションのQCスキルテンプレートがsource/skillsフォルダ内に生成されています。プロンプトで「QCスキル」と指示することで、より質の高い確認作業を行うことができます。
+[`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md)を用いたこのチュートリアルでは、オプションのQCスキルテンプレートがagent_control/skillsフォルダ内に生成されています。プロンプトで「QCスキル」と指示することで、より質の高い確認作業を行うことができます。
 
 - `QC_SKILL_CONTEXT.md`:
   計画のドラフトやRコーディングに先立って、コンテキスト情報が明確かどうかを確認します

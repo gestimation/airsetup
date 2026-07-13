@@ -262,7 +262,7 @@ problem (replace <code>YYYYMMDD</code> with the execution date).</li>
 <h3 id="step-3--review-results-with-codex">Step 3. Review results with Codex<a class="anchor" aria-label="anchor" href="#step-3--review-results-with-codex"></a>
 </h3>
 <ul>
-<li>Check the figures generated in the <code>ai_output</code>
+<li>Check the figures generated in the <code>r</code>_output`
 folder.</li>
 <li>With support from Codex, perform the final review of whether the
 analysis results are correct.</li>
@@ -290,8 +290,9 @@ to CRAN, but it has passed more than 100 tests using
 <code>testthat</code>. Running <code><a href="../reference/airsetup.html">airsetup()</a></code> has no effect on
 any paths other than the one specified.</p>
 <p>In this tutorial using <code><a href="../reference/airsetup_demo.html">airsetup_demo()</a></code>, an optional QC
-skill template is generated in the source/skills folder. By specifying a
-skill in the prompt, you can perform higher-quality QC tasks.</p>
+skill template is generated in the agent_control/skills folder. By
+specifying a skill in the prompt, you can perform higher-quality QC
+tasks.</p>
 <ul>
 <li>
 <code>QC_SKILL_CONTEXT.md</code>: checks whether the context is
