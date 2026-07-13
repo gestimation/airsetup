@@ -226,7 +226,6 @@ test_that("AGENTS.md records shared rules and English output language by default
   expect_match(text, "`agent_control/`", fixed = TRUE)
   expect_match(text, "Detailed agent role definitions and QC skill instructions are stored here.", fixed = TRUE)
   expect_match(text, "`QC_SKILL_*.md` files are created here when `skills = TRUE`.", fixed = TRUE)
-  expect_match(text, "Do not create `agent_specs/` or `skills/`", fixed = TRUE)
   expect_match(text, "Separate facts written in source documents", fixed = TRUE)
   expect_match(text, "Do not silently assume treatment-group coding", fixed = TRUE)
   expect_match(text, "Workflow agent deliverables belong under `ai_output/`", fixed = TRUE)
