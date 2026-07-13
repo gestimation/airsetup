@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">airsetup</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,16 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.3.9000" id="airsetup-0039000">airsetup 0.0.3.9000<a class="anchor" aria-label="anchor" href="#airsetup-0039000"></a></h2>
+<div class="section level3">
+<h3 id="qc-skill-updates-0-0-3-9000">QC skill updates<a class="anchor" aria-label="anchor" href="#qc-skill-updates-0-0-3-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/airskill.html">airskill()</a></code> now supports a separate <code>sap</code> skill that writes <code>QC_SKILL_SAP.md</code> for evidence-first clinical-trial SAP review.</li>
+<li>
+<code>QC_SKILL_PLAN.md</code> is now reserved for general coding plans and analysis specifications; clinical-trial SAPs route to <code>QC_SKILL_SAP.md</code>.</li>
+<li>
+<code>QC_SKILL_M11SEMANTIC.md</code> now uses an evidence-gated four-column semantic map with 14 analysis-critical M11 terms and explicit <code>Cannot assess</code> handling. Study-specific content must not be completed from convention or external knowledge.</li>
+<li>The SAP skill includes a paraphrased 55-item SAP checklist plus an M11/E9(R1)-informed supplement. It reports attention items by default and does not require <code>M11SEMANTIC_MAP.md</code>.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="breaking-changes-0-0-3-9000">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-0-3-9000"></a></h3>
 <ul><li>

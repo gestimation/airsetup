@@ -60,20 +60,22 @@ airsetup_demo(demo_dir)
 #> 1  AGENT_CONTROL_INDEX.md
 #> 2     QC_SKILL_CONTEXT.md
 #> 3        QC_SKILL_PLAN.md
-#> 4      QC_SKILL_RESULT.md
-#> 5 QC_SKILL_M11SEMANTIC.md
-#> 6            demodata.rds
+#> 4         QC_SKILL_SAP.md
+#> 5      QC_SKILL_RESULT.md
+#> 6 QC_SKILL_M11SEMANTIC.md
 #> 7            demodata.rds
-#> 8 definition_demodata.txt
+#> 8            demodata.rds
+#> 9 definition_demodata.txt
 #>                                                         path  status
 #> 1            ai_project/agent_control/AGENT_CONTROL_INDEX.md skipped
 #> 2               ai_project/agent_control/QC_SKILL_CONTEXT.md created
 #> 3                  ai_project/agent_control/QC_SKILL_PLAN.md created
-#> 4                ai_project/agent_control/QC_SKILL_RESULT.md created
-#> 5           ai_project/agent_control/QC_SKILL_M11SEMANTIC.md created
-#> 6   ai_project/ai_visible_data/initial_20260713/demodata.rds created
-#> 7     r_project/ai_hidden_data/initial_20260713/demodata.rds created
-#> 8 ai_project/source/initial_20260713/definition_demodata.txt created
+#> 4                   ai_project/agent_control/QC_SKILL_SAP.md created
+#> 5                ai_project/agent_control/QC_SKILL_RESULT.md created
+#> 6           ai_project/agent_control/QC_SKILL_M11SEMANTIC.md created
+#> 7   ai_project/ai_visible_data/initial_20260713/demodata.rds created
+#> 8     r_project/ai_hidden_data/initial_20260713/demodata.rds created
+#> 9 ai_project/source/initial_20260713/definition_demodata.txt created
 #>   overwritten
 #> 1       FALSE
 #> 2       FALSE
@@ -83,6 +85,7 @@ airsetup_demo(demo_dir)
 #> 6       FALSE
 #> 7       FALSE
 #> 8       FALSE
+#> 9       FALSE
 aircheck(demo_dir)
 #>                                                item   type
 #> 1                                 ai_project/source folder
@@ -99,13 +102,14 @@ aircheck(demo_dir)
 #> 12  ai_project/agent_control/AGENT_CONTROL_INDEX.md   file
 #> 13     ai_project/agent_control/QC_SKILL_CONTEXT.md   file
 #> 14        ai_project/agent_control/QC_SKILL_PLAN.md   file
-#> 15      ai_project/agent_control/QC_SKILL_RESULT.md   file
-#> 16 ai_project/agent_control/QC_SKILL_M11SEMANTIC.md   file
-#> 17                         r_project/ai_hidden_data folder
-#> 18                             r_project/.gitignore   file
-#> 19         r_project/README_DO_NOT_SHARE_WITH_AI.md   file
-#> 20                         r_project/ai_hidden_data folder
-#> 21        r_project/ai_hidden_data/initial_YYYYMMDD folder
+#> 15         ai_project/agent_control/QC_SKILL_SAP.md   file
+#> 16      ai_project/agent_control/QC_SKILL_RESULT.md   file
+#> 17 ai_project/agent_control/QC_SKILL_M11SEMANTIC.md   file
+#> 18                         r_project/ai_hidden_data folder
+#> 19                             r_project/.gitignore   file
+#> 20         r_project/README_DO_NOT_SHARE_WITH_AI.md   file
+#> 21                         r_project/ai_hidden_data folder
+#> 22        r_project/ai_hidden_data/initial_YYYYMMDD folder
 #>                                                path exists required
 #> 1                                 ai_project/source   TRUE     TRUE
 #> 2                        ai_project/ai_visible_data   TRUE     TRUE
@@ -121,13 +125,14 @@ aircheck(demo_dir)
 #> 12  ai_project/agent_control/AGENT_CONTROL_INDEX.md   TRUE     TRUE
 #> 13     ai_project/agent_control/QC_SKILL_CONTEXT.md   TRUE     TRUE
 #> 14        ai_project/agent_control/QC_SKILL_PLAN.md   TRUE     TRUE
-#> 15      ai_project/agent_control/QC_SKILL_RESULT.md   TRUE     TRUE
-#> 16 ai_project/agent_control/QC_SKILL_M11SEMANTIC.md   TRUE     TRUE
-#> 17                         r_project/ai_hidden_data   TRUE     TRUE
-#> 18                             r_project/.gitignore   TRUE     TRUE
-#> 19         r_project/README_DO_NOT_SHARE_WITH_AI.md   TRUE     TRUE
-#> 20                         r_project/ai_hidden_data   TRUE     TRUE
-#> 21        r_project/ai_hidden_data/initial_YYYYMMDD   TRUE     TRUE
+#> 15         ai_project/agent_control/QC_SKILL_SAP.md   TRUE     TRUE
+#> 16      ai_project/agent_control/QC_SKILL_RESULT.md   TRUE     TRUE
+#> 17 ai_project/agent_control/QC_SKILL_M11SEMANTIC.md   TRUE     TRUE
+#> 18                         r_project/ai_hidden_data   TRUE     TRUE
+#> 19                             r_project/.gitignore   TRUE     TRUE
+#> 20         r_project/README_DO_NOT_SHARE_WITH_AI.md   TRUE     TRUE
+#> 21                         r_project/ai_hidden_data   TRUE     TRUE
+#> 22        r_project/ai_hidden_data/initial_YYYYMMDD   TRUE     TRUE
 #>                       message
 #> 1                       Found
 #> 2                       Found
@@ -150,4 +155,5 @@ aircheck(demo_dir)
 #> 19                      Found
 #> 20                      Found
 #> 21                      Found
+#> 22                      Found
 ```

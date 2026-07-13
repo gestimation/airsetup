@@ -2,6 +2,22 @@
 
 ## airsetup 0.0.3.9000
 
+### QC skill updates
+
+- [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md)
+  now supports a separate `sap` skill that writes `QC_SKILL_SAP.md` for
+  evidence-first clinical-trial SAP review.
+- `QC_SKILL_PLAN.md` is now reserved for general coding plans and
+  analysis specifications; clinical-trial SAPs route to
+  `QC_SKILL_SAP.md`.
+- `QC_SKILL_M11SEMANTIC.md` now uses an evidence-gated four-column
+  semantic map with 14 analysis-critical M11 terms and explicit
+  `Cannot assess` handling. Study-specific content must not be completed
+  from convention or external knowledge.
+- The SAP skill includes a paraphrased 55-item SAP checklist plus an
+  M11/E9(R1)-informed supplement. It reports attention items by default
+  and does not require `M11SEMANTIC_MAP.md`.
+
 ### Breaking changes
 
 - [`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md)
