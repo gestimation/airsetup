@@ -2,14 +2,20 @@
 
 `airskill()` adds lightweight QC skill Markdown files to an existing
 airsetup project. The files are written under
-`ai_project/agent_control/`.
+`ai_project/agent_control/`. Use `"plan"` for a general coding plan or
+analysis specification and `"sap"` for a clinical-trial Statistical
+Analysis Plan. These are normally alternative review tracks. SAP QC can
+use `M11SEMANTIC_MAP.md` when it is available, but it can also review
+the supplied protocol or the SAP alone. When cross-document evidence is
+unavailable, the generated SAP skill instructs the reviewer to report
+`Cannot assess`, not infer missing facts.
 
 ## Usage
 
 ``` r
 airskill(
   path = ".",
-  skills = c("context", "plan", "result", "m11_semantic"),
+  skills = c("context", "plan", "sap", "result", "m11_semantic"),
   overwrite = FALSE,
   quiet = FALSE
 )
@@ -25,7 +31,7 @@ airskill(
 - skills:
 
   Character vector of skills to add. Supported values are `"context"`,
-  `"plan"`, `"result"`, and `"m11_semantic"`.
+  `"plan"`, `"sap"`, `"result"`, and `"m11_semantic"`.
 
 - overwrite:
 
@@ -74,6 +80,8 @@ airskill(project_dir, skills = c("context", "plan"))
 #> 1 skipped       FALSE
 #> 2 skipped       FALSE
 #> 3 skipped       FALSE
+airskill(project_dir, skills = "sap")
+#> Error: Unsupported skill value: sap. Supported values are: context, plan, result, m11_semantic.
 airskill(project_dir, skills = "m11_semantic")
 #> skipped: ai_project/agent_control/AGENT_CONTROL_INDEX.md
 #> skipped: ai_project/agent_control/QC_SKILL_M11SEMANTIC.md

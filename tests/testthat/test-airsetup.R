@@ -36,6 +36,7 @@ expect_airsetup_default_structure <- function(path) {
   expect_true(file.exists(file.path(agent_control_dir, "QC_SKILL_CONTEXT.md")))
   expect_true(file.exists(file.path(agent_control_dir, "QC_SKILL_M11SEMANTIC.md")))
   expect_true(file.exists(file.path(agent_control_dir, "QC_SKILL_PLAN.md")))
+  expect_true(file.exists(file.path(agent_control_dir, "QC_SKILL_SAP.md")))
   expect_true(file.exists(file.path(agent_control_dir, "QC_SKILL_RESULT.md")))
   expect_false(dir.exists(file.path(path, "ai_project", "skills")))
 }

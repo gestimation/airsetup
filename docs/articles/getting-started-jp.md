@@ -201,16 +201,19 @@ pak::pak("gestimation/airsetup")
 
 このパッケージはまだアルファ版のためCRANに提出していませんが、`testthat`を用いた100件以上のテストに合格しています。[`airsetup()`](https://gestimation.github.io/airsetup/reference/airsetup.md)を実行した結果、指定したパス以外に影響を与えることはありません。
 
-[`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md)を用いたこのチュートリアルでは、オプションのQCスキルテンプレートがagent_control/skillsフォルダ内に生成されています。プロンプトで「QCスキル」と指示することで、より質の高い確認作業を行うことができます。
+[`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md)を用いたこのチュートリアルでは、オプションのQCスキルテンプレートが`agent_control/`フォルダ内に生成されています。プロンプトで「QCスキル」と指示することで、より質の高い確認作業を行うことができます。
 
 - `QC_SKILL_CONTEXT.md`:
   計画のドラフトやRコーディングに先立って、コンテキスト情報が明確かどうかを確認します
 - `QC_SKILL_PLAN.md`:
-  コーディング計画または統計解析計画（SAP）が、Rで実装するためにじゅうぶんな情報を持っているかどうかを確認します。
+  一般的なコーディング計画または解析仕様が、Rで実装するためにじゅうぶんな情報を持っているかどうかを確認します。
+- `QC_SKILL_SAP.md`:
+  55項目のSAPチェックリスト要約とM11/E9(R1)-informedな補足を用いて、臨床試験SAPを根拠優先で確認します。M11
+  semantic mapは利用可能な場合に参照しますが、必須ではありません。
 - `QC_SKILL_RESULT.md`:
   解析結果が内部的に一貫しており、計画に沿ったもので、安全に解釈できるかどうかを確認します
 - `QC_SKILL_M11SEMANTIC.md`:
-  Rの計画やコーディングに先立って、複数の臨床試験資料にまたがるM11-informedな意味整理を支援します。このスキルはデフォルトで生成されますが、通常の文脈QCではなく、M11/電子プロトコール関連のタスク、または複雑な臨床試験資料の意味論的レビューにのみ使用してください。
+  Rの計画やコーディングに先立って、解析上重要な項目を根拠優先で整理します。通常の文脈QCではなく、M11/電子プロトコール関連のタスク、または複雑な臨床試験資料の意味論的レビューにのみ使用してください。
 
 もし、AIがこのワークフローの中でどのようにふるまうのかに興味を持たれたなら、[`airsetup_demo()`](https://gestimation.github.io/airsetup/reference/airsetup_demo.md)で生成される`AGENTS.md`、フォルダ構造、コンテキスト資料をご覧ください。
 

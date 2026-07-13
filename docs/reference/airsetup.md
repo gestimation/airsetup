@@ -28,7 +28,8 @@ airsetup(
 
 - skills:
 
-  Logical. If `TRUE`, add QC skill templates under
+  Logical. If `TRUE`, add the context, general plan, clinical SAP,
+  result, and M11 semantic QC skill templates under
   `ai_project/agent_control/`.
 
 - qc_agent:

@@ -1,6 +1,6 @@
 Package: airsetup
 Title: AI-Assisted R Workflow with QC and Clear Boundaries
-Version: 0.0.3
+Version: 0.0.4
 Authors@R:
     person("gestimation", "Toolkit", , "maintainer@example.com", role = c("aut", "cre"))
 Author: gestimation Toolkit
@@ -10,7 +10,8 @@ Description: Lightweight workflow infrastructure for setting up minimal
     folder with source, dummy-data, AI-output, R-output, QC, log, and
     agent-control areas,
     plus AGENTS.md guidance, QC skill templates, including QC_SKILL_CONTEXT.md,
-    QC_SKILL_PLAN.md, QC_SKILL_RESULT.md, QC_SKILL_M11SEMANTIC.md,
+    QC_SKILL_PLAN.md, QC_SKILL_SAP.md, QC_SKILL_RESULT.md,
+    QC_SKILL_M11SEMANTIC.md,
     AGENT_CONTROL_INDEX.md, and a QC_STATUS.md
     tracker. With split = TRUE, it also creates a sibling R execution folder for non-AI-visible
     analysis data. With qc_agent = TRUE, it adds independent QC agent scaffolding and

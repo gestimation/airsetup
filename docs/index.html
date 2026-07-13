@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">airsetup</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
 <!-- badges: end -->
 <p>Clear boundaries, flexible QC, and traceable structure for AI-assisted R analysis.</p>
 <p><code>airsetup</code> creates a small, opinionated folder structure for R analysis projects where AI agents help write scripts, inspect visible dummy data, and review outputs, while hidden analysis data stays outside the AI-visible workspace.</p>
-<p>It does not provide statistical analysis functions. Instead, it prepares separated folders, a minimal <code>AGENTS.md</code>, a <code>QC_STATUS.md</code> tracker, optional lightweight QC skill templates for context review, plan review, result review, and M11-informed semantic review, and optional independent QC agent scaffolding.</p>
+<p>It does not provide statistical analysis functions. Instead, it prepares separated folders, a minimal <code>AGENTS.md</code>, a <code>QC_STATUS.md</code> tracker, optional lightweight QC skill templates for context review, general plan review, clinical SAP review, result review, and M11-informed semantic review, and optional independent QC agent scaffolding.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -82,7 +82,10 @@
 <span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="st">"project"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="st">"project"</span>, qc_agent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="st">"project"</span>, split <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="st">"project"</span>, skills <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/airsetup.html">airsetup</a></span><span class="op">(</span><span class="st">"project"</span>, skills <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Add only the SAP QC skill to an existing airsetup project</span></span>
+<span><span class="fu"><a href="reference/airskill.html">airskill</a></span><span class="op">(</span><span class="st">"project"</span>, skills <span class="op">=</span> <span class="st">"sap"</span><span class="op">)</span></span></code></pre></div>
 <p>By default, <code><a href="reference/airsetup.html">airsetup()</a></code> uses <code>split = TRUE</code>, <code>skills = TRUE</code>, and <code>qc_agent = FALSE</code>. With <code>split = TRUE</code>, it creates two sibling folders:</p>
 <pre class="text"><code>my_analysis/
 +-- ai_project/
@@ -226,7 +229,12 @@ An example of R project folder
 <tr>
 <td><code><a href="reference/airskill.html">airskill()</a></code></td>
 <td><code>ai_project/agent_control/QC_SKILL_PLAN.md</code></td>
-<td>Plan and SAP implementability QC skill.</td>
+<td>General coding-plan and analysis-specification QC skill.</td>
+</tr>
+<tr>
+<td><code><a href="reference/airskill.html">airskill()</a></code></td>
+<td><code>ai_project/agent_control/QC_SKILL_SAP.md</code></td>
+<td>Evidence-first clinical-trial SAP QC skill.</td>
 </tr>
 <tr>
 <td><code><a href="reference/airskill.html">airskill()</a></code></td>
@@ -298,7 +306,12 @@ An example of R project folder
 <tr>
 <td>Plan QC</td>
 <td><code>ai_project/qc/plan-qc-001.md</code></td>
-<td>Coding plan or SAP QC report.</td>
+<td>General coding-plan QC report.</td>
+</tr>
+<tr>
+<td>Clinical SAP QC</td>
+<td><code>ai_project/qc/sap-qc-001.md</code></td>
+<td>Clinical-trial SAP completeness and implementation-readiness QC report.</td>
 </tr>
 <tr>
 <td>Result QC</td>
@@ -382,11 +395,13 @@ An example of AI-hidden data folder
 <p>The generated skill files are intended to support self-checking steps in an AI-assisted R workflow.</p>
 <ul>
 <li><p><code>QC_SKILL_CONTEXT.md</code>: checks whether the supplied analysis context is clear enough before drafting a plan or generating R code.</p></li>
-<li><p><code>QC_SKILL_PLAN.md</code>: checks whether an coding plan or SAP is clear enough for R implementation.</p></li>
+<li><p><code>QC_SKILL_PLAN.md</code>: checks whether a general coding plan or non-SAP analysis specification is clear enough for R implementation.</p></li>
+<li><p><code>QC_SKILL_SAP.md</code>: performs evidence-first clinical-trial SAP QC using a paraphrased 55-item SAP checklist and an M11/E9(R1)-informed supplement. It can use <code>M11SEMANTIC_MAP.md</code> or the supplied protocol when available, but can also review the SAP alone. Unavailable cross-document evidence is reported as <code>Cannot assess</code>, not completed by assumption.</p></li>
 <li><p><code>QC_SKILL_RESULT.md</code>: checks whether analysis results are internally consistent, traceable, aligned with the plan, and safe to interpret.</p></li>
-<li><p><code>QC_SKILL_M11SEMANTIC.md</code>: supports M11-informed semantic organization across multiple clinical-trial materials before R planning or R coding. It is generated by default but should be used only for M11/electronic-protocol tasks or complex clinical-trial semantic review, not ordinary context QC.</p></li>
+<li><p><code>QC_SKILL_M11SEMANTIC.md</code>: supports evidence-first M11-informed semantic organization across multiple clinical-trial materials before R planning or R coding. It uses a compact analysis-critical map and should be used only for M11/electronic-protocol tasks or complex clinical-trial semantic review, not ordinary context QC.</p></li>
 <li><p><code>AGENT_CONTROL_INDEX.md</code>: explains the agent control files and available QC skills.</p></li>
 </ul>
+<p><code>QC_SKILL_PLAN.md</code> and <code>QC_SKILL_SAP.md</code> are normally alternative review tracks. Across the clinical skills, the governing rule is: no evidence, no study-specific assertion.</p>
 <p>The skills use a compact QC report format with domain-level status, issue severity, readiness for next steps, cannot-assess items, AI assumption risks, and recommended handoff actions.</p>
 <p>They are intentionally lightweight. A Pass from these skills does not mean formal statistical approval, independent validation, regulatory approval, or final scientific acceptance.</p>
 </div>

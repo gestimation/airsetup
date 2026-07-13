@@ -6,7 +6,7 @@
 \usage{
 airskill(
   path = ".",
-  skills = c("context", "plan", "result", "m11_semantic"),
+  skills = c("context", "plan", "sap", "result", "m11_semantic"),
   overwrite = FALSE,
   quiet = FALSE
 )
@@ -15,7 +15,7 @@ airskill(
 \item{path}{Project root created by \code{\link[=airsetup]{airsetup()}}.}
 
 \item{skills}{Character vector of skills to add. Supported values are
-\code{"context"}, \code{"plan"}, \code{"result"}, and \code{"m11_semantic"}.}
+\code{"context"}, \code{"plan"}, \code{"sap"}, \code{"result"}, and \code{"m11_semantic"}.}
 
 \item{overwrite}{Logical. If \code{FALSE}, existing files are not overwritten.}
 
@@ -28,11 +28,18 @@ A data frame with columns \code{file}, \code{path}, \code{status}, and
 \description{
 \code{airskill()} adds lightweight QC skill Markdown files to an existing
 airsetup project. The files are written under \verb{ai_project/agent_control/}.
+Use \code{"plan"} for a general coding plan or analysis specification and
+\code{"sap"} for a clinical-trial Statistical Analysis Plan. These are normally
+alternative review tracks. SAP QC can use \code{M11SEMANTIC_MAP.md} when it is
+available, but it can also review the supplied protocol or the SAP alone.
+When cross-document evidence is unavailable, the generated SAP skill
+instructs the reviewer to report \verb{Cannot assess}, not infer missing facts.
 }
 \examples{
 project_dir <- file.path(tempdir(), "airskill_example")
 airsetup(project_dir, split = FALSE, skills = FALSE)
 airskill(project_dir)
 airskill(project_dir, skills = c("context", "plan"))
+airskill(project_dir, skills = "sap")
 airskill(project_dir, skills = "m11_semantic")
 }

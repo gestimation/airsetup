@@ -19,7 +19,8 @@ airsetup(
 \item{split}{Logical. If \code{TRUE}, create sibling \code{ai_project} and \code{r_project}
 folders. If \code{FALSE}, create only \code{ai_project}.}
 
-\item{skills}{Logical. If \code{TRUE}, add QC skill templates under
+\item{skills}{Logical. If \code{TRUE}, add the context, general plan, clinical
+SAP, result, and M11 semantic QC skill templates under
 \verb{ai_project/agent_control/}.}
 
 \item{qc_agent}{Logical. If \code{TRUE}, add independent QC agent specifications

@@ -747,7 +747,8 @@ write_demo_data_definition <- function(path, overwrite = FALSE) {
 #' @param path Parent directory to create or update.
 #' @param split Logical. If `TRUE`, create sibling `ai_project` and `r_project`
 #'   folders. If `FALSE`, create only `ai_project`.
-#' @param skills Logical. If `TRUE`, add QC skill templates under
+#' @param skills Logical. If `TRUE`, add the context, general plan, clinical
+#'   SAP, result, and M11 semantic QC skill templates under
 #'   `ai_project/agent_control/`.
 #' @param qc_agent Logical. If `TRUE`, add independent QC agent specifications
 #'   and Plan gate review folders.
@@ -1136,7 +1137,8 @@ create_qc_status_md <- function(path, overwrite = FALSE) {
 #'
 #' @param path Parent project directory to check.
 #' @param split Logical. If `TRUE`, check the sibling `r_project` scaffold.
-#' @param skills Logical. If `TRUE`, check QC skill templates under
+#' @param skills Logical. If `TRUE`, check the context, general plan, clinical
+#'   SAP, result, and M11 semantic QC skill templates under
 #'   `ai_project/agent_control/`.
 #' @param qc_agent Logical. If `TRUE`, check independent QC agent scaffolding.
 #'
@@ -1226,6 +1228,7 @@ aircheck <- function(path, split = TRUE, skills = TRUE, qc_agent = FALSE) {
       c(
         "QC_SKILL_CONTEXT.md",
         "QC_SKILL_PLAN.md",
+        "QC_SKILL_SAP.md",
         "QC_SKILL_RESULT.md",
         "QC_SKILL_M11SEMANTIC.md"
       )

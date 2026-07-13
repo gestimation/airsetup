@@ -20,7 +20,8 @@ aircheck(path, split = TRUE, skills = TRUE, qc_agent = FALSE)
 
 - skills:
 
-  Logical. If `TRUE`, check QC skill templates under
+  Logical. If `TRUE`, check the context, general plan, clinical SAP,
+  result, and M11 semantic QC skill templates under
   `ai_project/agent_control/`.
 
 - qc_agent:
