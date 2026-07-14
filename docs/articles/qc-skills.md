@@ -1,0 +1,267 @@
+# QC skills guide
+
+airsetup provides five skills for instructing an AI agent to perform
+quality control (QC) at different stages of an AI-assisted R workflow.
+These skills review analysis requests, clinical-trial documents,
+analysis plans, and R outputs. They produce structured evidence that
+helps the user decide whether enough information is available to
+proceed.
+
+QC does not delegate decisions to the AI. It makes uncertainties,
+evidence, assumption risks, and required actions visible so that the
+user or responsible reviewer can make an informed decision.
+
+[Japanese
+version](https://gestimation.github.io/airsetup/articles/qc-skills-jp.md)
+
+## Choose the skill that matches the current stage
+
+Select the skill closest to the current stage of work.
+
+| Current situation | Skill | Primary question |
+|----|----|----|
+| An analysis request or data information is available | CONTEXT QC | Is there enough information to start the analysis? |
+| A general analysis plan has been drafted | PLAN QC | Can R code be written from this plan? |
+| A clinical-trial SAP has been drafted | SAP QC | Are the statistical specifications and supporting evidence sufficient? |
+| Information must be organized across clinical-trial documents | M11 SEMANTIC QC | What can be extracted with document-supported evidence? |
+| Tables, figures, or model outputs are available | RESULT QC | Can these results be safely reported and interpreted? |
+
+When uncertain, start with CONTEXT QC. If several ordinary skills appear
+applicable, begin with the earliest unresolved workflow stage.
+
+``` text
+Context
+    ↓
+Analysis plan or SAP
+    ↓
+R coding and analysis execution
+    ↓
+Results
+```
+
+Even when results already exist, unresolved meanings of the analysis
+population or variables may require returning to context review rather
+than relying on RESULT QC alone.
+
+## Add skills to a project
+
+[`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md)
+adds Markdown skill files for an AI agent to a project. Creating the
+files does not itself start QC. After creation, identify the skill to
+use in the request to the AI agent.
+
+Add all skills:
+
+``` r
+
+airskill("project folder")
+```
+
+Add selected skills:
+
+``` r
+
+airskill(
+  path = "project folder",
+  skills = c("context", "plan", "result")
+)
+```
+
+Add the clinical-trial skills:
+
+``` r
+
+airskill(
+  path = "project folder",
+  skills = c("sap", "m11_semantic")
+)
+```
+
+Skill files are created in `ai_project/agent_control/`.
+
+| Value in `skills` | File created              |
+|-------------------|---------------------------|
+| `context`         | `QC_SKILL_CONTEXT.md`     |
+| `plan`            | `QC_SKILL_PLAN.md`        |
+| `sap`             | `QC_SKILL_SAP.md`         |
+| `m11_semantic`    | `QC_SKILL_M11SEMANTIC.md` |
+| `result`          | `QC_SKILL_RESULT.md`      |
+
+`AGENT_CONTROL_INDEX.md`, created in the same folder, summarizes the
+purpose and selection rules for each skill.
+
+## PLAN QC versus SAP QC
+
+PLAN QC and SAP QC are alternatives selected according to the document
+under review; they are not normally consecutive mandatory steps.
+
+PLAN QC applies to general analysis plans and coding specifications,
+including descriptive analyses, cross-tabulations, epidemiologic or
+registry studies, and exploratory analyses.
+
+SAP QC applies to statistical analysis plans for clinical trials. In
+addition to implementation readiness, it reviews consistency with the
+protocol, estimands, analysis sets, interim analyses, multiplicity,
+missing data, sensitivity analyses, safety analyses, version control,
+and revision history.
+
+When a clinical-trial SAP is available, select SAP QC rather than PLAN
+QC in most cases.
+
+## When to use M11 SEMANTIC QC
+
+M11 SEMANTIC QC is not mandatory for every clinical trial. It is useful
+when:
+
+- information is distributed across the protocol, SAP, CRF, and data
+  definitions;
+- estimands or intercurrent events must be organized;
+- endpoints must be mapped to source variables;
+- cross-document inconsistencies must be identified;
+- trial semantics must be organized before SAP development; or
+- ICH M11 is being used as a reference framework for semantic
+  organization.
+
+For a simple dataset, variable list, or R coding request, CONTEXT QC is
+usually sufficient. M11 SEMANTIC QC does not certify ICH M11 compliance;
+it uses M11 concepts as a reference framework for organizing
+clinical-trial semantics.
+
+## Standard workflows
+
+### General analysis
+
+``` text
+Analysis request and data information
+    ↓
+CONTEXT QC
+    ↓
+General analysis plan
+    ↓
+PLAN QC
+    ↓
+R coding and analysis execution
+    ↓
+RESULT QC
+    ↓
+Reporting and interpretation
+```
+
+### Clinical trial
+
+``` text
+Protocol, CRF, data definitions, and related materials
+    ↓
+M11 SEMANTIC QC, when needed
+    ↓
+SAP
+    ↓
+SAP QC
+    ↓
+R coding and analysis execution
+    ↓
+RESULT QC
+    ↓
+Reporting and statistical review
+```
+
+## Principles shared by all QC skills
+
+### Do not infer missing study-specific information
+
+If information cannot be verified from the documents or data, record it
+as `Cannot assess`, `Unknown`, or an unresolved item rather than filling
+it with a plausible value.
+
+### Separate documented facts from AI proposals
+
+Distinguish document-supported facts, cross-document inconsistencies,
+and AI proposals. An AI proposal is not an approved study specification.
+
+### Provide evidence
+
+Where possible, cite filenames, document sections, tables, variable
+names, code, or logs that support each judgment.
+
+### Do not reduce QC to a score
+
+Record the issue, impact, evidence, and recommended action. A single
+critical issue may block the next step even when most other items appear
+complete.
+
+## Interpreting QC results
+
+| Status | Meaning |
+|----|----|
+| `OK` | No problem was identified within the provided materials |
+| `Needs clarification` | Confirmation by the user or responsible reviewer is required |
+| `Problem` | Correction or another action is required |
+| `Cannot assess` | Required materials are unavailable |
+| `Not applicable` | The item does not apply to the current task |
+
+| Severity | Meaning |
+|----|----|
+| `Critical` | Do not proceed until the issue is resolved |
+| `Major` | Resolve before the result or implementation is used |
+| `Minor` | Correction is desirable but normally does not change the main conclusion |
+| `Note` | Limitation, caution, or reference information |
+
+Status and severity are separate. For example, an analysis-population
+definition may be `Cannot assess` and still constitute a blocking issue.
+
+## Requesting QC from an AI agent
+
+### Name the skill
+
+``` text
+Use QC_SKILL_CONTEXT.md to perform CONTEXT QC
+for the current analysis request.
+
+Do not infer missing information, and explicitly identify
+items that cannot be assessed.
+```
+
+### Ask the AI agent to select a skill
+
+``` text
+Review the available materials and the current workflow stage,
+then select and apply the most appropriate airsetup QC skill.
+
+State which skill you selected and why before starting the review.
+```
+
+Ordinarily, do not run several skills simultaneously. Start with the
+earliest unresolved stage.
+
+## After receiving a QC report
+
+Use the report as a working document rather than as a certificate of
+approval.
+
+1.  Review `Critical` and `Major` issues.
+2.  Identify `Cannot assess` items that affect the next step.
+3.  Answer clarification questions and decision items.
+4.  Revise the documents, data definitions, plan, code, or output.
+5.  If needed, conduct another review using the next sequential report
+    number.
+6.  Carry unresolved items into `QC_STATUS.md`.
+
+Do not normally overwrite earlier reports; retain them so the review
+history remains traceable.
+
+## Detailed references
+
+- [CONTEXT
+  QC](https://gestimation.github.io/airsetup/articles/qc-context.md)
+- [PLAN QC](https://gestimation.github.io/airsetup/articles/qc-plan.md)
+- [SAP QC](https://gestimation.github.io/airsetup/articles/qc-sap.md)
+- [M11 SEMANTIC
+  QC](https://gestimation.github.io/airsetup/articles/qc-m11semantic.md)
+- [RESULT
+  QC](https://gestimation.github.io/airsetup/articles/qc-result.md)
+
+The scope of each QC skill depends on the supplied materials. These
+skills do not automatically guarantee the accuracy of source data, code,
+statistical methods, or scientific conclusions. Important decisions
+require review by the appropriate investigator, statistician, data
+specialist, or other responsible person.

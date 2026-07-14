@@ -54,20 +54,23 @@ airskill(project_dir)
 #> skipped: ai_project/agent_control/AGENT_CONTROL_INDEX.md
 #> created: ai_project/agent_control/QC_SKILL_CONTEXT.md
 #> created: ai_project/agent_control/QC_SKILL_PLAN.md
+#> created: ai_project/agent_control/QC_SKILL_SAP.md
 #> created: ai_project/agent_control/QC_SKILL_RESULT.md
 #> created: ai_project/agent_control/QC_SKILL_M11SEMANTIC.md
 #>                      file                                             path
 #> 1  AGENT_CONTROL_INDEX.md  ai_project/agent_control/AGENT_CONTROL_INDEX.md
 #> 2     QC_SKILL_CONTEXT.md     ai_project/agent_control/QC_SKILL_CONTEXT.md
 #> 3        QC_SKILL_PLAN.md        ai_project/agent_control/QC_SKILL_PLAN.md
-#> 4      QC_SKILL_RESULT.md      ai_project/agent_control/QC_SKILL_RESULT.md
-#> 5 QC_SKILL_M11SEMANTIC.md ai_project/agent_control/QC_SKILL_M11SEMANTIC.md
+#> 4         QC_SKILL_SAP.md         ai_project/agent_control/QC_SKILL_SAP.md
+#> 5      QC_SKILL_RESULT.md      ai_project/agent_control/QC_SKILL_RESULT.md
+#> 6 QC_SKILL_M11SEMANTIC.md ai_project/agent_control/QC_SKILL_M11SEMANTIC.md
 #>    status overwritten
 #> 1 skipped       FALSE
 #> 2 created       FALSE
 #> 3 created       FALSE
 #> 4 created       FALSE
 #> 5 created       FALSE
+#> 6 created       FALSE
 airskill(project_dir, skills = c("context", "plan"))
 #> skipped: ai_project/agent_control/AGENT_CONTROL_INDEX.md
 #> skipped: ai_project/agent_control/QC_SKILL_CONTEXT.md
@@ -81,7 +84,14 @@ airskill(project_dir, skills = c("context", "plan"))
 #> 2 skipped       FALSE
 #> 3 skipped       FALSE
 airskill(project_dir, skills = "sap")
-#> Error: Unsupported skill value: sap. Supported values are: context, plan, result, m11_semantic.
+#> skipped: ai_project/agent_control/AGENT_CONTROL_INDEX.md
+#> skipped: ai_project/agent_control/QC_SKILL_SAP.md
+#>                     file                                            path
+#> 1 AGENT_CONTROL_INDEX.md ai_project/agent_control/AGENT_CONTROL_INDEX.md
+#> 2        QC_SKILL_SAP.md        ai_project/agent_control/QC_SKILL_SAP.md
+#>    status overwritten
+#> 1 skipped       FALSE
+#> 2 skipped       FALSE
 airskill(project_dir, skills = "m11_semantic")
 #> skipped: ai_project/agent_control/AGENT_CONTROL_INDEX.md
 #> skipped: ai_project/agent_control/QC_SKILL_M11SEMANTIC.md

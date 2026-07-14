@@ -11,7 +11,7 @@ home:
 
 navbar:
   structure:
-    left:  [getting_started, getting_started_jp, reference]
+    left:  [getting_started, getting_started_jp, qc_guides_en, qc_guides_jp, reference]
     right: [search, github]
   components:
     getting_started:
@@ -20,6 +20,36 @@ navbar:
     getting_started_jp:
       text: Getting started [JP]
       href: articles/getting-started-jp.html
+    qc_guides_en:
+      text: QC guides [EN]
+      menu:
+      - text: QC skills guide
+        href: articles/qc-skills.html
+      - text: CONTEXT QC
+        href: articles/qc-context.html
+      - text: PLAN QC
+        href: articles/qc-plan.html
+      - text: SAP QC
+        href: articles/qc-sap.html
+      - text: M11 SEMANTIC QC
+        href: articles/qc-m11semantic.html
+      - text: RESULT QC
+        href: articles/qc-result.html
+    qc_guides_jp:
+      text: QC guides [JP]
+      menu:
+      - text: QCスキルガイド
+        href: articles/qc-skills-jp.html
+      - text: CONTEXT QC
+        href: articles/qc-context-jp.html
+      - text: PLAN QC
+        href: articles/qc-plan-jp.html
+      - text: SAP QC
+        href: articles/qc-sap-jp.html
+      - text: M11 SEMANTIC QC
+        href: articles/qc-m11semantic-jp.html
+      - text: RESULT QC
+        href: articles/qc-result-jp.html
     reference:
       text: Reference
       href: reference/index.html
@@ -31,6 +61,22 @@ articles:
 - title: "Getting started－チャットの方が得意な研究者のためのAI & Rワークフロー"
   contents:
   - getting-started-jp
+- title: QC guides [EN]
+  contents:
+  - qc-skills
+  - qc-context
+  - qc-plan
+  - qc-sap
+  - qc-m11semantic
+  - qc-result
+- title: QC guides [JP]
+  contents:
+  - qc-skills-jp
+  - qc-context-jp
+  - qc-plan-jp
+  - qc-sap-jp
+  - qc-m11semantic-jp
+  - qc-result-jp
 
 reference:
 - title: Create and check projects

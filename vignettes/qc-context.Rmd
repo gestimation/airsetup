@@ -1,0 +1,195 @@
+---
+title: "CONTEXT QC technical reference"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CONTEXT QC technical reference}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+CONTEXT QC evaluates whether the analysis request, dataset, population, variables, method, and output assumptions can be interpreted unambiguously before an analysis plan or R code is created.
+
+[Return to the QC skills guide](qc-skills.html)
+
+[Japanese version](qc-context-jp.html)
+
+## Purpose and scope
+
+CONTEXT QC determines whether the inputs for the requested next step are **unambiguous, traceable, and usable without study-specific inference**. Its purpose is not to choose an advanced statistical method, but to assess the clarity and usability of the analysis context.
+
+Assessment is performed by domain—purpose, dataset, population, analysis unit, variables, method, and output—rather than by assigning one impression to the entire request. Evidence and status are recorded for each domain, followed by readiness for each next step.
+
+### Out of scope
+
+- Implementation readiness of a general analysis plan: PLAN QC
+- Statistical specifications in a clinical-trial SAP: SAP QC
+- Semantic organization across clinical-trial documents: M11 SEMANTIC QC
+- Review of completed analysis results: RESULT QC
+
+## Entry criteria
+
+At minimum, a task request or user instruction must be available. Datasets, variable information, plans, code, and earlier QC reports are optional; any domain that depends on unavailable material is recorded as `Cannot assess`.
+
+| Input | Requirement |
+|---|---|
+| Task request | Required; the purpose or requested deliverable must be identifiable |
+| Dataset or variable information | Normally required to assess readiness for R coding |
+| Population and analysis unit | Required for aggregation or model implementation |
+| Analysis method and output specification | Required to assess readiness for those steps |
+| Earlier plans, code, results, or QC | Optional; reviewed for consistency when supplied |
+
+## When to use it
+
+- After receiving a new analysis request or data definition
+- Before drafting an analysis plan or R code
+- When the meaning of a variable or population becomes unclear
+- When RESULT QC identifies a missing prerequisite
+
+Use [SAP QC](qc-sap.html) for a clinical-trial SAP and [M11 SEMANTIC QC](qc-m11semantic.html) when semantics must be organized across multiple clinical-trial documents.
+
+## Materials reviewed
+
+| Material | Main review purpose |
+|---|---|
+| Analysis request or research question | Purpose, comparison, outcome, required output |
+| Dataset | File, format, row unit, record count, variables |
+| Data definition | Meaning, type, unit, categories, missing-value codes |
+| Population definition | Inclusion, exclusion, analysis flags |
+| Method specification | Summary, model, comparison, adjustment, test |
+| Output specification | Tables, figures, model outputs, paths, formats |
+| Execution environment | R, packages, versions, reproducibility requirements |
+
+Not every material is mandatory, but fewer materials reduce the assessable scope.
+
+## Six review domains
+
+### 1. Purpose
+
+- Express the research or operational question in one sentence.
+- Identify whether the analysis is descriptive, comparative, predictive, associational, or causal.
+- Map the primary outcome, comparison, and assessment time to the request.
+- Identify the deliverable and the decision it is intended to support.
+
+A broad request such as “analyze the data” requires clarification before planning or coding.
+
+### 2. Dataset
+
+- Identify each file by path, filename, version, or date.
+- Specify format, encoding, and import method.
+- Determine what one row represents.
+- For multiple files, identify join keys, relationships, and duplicate handling.
+- Identify the data-cut or update date when relevant.
+
+### 3. Population and analysis unit
+
+- Identify whether the analysis unit is a participant, observation, site, visit, or another unit.
+- Translate inclusion and exclusion criteria into data fields and logical conditions.
+- Define handling of duplicates, multiple records, and repeated measures.
+- Identify analysis-flag variable names and included or excluded values.
+
+### 4. Variables
+
+- Map column names to analysis concepts.
+- Identify types such as numeric, character, and date.
+- Identify units, category codes, labels, and reference categories.
+- Distinguish missing, not measured, not applicable, and special values.
+- For derived variables, identify inputs, formula, assessment time, and precedence rules.
+
+Do not infer whether `0` means absence, control, or not measured from the variable name alone.
+
+### 5. Analysis method
+
+- Translate the request into implementation units such as summaries, tests, models, and plots.
+- Map groups, time points, strata, and adjustment variables to columns or definitions.
+- Define missing-data handling for populations, denominators, and model inputs.
+- Identify effect measures, confidence levels, p-values, and one- or two-sided tests when needed.
+- If the method is unspecified, distinguish a required user decision from permission to offer options.
+
+### 6. Output and reproducibility
+
+- Enumerate required tables, figures, estimates, model outputs, and narrative text.
+- Identify output formats, destinations, and filenames.
+- Specify titles, units, digits, denominators, missing-value displays, and footnotes.
+- Identify intended R packages and version constraints.
+- Identify logs, random seeds, `sessionInfo()`, and other reproducibility records.
+
+## AI assumption risks
+
+| Missing information | Possible AI assumption | Main impact |
+|---|---|---|
+| Row unit | Treat one row as one participant | Counts and models may change |
+| Group coding | Treat `0` as control | Comparison direction may be reversed |
+| Missing-value coding | Treat a special value as observed | Summaries and estimates may change |
+| Population | Analyze every record | Denominators and conclusions may change |
+| Unit | Infer units from a column name | Effect sizes and labels may be wrong |
+| Output specification | Use a conventional format | Deliverables may not match expectations |
+
+Record such items as questions or unresolved items, not facts.
+
+## Decision rules and evidence requirements
+
+Use `OK`, `Needs clarification`, `Problem`, `Cannot assess`, or `Not applicable` for each domain.
+
+| Status | Application |
+|---|---|
+| `OK` | Required information is unambiguous and supported by evidence |
+| `Needs clarification` | Limited confirmation is needed and its impact can be bounded |
+| `Problem` | Ambiguity, inconsistency, or omission affects accuracy or reproducibility |
+| `Cannot assess` | Required material is missing, unreadable, or outside the review scope |
+| `Not applicable` | Evidence supports that the domain does not apply |
+
+For `Problem` and `Cannot assess`, create a corresponding issue, cannot-assess item, or AI assumption risk. `Evidence` should identify the filename, section, table, variable, codebook entry, or relevant user instruction—not merely state that the information is “in the materials.”
+
+### Overall judgment and readiness
+
+- At least one Critical issue: normally `Not ready`; overall judgment `Revision required`, `Fail`, or `Cannot assess`.
+- At least one Major issue: normally `Partially ready` or `Not ready` for the affected step.
+- Minor issues only: `Conditional pass` or `Mostly ready` may be appropriate.
+- Notes only: `Pass` may be appropriate.
+- Required information unavailable: use `Cannot assess` rather than inference.
+
+Do not use a numeric score. Issue severity takes precedence over an overall impression.
+
+## Output file
+
+```text
+ai_project/qc/context-qc-001.md
+```
+
+Increase the number for later reviews and retain earlier reports. The standard report contains 12 sections: Skill information, Overall judgment, Readiness by next step, Materials reviewed, Domain assessment, Issues, Cannot-assess items, AI assumption risks, Required clarification questions, Recommended next actions, Quick assessment, and Handoff to next workflow step.
+
+The Issues table contains at least `ID`, `Severity`, `Issue`, `Evidence`, and `Recommended action`.
+
+## Decision to proceed
+
+Before planning or R coding, the following should be sufficiently clear for implementation: analysis purpose, input data and row unit, population, primary variables and codes, requested analyses or summaries, required outputs, and critical unresolved items.
+
+Limited exploratory work may still be possible when uncertainty is bounded. Document the permitted scope and any assumptions explicitly.
+
+## Decision examples
+
+### `OK`
+
+```text
+Dataset clarity: OK
+Evidence: "Input data" in analysis_request.md; PATID row in definition.csv
+Assessment: Use analysis.rds. One row represents one participant, and PATID is the participant identifier.
+```
+
+### `Cannot assess`
+
+```text
+Population and analysis-unit clarity: Cannot assess
+Missing information: Included value for the analysis-population flag
+Why needed: The FAS population cannot be extracted reproducibly.
+```
+
+A statement such as “`FASFL == 1` is probably correct” is an AI assumption risk, not a documented fact.
+
+## Review limitations
+
+CONTEXT QC assesses whether assumptions are unambiguous, traceable, and usable for the next step based on the provided materials. It does not guarantee source-data accuracy, final study-design validity, optimal statistical methods, or complete correctness of future code.

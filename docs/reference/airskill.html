@@ -31,6 +31,24 @@ instructs the reviewer to report Cannot assess, not infer missing facts.'></head
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/getting-started.html">Getting started [EN]</a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/getting-started-jp.html">Getting started [JP]</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-qc-guides-en-" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">QC guides [EN]</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-qc-guides-en-"><li><a class="dropdown-item" href="../articles/qc-skills.html">QC skills guide</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-context.html">CONTEXT QC</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-plan.html">PLAN QC</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-sap.html">SAP QC</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-m11semantic.html">M11 SEMANTIC QC</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-result.html">RESULT QC</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-qc-guides-jp-" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">QC guides [JP]</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-qc-guides-jp-"><li><a class="dropdown-item" href="../articles/qc-skills-jp.html">QCスキルガイド</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-context-jp.html">CONTEXT QC</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-plan-jp.html">PLAN QC</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-sap-jp.html">SAP QC</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-m11semantic-jp.html">M11 SEMANTIC QC</a></li>
+    <li><a class="dropdown-item" href="../articles/qc-result-jp.html">RESULT QC</a></li>
+  </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -104,20 +122,23 @@ instructs the reviewer to report <code>Cannot assess</code>, not infer missing f
 <span class="r-msg co"><span class="r-pr">#&gt;</span> skipped: ai_project/agent_control/AGENT_CONTROL_INDEX.md</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> created: ai_project/agent_control/QC_SKILL_CONTEXT.md</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> created: ai_project/agent_control/QC_SKILL_PLAN.md</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> created: ai_project/agent_control/QC_SKILL_SAP.md</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> created: ai_project/agent_control/QC_SKILL_RESULT.md</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> created: ai_project/agent_control/QC_SKILL_M11SEMANTIC.md</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      file                                             path</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  AGENT_CONTROL_INDEX.md  ai_project/agent_control/AGENT_CONTROL_INDEX.md</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     QC_SKILL_CONTEXT.md     ai_project/agent_control/QC_SKILL_CONTEXT.md</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3        QC_SKILL_PLAN.md        ai_project/agent_control/QC_SKILL_PLAN.md</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      QC_SKILL_RESULT.md      ai_project/agent_control/QC_SKILL_RESULT.md</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 QC_SKILL_M11SEMANTIC.md ai_project/agent_control/QC_SKILL_M11SEMANTIC.md</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         QC_SKILL_SAP.md         ai_project/agent_control/QC_SKILL_SAP.md</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      QC_SKILL_RESULT.md      ai_project/agent_control/QC_SKILL_RESULT.md</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 QC_SKILL_M11SEMANTIC.md ai_project/agent_control/QC_SKILL_M11SEMANTIC.md</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    status overwritten</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 skipped       FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 created       FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 created       FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 created       FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 created       FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 created       FALSE</span>
 <span class="r-in"><span><span class="fu">airskill</span><span class="op">(</span><span class="va">project_dir</span>, skills <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"context"</span>, <span class="st">"plan"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> skipped: ai_project/agent_control/AGENT_CONTROL_INDEX.md</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> skipped: ai_project/agent_control/QC_SKILL_CONTEXT.md</span>
@@ -131,7 +152,14 @@ instructs the reviewer to report <code>Cannot assess</code>, not infer missing f
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 skipped       FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 skipped       FALSE</span>
 <span class="r-in"><span><span class="fu">airskill</span><span class="op">(</span><span class="va">project_dir</span>, skills <span class="op">=</span> <span class="st">"sap"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Unsupported skill value: sap. Supported values are: context, plan, result, m11_semantic.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> skipped: ai_project/agent_control/AGENT_CONTROL_INDEX.md</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> skipped: ai_project/agent_control/QC_SKILL_SAP.md</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     file                                            path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 AGENT_CONTROL_INDEX.md ai_project/agent_control/AGENT_CONTROL_INDEX.md</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        QC_SKILL_SAP.md        ai_project/agent_control/QC_SKILL_SAP.md</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    status overwritten</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 skipped       FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 skipped       FALSE</span>
 <span class="r-in"><span><span class="fu">airskill</span><span class="op">(</span><span class="va">project_dir</span>, skills <span class="op">=</span> <span class="st">"m11_semantic"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> skipped: ai_project/agent_control/AGENT_CONTROL_INDEX.md</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> skipped: ai_project/agent_control/QC_SKILL_M11SEMANTIC.md</span>

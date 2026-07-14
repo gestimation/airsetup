@@ -4,7 +4,19 @@ pkgdown_sha: ~
 articles:
   getting-started-jp: getting-started-jp.html
   getting-started: getting-started.html
-last_built: 2026-07-13T08:02Z
+  qc-context-jp: qc-context-jp.html
+  qc-context: qc-context.html
+  qc-m11semantic-jp: qc-m11semantic-jp.html
+  qc-m11semantic: qc-m11semantic.html
+  qc-plan-jp: qc-plan-jp.html
+  qc-plan: qc-plan.html
+  qc-result-jp: qc-result-jp.html
+  qc-result: qc-result.html
+  qc-sap-jp: qc-sap-jp.html
+  qc-sap: qc-sap.html
+  qc-skills-jp: qc-skills-jp.html
+  qc-skills: qc-skills.html
+last_built: 2026-07-14T06:09Z
 urls:
   reference: https://gestimation.github.io/airsetup/reference
   article: https://gestimation.github.io/airsetup/articles

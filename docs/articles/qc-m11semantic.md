@@ -1,0 +1,281 @@
+# M11 SEMANTIC QC technical reference
+
+M11 SEMANTIC QC organizes analysis-critical semantics and supporting
+evidence across clinical-trial materials such as protocols, SAPs, CRFs,
+and data definitions.
+
+This skill does not certify compliance with ICH M11. It uses concepts
+from M11 and E9(R1) as a reference framework for organizing
+clinical-trial semantics.
+
+[Return to the QC skills
+guide](https://gestimation.github.io/airsetup/articles/qc-skills.md)
+
+[Japanese
+version](https://gestimation.github.io/airsetup/articles/qc-m11semantic-jp.md)
+
+## Purpose and scope
+
+M11 SEMANTIC QC decomposes distributed information into
+**document-supported content, source locations, status, inconsistencies,
+and impact on R implementation**.
+
+It produces a semantic map containing document-supported facts and a QC
+summary containing judgments, issues, decision items, and AI assumption
+risks. It does not create a protocol, electronic exchange package,
+controlled-terminology package, regulatory submission, or formal SAP
+review.
+
+## Entry criteria
+
+Use this skill when semantics must be organized across documents or when
+an M11/e-protocol-related semantic review is requested. Use CONTEXT QC
+for a simple variable list or a single data definition used to assess R
+implementation readiness.
+
+| Input | Role |
+|----|----|
+| Protocol | Primary evidence for objectives, design, treatment, and endpoints |
+| SAP | Evidence for methods, analysis sets, missing data, and multiplicity |
+| CRF and data definitions | Mapping of endpoints to collected items and variables |
+| Analysis-data specification | Mapping of analysis variables, derivations, and flags |
+| Investigator instructions or earlier QC | Identification of extra-document decisions and unresolved items |
+
+Do not fill unavailable information from general clinical-trial
+practice.
+
+## Recommended use cases
+
+- Important information is distributed across documents.
+- Cross-document inconsistencies must be identified.
+- Relationships between primary objectives and estimands must be
+  organized.
+- Intercurrent events and strategies must be mapped.
+- Endpoints must be mapped to source variables.
+- Trial semantics must be organized before SAP development.
+- Analysis-critical definitions must be traceable before R coding.
+
+For a simple dataset, variable list, or coding request, [CONTEXT
+QC](https://gestimation.github.io/airsetup/articles/qc-context.md) is
+usually sufficient.
+
+## Materials reviewed
+
+Review protocol versions and amendments, SAPs or drafts, CRFs and
+completion guidelines, data definitions and code lists, analysis-dataset
+specifications, investigator instructions, task requests, earlier QC
+records, and AI-visible data structure or metadata.
+
+When data values are unavailable, state what can be assessed from column
+names, types, labels, and value codes.
+
+## Evidence gate
+
+Process each item in this order:
+
+1.  Determine whether the document or metadata explicitly states it.
+2.  Identify evidence by file, section, table, variable, or another
+    traceable location.
+3.  Check consistency across sources.
+4.  If evidence is absent, record the item as unresolved or missing.
+5.  Separate AI proposals from documented facts.
+
+Do not infer study-specific treatment codes, analysis sets, assessment
+times, missing-data handling, or intercurrent-event strategies.
+
+`Evidence` includes at least the source name and an identifiable
+location, with version, date, section, table, page, and variable name
+where available. List each supporting source when several documents
+support the same item. Candidate interpretations belong in Issues
+requiring attention, not Document-supported content.
+
+## Fourteen analysis-critical items
+
+### 1. Primary Objective(s) and Associated Estimand(s)
+
+Record the primary-objective wording, corresponding clinical question,
+and linked estimand with evidence. Do not infer an objective–estimand
+mapping that is not explicit.
+
+### 2. Population
+
+Record the target patient population, principal disease characteristics,
+and inclusion/exclusion criteria. Do not treat the trial population and
+an analysis set as the same concept.
+
+### 3. Treatment
+
+Record treatment conditions, doses, routes, durations, concomitant and
+rescue therapies. Distinguish the estimand treatment condition,
+randomized treatment, actual treatment, and dataset treatment code.
+
+### 4. Endpoint
+
+Record endpoint concept, measurement, assessment time, unit, derivation,
+and source variables. Do not confirm a candidate source variable as
+document-supported mapping.
+
+### 5. Population-Level Summary
+
+Record the summary measure—difference, ratio, hazard ratio, mean, or
+another measure—and comparison direction. Use `Unclear` if only a method
+is specified.
+
+### 6. Description of Intercurrent Event
+
+Record definitions and timing of events such as treatment
+discontinuation, rescue therapy, and death, and their effect on
+interpretation or existence of the measurement. Do not add generally
+plausible events as study-specific intercurrent events.
+
+### 7. Intercurrent Event Strategy
+
+Map document-supported treatment-policy, hypothetical, composite,
+while-on-treatment, principal-stratum, or other strategies to each
+intercurrent event. Assign no strategy without evidence.
+
+### 8. Analysis Sets
+
+Record names, inclusion/exclusion rules, treatment classification, and
+applicable analyses for FAS, ITT, PPS, Safety, and other sets.
+
+### 9. Statistical Analysis Method
+
+Record primary methods, model formulas, effect measures, covariates,
+strata, comparisons, estimators, confidence intervals, and tests.
+
+### 10. Handling of Data in Relation to Primary Estimand(s)
+
+Record rules for including, excluding, deriving, or censoring
+measurements, assessment times, post-discontinuation data, and
+post-rescue data.
+
+### 11. Handling of Missing Data in Relation to Primary Estimand(s)
+
+Record missingness definitions and reasons, primary-analysis handling,
+imputation or modeling methods, and assumptions.
+
+### 12. Sensitivity Analysis
+
+For each sensitivity analysis, record the primary-analysis assumption
+examined and changes to conditions, population, variables, model, and
+comparator.
+
+### 13. Multiplicity Adjustments
+
+Record hypothesis families, testing sequence, alpha allocation,
+gatekeeping, and multiplicity rules including interim analyses.
+
+### 14. Sample Size Determination
+
+Record the calculation method, effect, variance or event assumptions,
+alpha, power, allocation, dropout, and supporting evidence.
+
+Add safety, subgroup, data-cut, randomization/stratification, or
+external-data items when they are important for R implementation.
+
+## Semantic-map status values
+
+| Status | Application |
+|----|----|
+| `Provided` | Explicit supported content and traceable evidence are available |
+| `Partially provided` | Only part of the required information is supported |
+| `Not provided` | Relevant materials were reviewed but the item was not identified |
+| `Unclear` | Relevant text exists but has no unique interpretation |
+| `Inconsistent` | Supplied sources conflict |
+| `Cannot assess` | Required material is unavailable, unreadable, or out of scope |
+| `Not applicable` | Non-applicability is supported by the documents or design |
+
+`Not provided` does not mean the information does not exist in the
+study; it means it was not identified within the reviewed materials. Do
+not use `Not applicable` without evidence. For `Not provided` and
+`Cannot assess`, leave Document-supported content empty in principle.
+
+## Cross-document inconsistencies
+
+Do not automatically choose one statement as correct. Record the
+conflicting content, file and location for each statement, version and
+date, analysis or implementation impact, and the person or material
+needed for resolution.
+
+## Two standard outputs
+
+### M11SEMANTIC_MAP.md
+
+``` text
+ai_project/ai_output/m11semantic/M11SEMANTIC_MAP.md
+```
+
+The semantic map records `Item`, `Document-supported content`,
+`Evidence`, and `Status`. It does not replace an approved SAP or data
+specification.
+
+### M11SEMANTIC_QC_SUMMARY.md
+
+``` text
+ai_project/qc/m11semantic/M11SEMANTIC_QC_SUMMARY.md
+```
+
+The QC summary contains Review target, Readiness for R coding,
+Domain-level QC summary, Issues requiring attention, User decisions
+required, AI assumption risks, Recommended next step, and a
+`QC_STATUS.md` update note.
+
+The issue table contains `ID`, `Issue type`, `Severity`, `Item`,
+`Evidence`, `Analysis impact`, and `Required resolution`. Candidate
+interpretations are recorded here, not as document-supported
+semantic-map content.
+
+## Readiness for R coding
+
+| Status | Meaning |
+|----|----|
+| `Ready` | Critical semantics have evidence and no major unresolved issue remains |
+| `Partially ready` | Limited work can proceed but important gaps remain |
+| `Not ready` | Implementation requires study-specific inference |
+| `Cannot assess` | Required materials or data structure are insufficient |
+
+Semantic clarity alone is not sufficient when dataset columns, types,
+codes, or row units are unknown.
+
+### Decision rules
+
+- Do not mark R implementation `Ready` when a Critical issue concerns
+  primary objectives, treatments, primary endpoints, or analysis sets.
+- Use `Partially ready` when document-supported semantics exist but
+  variable mappings or analysis specifications remain incomplete.
+- Use `Cannot assess` when required sources are unavailable and the
+  existence of a critical item cannot be judged.
+- Carry inconsistencies forward for human decision; do not resolve them
+  automatically.
+- Do not convert semantic-map completion counts into a score or M11
+  compliance rate.
+
+## Decision example
+
+``` text
+Item: Endpoint
+Document-supported content: Change from baseline in axial length at Week 24
+Evidence: Protocol 8.2.1; CRF AL_FORM; data_definition.xlsx AL_BL, AL_W24
+Status: Partially provided
+
+Issue type: Ambiguous
+Severity: Major
+Analysis impact: The analysis eye and derivation cannot be determined uniquely.
+Required resolution: The responsible statistician must confirm the analysis-eye rule.
+```
+
+## Relationship to SAP QC
+
+M11 SEMANTIC QC organizes semantics across documents. [SAP
+QC](https://gestimation.github.io/airsetup/articles/qc-sap.md) evaluates
+statistical specifications and implementation readiness in the SAP. The
+semantic outputs may inform SAP development or SAP QC, but SAP QC does
+not require an existing `M11SEMANTIC_MAP.md`.
+
+## Review limitations
+
+M11 SEMANTIC QC extracts semantics and records evidence and gaps. It
+does not certify ICH M11 compliance, formal document approval,
+data-value accuracy, statistical-method validity, or R implementation
+correctness.
