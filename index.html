@@ -33,6 +33,28 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="articles/getting-started.html">Getting started [EN]</a></li>
 <li class="nav-item"><a class="nav-link" href="articles/getting-started-jp.html">Getting started [JP]</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-qc-guides-en-" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">QC guides [EN]</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-qc-guides-en-">
+<li><a class="dropdown-item" href="articles/qc-skills.html">QC skills guide</a></li>
+    <li><a class="dropdown-item" href="articles/qc-context.html">CONTEXT QC</a></li>
+    <li><a class="dropdown-item" href="articles/qc-plan.html">PLAN QC</a></li>
+    <li><a class="dropdown-item" href="articles/qc-sap.html">SAP QC</a></li>
+    <li><a class="dropdown-item" href="articles/qc-m11semantic.html">M11 SEMANTIC QC</a></li>
+    <li><a class="dropdown-item" href="articles/qc-result.html">RESULT QC</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-qc-guides-jp-" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">QC guides [JP]</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-qc-guides-jp-">
+<li><a class="dropdown-item" href="articles/qc-skills-jp.html">QCスキルガイド</a></li>
+    <li><a class="dropdown-item" href="articles/qc-context-jp.html">CONTEXT QC</a></li>
+    <li><a class="dropdown-item" href="articles/qc-plan-jp.html">PLAN QC</a></li>
+    <li><a class="dropdown-item" href="articles/qc-sap-jp.html">SAP QC</a></li>
+    <li><a class="dropdown-item" href="articles/qc-m11semantic-jp.html">M11 SEMANTIC QC</a></li>
+    <li><a class="dropdown-item" href="articles/qc-result-jp.html">RESULT QC</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -244,7 +266,7 @@ An example of R project folder
 <tr>
 <td><code><a href="reference/airskill.html">airskill()</a></code></td>
 <td><code>ai_project/agent_control/QC_SKILL_M11SEMANTIC.md</code></td>
-<td>M11-informed semantic context QC skill for complex clinical-trial materials.</td>
+<td>M11 SEMANTIC QC skill for evidence-based semantic organization across complex clinical-trial materials.</td>
 </tr>
 <tr>
 <td><code>airsetup(qc_agent = TRUE)</code></td>
@@ -299,22 +321,22 @@ An example of R project folder
 </tr></thead>
 <tbody>
 <tr>
-<td>Context QC</td>
+<td>CONTEXT QC</td>
 <td><code>ai_project/qc/context-qc-001.md</code></td>
 <td>Lightweight context QC report.</td>
 </tr>
 <tr>
-<td>Plan QC</td>
+<td>PLAN QC</td>
 <td><code>ai_project/qc/plan-qc-001.md</code></td>
 <td>General coding-plan QC report.</td>
 </tr>
 <tr>
-<td>Clinical SAP QC</td>
+<td>SAP QC</td>
 <td><code>ai_project/qc/sap-qc-001.md</code></td>
 <td>Clinical-trial SAP completeness and implementation-readiness QC report.</td>
 </tr>
 <tr>
-<td>Result QC</td>
+<td>RESULT QC</td>
 <td><code>ai_project/qc/result-qc-001.md</code></td>
 <td>Analysis result QC report.</td>
 </tr>
@@ -329,12 +351,12 @@ An example of R project folder
 <td>Source-specified, user-approved, proposed, and unresolved analysis decisions.</td>
 </tr>
 <tr>
-<td>M11 semantic mapping</td>
+<td>M11 SEMANTIC QC — semantic map</td>
 <td><code>ai_project/ai_output/m11semantic/M11SEMANTIC_MAP.md</code></td>
-<td>M11-informed semantic map for R planning and coding.</td>
+<td>M11-informed semantic map for R planning and code generation.</td>
 </tr>
 <tr>
-<td>M11 semantic QC</td>
+<td>M11 SEMANTIC QC — QC summary</td>
 <td><code>ai_project/qc/m11semantic/M11SEMANTIC_QC_SUMMARY.md</code></td>
 <td>QC-oriented readiness summary for the M11 semantic map.</td>
 </tr>
@@ -372,7 +394,7 @@ An example of AI-hidden data folder
 <li>to ask for human approval when a decision requires domain judgment.</li>
 </ul>
 <p>The generated file is not an access-control mechanism. It is a project-level working rule that makes the boundary explicit and repeatable.</p>
-<p>When <code>qc_agent = TRUE</code>, <code>AGENTS.md</code>, <code>agent_control/WORKFLOW_AGENT.md</code>, and <code>agent_control/QC_AGENT.md</code> all state the Plan gate rule: the Workflow agent must not proceed to final R code generation until the QC agent records <code>APPROVE_NEXT_STEP</code>. Before that approval, context confirmation, M11SEMANTIC extraction, SAP or analysis-plan drafting, data requirements tables, endpoint map drafts, metadata inspection plans, and pseudocode are allowed. Final R analysis scripts, final endpoint or analysis-set derivation code, final table/figure scripts, and final statistical model implementations are not.</p>
+<p>When <code>qc_agent = TRUE</code>, <code>AGENTS.md</code>, <code>agent_control/WORKFLOW_AGENT.md</code>, and <code>agent_control/QC_AGENT.md</code> all state the Plan gate rule: the Workflow agent must not proceed to final R code generation until the QC agent records <code>APPROVE_NEXT_STEP</code>. Before that approval, context confirmation, M11 SEMANTIC QC, SAP or analysis-plan drafting, data requirements tables, endpoint map drafts, metadata inspection plans, and pseudocode are allowed. Final R analysis scripts, final endpoint or analysis-set derivation code, final table/figure scripts, and final statistical model implementations are not.</p>
 </div>
 <div class="section level2">
 <h2 id="flexible-qc-and-traceability">Flexible QC and traceability<a class="anchor" aria-label="anchor" href="#flexible-qc-and-traceability"></a>
@@ -393,6 +415,7 @@ An example of AI-hidden data folder
 <h2 id="what-the-qc-skills-are-for">What the QC skills are for<a class="anchor" aria-label="anchor" href="#what-the-qc-skills-are-for"></a>
 </h2>
 <p>The generated skill files are intended to support self-checking steps in an AI-assisted R workflow.</p>
+<p>For selection guidance, decision rules, output schemas, and worked examples in Japanese, see the <a href="https://gestimation.github.io/airsetup/articles/qc-skills-jp.html">airsetup QC skills user guide</a>.</p>
 <ul>
 <li><p><code>QC_SKILL_CONTEXT.md</code>: checks whether the supplied analysis context is clear enough before drafting a plan or generating R code.</p></li>
 <li><p><code>QC_SKILL_PLAN.md</code>: checks whether a general coding plan or non-SAP analysis specification is clear enough for R implementation.</p></li>

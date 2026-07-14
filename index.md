@@ -130,7 +130,7 @@ AI agents may create later during planning, QC, and coding.
 | [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/agent_control/QC_SKILL_PLAN.md` | General coding-plan and analysis-specification QC skill. |
 | [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/agent_control/QC_SKILL_SAP.md` | Evidence-first clinical-trial SAP QC skill. |
 | [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/agent_control/QC_SKILL_RESULT.md` | Result consistency and interpretation QC skill. |
-| [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/agent_control/QC_SKILL_M11SEMANTIC.md` | M11-informed semantic context QC skill for complex clinical-trial materials. |
+| [`airskill()`](https://gestimation.github.io/airsetup/reference/airskill.md) | `ai_project/agent_control/QC_SKILL_M11SEMANTIC.md` | M11 SEMANTIC QC skill for evidence-based semantic organization across complex clinical-trial materials. |
 | `airsetup(qc_agent = TRUE)` | `ai_project/agent_control/WORKFLOW_AGENT.md` | Workflow agent role and Plan gate constraints. |
 | `airsetup(qc_agent = TRUE)` | `ai_project/agent_control/QC_AGENT.md` | Independent QC agent role and decision rules. |
 | `airsetup(qc_agent = TRUE)` | `ai_project/qc/review/` | Independent QC review and decision areas. |
@@ -145,14 +145,14 @@ performed.
 
 | Workflow step | Recommended path | Role |
 |----|----|----|
-| Context QC | `ai_project/qc/context-qc-001.md` | Lightweight context QC report. |
-| Plan QC | `ai_project/qc/plan-qc-001.md` | General coding-plan QC report. |
-| Clinical SAP QC | `ai_project/qc/sap-qc-001.md` | Clinical-trial SAP completeness and implementation-readiness QC report. |
-| Result QC | `ai_project/qc/result-qc-001.md` | Analysis result QC report. |
+| CONTEXT QC | `ai_project/qc/context-qc-001.md` | Lightweight context QC report. |
+| PLAN QC | `ai_project/qc/plan-qc-001.md` | General coding-plan QC report. |
+| SAP QC | `ai_project/qc/sap-qc-001.md` | Clinical-trial SAP completeness and implementation-readiness QC report. |
+| RESULT QC | `ai_project/qc/result-qc-001.md` | Analysis result QC report. |
 | SAP drafting, when useful | `ai_project/ai_output/SAP.md` | Draft project-specific SAP or analysis specification. |
 | SAP decisions, when useful | `ai_project/ai_output/SAP_DECISIONS.md` | Source-specified, user-approved, proposed, and unresolved analysis decisions. |
-| M11 semantic mapping | `ai_project/ai_output/m11semantic/M11SEMANTIC_MAP.md` | M11-informed semantic map for R planning and coding. |
-| M11 semantic QC | `ai_project/qc/m11semantic/M11SEMANTIC_QC_SUMMARY.md` | QC-oriented readiness summary for the M11 semantic map. |
+| M11 SEMANTIC QC — semantic map | `ai_project/ai_output/m11semantic/M11SEMANTIC_MAP.md` | M11-informed semantic map for R planning and code generation. |
+| M11 SEMANTIC QC — QC summary | `ai_project/qc/m11semantic/M11SEMANTIC_QC_SUMMARY.md` | QC-oriented readiness summary for the M11 semantic map. |
 
 ## Clear boundaries with separated folders
 
@@ -215,11 +215,11 @@ When `qc_agent = TRUE`, `AGENTS.md`, `agent_control/WORKFLOW_AGENT.md`,
 and `agent_control/QC_AGENT.md` all state the Plan gate rule: the
 Workflow agent must not proceed to final R code generation until the QC
 agent records `APPROVE_NEXT_STEP`. Before that approval, context
-confirmation, M11SEMANTIC extraction, SAP or analysis-plan drafting,
-data requirements tables, endpoint map drafts, metadata inspection
-plans, and pseudocode are allowed. Final R analysis scripts, final
-endpoint or analysis-set derivation code, final table/figure scripts,
-and final statistical model implementations are not.
+confirmation, M11 SEMANTIC QC, SAP or analysis-plan drafting, data
+requirements tables, endpoint map drafts, metadata inspection plans, and
+pseudocode are allowed. Final R analysis scripts, final endpoint or
+analysis-set derivation code, final table/figure scripts, and final
+statistical model implementations are not.
 
 ## Flexible QC and traceability
 
@@ -242,6 +242,10 @@ directory.
 
 The generated skill files are intended to support self-checking steps in
 an AI-assisted R workflow.
+
+For selection guidance, decision rules, output schemas, and worked
+examples in Japanese, see the [airsetup QC skills user
+guide](https://gestimation.github.io/airsetup/articles/qc-skills-jp.html).
 
 - `QC_SKILL_CONTEXT.md`: checks whether the supplied analysis context is
   clear enough before drafting a plan or generating R code.

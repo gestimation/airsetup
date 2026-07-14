@@ -73,9 +73,9 @@ airsetup_demo(demo_dir)
 #> 4                   ai_project/agent_control/QC_SKILL_SAP.md created
 #> 5                ai_project/agent_control/QC_SKILL_RESULT.md created
 #> 6           ai_project/agent_control/QC_SKILL_M11SEMANTIC.md created
-#> 7   ai_project/ai_visible_data/initial_20260713/demodata.rds created
-#> 8     r_project/ai_hidden_data/initial_20260713/demodata.rds created
-#> 9 ai_project/source/initial_20260713/definition_demodata.txt created
+#> 7   ai_project/ai_visible_data/initial_20260714/demodata.rds created
+#> 8     r_project/ai_hidden_data/initial_20260714/demodata.rds created
+#> 9 ai_project/source/initial_20260714/definition_demodata.txt created
 #>   overwritten
 #> 1       FALSE
 #> 2       FALSE
